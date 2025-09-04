@@ -45,3 +45,5 @@ class DataAccess{
         }
     }
 }
+
+module.exports = DataAccess;
