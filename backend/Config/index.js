@@ -1,6 +1,6 @@
-const config = {
-    jwtKey: 'alanSawyer',
+const configs = {
+    JWT_SECRET: 'alanSawyer',
     mongoURI: 'mongodb://localhost:27017/crud'
 }
 
-module.exports = config
+module.exports = configs

@@ -19,7 +19,15 @@ class DataAccess{
         }
     }
 
-    async searchUsers(query) {
+    async getOneData (filter) {
+        try {
+            return await this.dbModel.findOne(filter);
+        } catch (error) {
+            console.log("DA_getOneDataError: ", error);
+        }
+    }
+
+    async searchData(query) {
         return await this.dbModel.find({
             $or: [
             { name: { $regex: query, $options: "i" } },     // case-insensitive
