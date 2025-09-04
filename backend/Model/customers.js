@@ -6,7 +6,11 @@ const customerSchema = new mongoose.Schema({
     job: String,
     birthday: Date,
     age: Number,
-    active:Boolean
+    active:Boolean,
+    owner: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'users'
+    }
 })
 
 const customerDB = mongoose.model('customers', customerSchema);
