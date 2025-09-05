@@ -1,6 +1,6 @@
 const app = require("./app");
-const configs = require("./Config");
-const connectDB = require("./Mongodb");
+const configs = require("./Config/index.js");
+const connectDB = require("./Mongodb/index.js");
 
 connectDB();
 app.listen(configs.serverPort, () => {

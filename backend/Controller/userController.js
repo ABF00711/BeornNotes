@@ -1,7 +1,7 @@
-const { userDA } = require("../Data_Access");
+const { userDA } = require("../Data_Access/index.js");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const configs = require("../Config");
+const configs = require("../Config/index.js");
 
 const userController = {
     register: async (req, res) => {

@@ -1,6 +1,6 @@
-const customerDB = require("../Model/customers");
-const UserDB = require("../Model/User");
-const DataAccess = require("./data_access");
+const customerDB = require("../Model/customers.js");
+const UserDB = require("../Model/user.js");
+const DataAccess = require("./data_access.js");
 
 const userDA = new DataAccess(UserDB);
 const customerDA = new DataAccess(customerDB);

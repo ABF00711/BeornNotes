@@ -27,16 +27,6 @@ class DataAccess{
         }
     }
 
-    async searchData(query) {
-        return await this.dbModel.find({
-            $or: [
-            { name: { $regex: query, $options: "i" } },     // case-insensitive
-            { display_name: { $regex: query, $options: "i" } },
-            { job: { $regex: query, $options: "i" } }
-            ]
-        });
-    }
-
     async update (id, newData){
         try {
             return await this.dbModel.findByIdAndUpdate(id, newData, {new:true});
@@ -49,7 +39,7 @@ class DataAccess{
         try {
             await this.dbModel.findByIdAndDelete(id);
         } catch (error) {
-            console.log()
+            console.log("DA_deleteError: ", error);
         }
     }
 }
