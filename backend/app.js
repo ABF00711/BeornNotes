@@ -4,11 +4,9 @@ const router = require("./Route/index.js");
 
 const app = express()
 
-app.use(cors({
-    origin: ["*"],
-}));
+app.use(cors());
 app.use(express.json());
-app.use('/api', router);
 app.options('*', cors());
+app.use('/api', router);
 
 module.exports = app;

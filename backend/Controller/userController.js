@@ -10,7 +10,7 @@ const userController = {
 
             const existingUser = await userDA.getOneData({email});
             if (existingUser) {
-                return res.status(400).json({ message: "User already exists" });
+                return res.json({ message: "User already exists" });
             }
 
             const encryptedPassword = await bcrypt.hash(password, 10);
