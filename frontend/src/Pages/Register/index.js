@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import {useNavigate} from "react-router-dom";
 import "./style.css";
 import useAuth from "../../Hooks/useAuth";
+import {toast} from "react-toastify";
 
 function Register(){
     const navigate = useNavigate();
@@ -22,6 +23,10 @@ function Register(){
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (formData.password !== formData.confirmPassword){
+            toast.error("Password and Confirm Password do not match!", {position: "top-right"});
+            return;
+        }
         if (await register(formData)){
             navigate("/dashboard")
         }
