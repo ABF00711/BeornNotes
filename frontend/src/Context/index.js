@@ -1,23 +1,23 @@
-import { createContext, useState, useContext, useMemo } from "react";
+import { createContext, useState, useContext, useMemo, useEffect } from "react";
 
 const DataContext = createContext();
 
-export const useData = () => useContext(DataContext);
-
-const defaultData = {
-    user:"",
-    token:"",
-    isAuthenticated:false,
-    customers:[]
-}
+export const MyContext = DataContext;
 
 function ContextProvider({children}){
-    const [data, setData] = useState(defaultData);
+    const [userData, setUserData] = useState({
+        name:"",
+        email:""
+    })
+    const [token, setToken] = useState("");
 
-    const currentData = useMemo(() => ({...data, setData}), [data]);
+    useEffect(() => {
+        localStorage.setItem("jwtToken", token);
+    }, [token])
+
 
     return (
-        <DataContext.Provider value={currentData}>
+        <DataContext.Provider value={{userData, setUserData, token, setToken}}>
             {children}
         </DataContext.Provider>
     )

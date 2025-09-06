@@ -1,13 +1,17 @@
 import React, { useState } from "react";
+import {useNavigate} from "react-router-dom";
 import "./style.css";
+import useAuth from "../../Hooks/useAuth";
 
 function Register(){
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         name: "",
         email: "",
         password: "",
         confirmPassword: ""
     });
+    const {register} = useAuth();
 
     const handleChange = (e) => {
         setFormData({
@@ -16,10 +20,11 @@ function Register(){
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        
-        console.log("Registration data:", formData);
+        if (await register(formData)){
+            navigate("/dashboard")
+        }
     };
 
     return (

@@ -4,11 +4,15 @@ const services = {
     serverURL: "http://localhost:5000/api",
 
     register: async (userData) => {
-        const res = await axios.post(services.serverURL + "/register", userData);
-        return res.data;
+        try {
+            const res = await axios.post(services.serverURL + "/register", userData);
+            return res.data;
+        } catch (error) {
+            console.log("ServicesRegisterError: ", error);
+        }
     },
 
-    login: async () => {
+    login: async (userData) => {
         const res = await axios.post(services.serverURL + "/login", userData);
         return res.data;
     }
