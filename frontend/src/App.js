@@ -5,6 +5,7 @@ import Login from './Pages/Login';
 import ContextProvider from './Context';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Dashboard from './Pages/Dashboard';
 
 function App() {
   return (
@@ -12,9 +13,9 @@ function App() {
       <BrowserRouter>
         <ContextProvider>
           <Routes>
-            <Route path="/" element={<Login />} />
+            <Route path="/" element={<Dashboard />} />
             <Route path="/register" element={<Register />} />
-            {/* <Route path="/dashboard" element={<Dashboard />} /> */}
+            <Route path="/login" element={<Login />} />
           </Routes>
           <ToastContainer />
         </ContextProvider>

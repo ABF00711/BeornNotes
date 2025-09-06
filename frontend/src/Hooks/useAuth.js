@@ -12,6 +12,7 @@ function useAuth(){
             if (res.message == "register success"){
                 setUserData(res.user);
                 setToken(res.token);
+                localStorage.setItem("jwtToken", res.token);
                 toast.success(res.message, {position: "top-right"});
                 return true;
             }
@@ -28,6 +29,7 @@ function useAuth(){
             if (res.message == "login success"){
                 setUserData(res.user);
                 setToken(res.token);
+                localStorage.setItem("jwtToken", res.token);
                 toast.success(res.message, {position: "top-right"});
                 return true;
             }
@@ -38,8 +40,18 @@ function useAuth(){
         }
     }
 
+    const isAuthenticated = async () => {
+        const jwtToken = localStorage.getItem("jwtToken");
+        if (jwtToken !== ""){
+            const res = await services.isAuth({token: jwtToken});
+            if (res.message == "isAuth success") return true;
+            return false;
+        }
+        return false;
+    }
+
     return (
-        {register, login}
+        {register, login, isAuthenticated}
     )
 }
 

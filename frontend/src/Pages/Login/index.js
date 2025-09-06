@@ -20,7 +20,7 @@ function Login(){
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (await login(formData)){
-            navigate("/dashboard");
+            navigate("/");
         }
     }
 

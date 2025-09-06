@@ -1,4 +1,5 @@
 import { createContext, useState, useContext, useMemo, useEffect } from "react";
+import services from "../Services";
 
 const DataContext = createContext();
 
@@ -14,7 +15,6 @@ function ContextProvider({children}){
     useEffect(() => {
         localStorage.setItem("jwtToken", token);
     }, [token])
-
 
     return (
         <DataContext.Provider value={{userData, setUserData, token, setToken}}>

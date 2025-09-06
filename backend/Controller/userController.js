@@ -54,6 +54,21 @@ const userController = {
         }
     },
 
+    isAuth: async (req, res) => {
+        try {
+            const {token} = req.body;
+            const decoded = jwt.verify(token, configs.JWT_SECRET);
+            const user = await userDA.getOneData({email: decoded.email});
+            if(user && (user.hashedPassword == decoded.hashedPassword)){
+                return res.json({message: "isAuth success"});
+            }
+            res.json({message: "isAuth failed"});
+        } catch (error) {
+            console.log("isAuth failed: ", error);
+            res.json({message: "isAuth failded"});
+        }
+    },
+
     logout: async (req, res) => {
         try {
             const { token } = req.body;

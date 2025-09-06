@@ -28,7 +28,7 @@ function Register(){
             return;
         }
         if (await register(formData)){
-            navigate("/dashboard")
+            navigate("/")
         }
     };
 

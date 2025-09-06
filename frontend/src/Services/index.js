@@ -19,6 +19,15 @@ const services = {
         } catch (error) {
             console.log("ServicesLoginError: ", error);
         }
+    },
+
+    isAuth: async (token) => {
+        try {
+            const res = await axios.post(services.serverURL + "/isAuth", token);
+            return res.data;
+        } catch (error) {
+            console.log("ServicesIsAuthError: ", error);
+        }
     }
 }
 
