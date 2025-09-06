@@ -20,13 +20,13 @@ const userController = {
             jwt.sign(newUser, configs.JWT_SECRET, { expiresIn: "2h" }, (err, token) => {
                 if (err) {
                     console.log("jwt sign failed", err);
-                    res.status(500).json({ message: "jwt sign failed" });
+                    res.json({ message: "jwt sign failed" });
                 }
-                res.status(201).json({ message: "register success", user: newUser, token });
+                res.json({ message: "register success", user: newUser, token });
             });
         } catch (error) {
             console.log("register failed", error);
-            res.status(500).json({ message: "register failed" });
+            res.json({ message: "register failed" });
         }
     },
 
@@ -35,22 +35,22 @@ const userController = {
             const { email, password } = req.body;
             const user = await userDA.getOneData({email});
             if (!user) {
-                return res.status(400).json({ message: "User not found" });
+                return res.json({ message: "User not found" });
             }
             const isPasswordValid = await bcrypt.compare(password, user.hashedPassword);
             if (!isPasswordValid) {
-                return res.status(400).json({ message: "Invalid password" });
+                return res.json({ message: "Invalid password" });
             }
             jwt.sign({ name: user.name, email: user.email, hashedPassword: user.hashedPassword }, configs.JWT_SECRET, { expiresIn: "2h" }, (err, token) => {
                 if (err) {
                     console.log("jwt sign failed", err);
-                    res.status(500).json({ message: "jwt sign failed" });
+                    res.json({ message: "jwt sign failed" });
                 }
-                res.status(200).json({ message: "login success", user, token });
+                res.json({ message: "login success", user, token });
             });
         } catch (error) {
             console.log("login failed", error);
-            res.status(500).json({ message: "login failed" });
+            res.json({ message: "login failed" });
         }
     },
 
@@ -60,13 +60,13 @@ const userController = {
             const decoded = jwt.verify(token, configs.JWT_SECRET);
             const user = await userDA.getOneData({email: decoded.email});
             if (!user) {
-                return res.status(400).json({ message: "User not found" });
+                return res.json({ message: "User not found" });
             }
             await userDA.delete(user._id);
-            res.status(200).json({ message: "logout success" });
+            res.json({ message: "logout success" });
         } catch (error) {
             console.log("logout failed", error);
-            res.status(500).json({ message: "logout failed" });
+            res.json({ message: "logout failed" });
         }
     }
 };
