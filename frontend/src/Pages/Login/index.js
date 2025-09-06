@@ -1,7 +1,28 @@
-import React from "react";
+import React, {useState} from "react";
 import "./style.css";
+import useAuth from "../../Hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 function Login(){
+    const navigate = useNavigate();
+    const [formData, setFormData] = useState({
+        email: "",
+        password: ""
+    })
+    const {login} = useAuth();
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        })
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (await login(formData)){
+            navigate("/dashboard");
+        }
+    }
 
     return (
         <div className="auth-container">
@@ -11,13 +32,15 @@ function Login(){
                     <p>Sign in to your BeornNotes account</p>
                 </div>
                 
-                <form className="auth-form">
+                <form className="auth-form" onSubmit={handleSubmit}>
                     <div className="input-group">
                         <input 
                             type="email" 
                             placeholder="Email address" 
                             className="auth-input"
                             required
+                            name = "email"
+                            onChange = {handleChange}
                         />
                     </div>
                     
@@ -27,6 +50,8 @@ function Login(){
                             placeholder="Password" 
                             className="auth-input"
                             required
+                            name = "password"
+                            onChange = {handleChange}
                         />
                     </div>
                     

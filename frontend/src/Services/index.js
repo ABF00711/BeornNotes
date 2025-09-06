@@ -13,8 +13,12 @@ const services = {
     },
 
     login: async (userData) => {
-        const res = await axios.post(services.serverURL + "/login", userData);
-        return res.data;
+        try {
+            const res = await axios.post(services.serverURL + "/login", userData);
+            return res.data;
+        } catch (error) {
+            console.log("ServicesLoginError: ", error);
+        }
     }
 }
 

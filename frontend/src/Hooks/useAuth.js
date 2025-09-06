@@ -22,8 +22,24 @@ function useAuth(){
         }
     }
 
+    const login = async (user) => {
+        try {
+            const res = await services.login({email: user.email, password: user.password});
+            if (res.message == "login success"){
+                setUserData(res.user);
+                setToken(res.token);
+                toast.success(res.message, {position: "top-right"});
+                return true;
+            }
+            toast.error(res.message, {position: "top-right"});
+            return false;
+        } catch (error) {
+            console.log("loginError: ", error);
+        }
+    }
+
     return (
-        {register, }
+        {register, login}
     )
 }
 
