@@ -3,9 +3,33 @@ class DataAccess{
         this.dbModel = dbModel;
     }
 
-    async create (data) {
+    async create (tableName, newData) {
         try {
-            await this.dbModel.create(data);
+            if (!tableName || !newData || typeof newData !== 'object') {
+                throw new Error('Invalid tableName or newData provided');
+            }
+
+            const questionMarks = [];
+            const keys = [];
+            const values = [];
+            
+            for (const key in newData) {
+                if (newData.hasOwnProperty(key) && newData[key] !== undefined) {
+                    questionMarks.push("?");
+                    keys.push(key);
+                    values.push(newData[key]);
+                }
+            }
+
+            if (keys.length === 0) {
+                throw new Error('No valid data provided for insertion');
+            }
+
+            const questionMarksStr = questionMarks.join(", ");
+            const keysStr = keys.join(", ");
+            const sql = `INSERT INTO ${tableName} (${keysStr}) VALUES (${questionMarksStr})`;
+            await this.dbModel.query(sql, values);
+            
         } catch (error) {
             console.log("DA_createError: ", error);
         }
