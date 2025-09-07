@@ -40,6 +40,16 @@ function useAuth(){
         }
     }
 
+    const logout = () => {
+        try {
+            setUserData({name: "", email: ""});
+            setToken("");
+            localStorage.setItem("jwtToken", "");
+        } catch (error) {
+            console.log("logoutError: ", error);
+        }
+    }
+
     const isAuthenticated = async () => {
         const jwtToken = localStorage.getItem("jwtToken");
         if (jwtToken !== ""){
@@ -51,7 +61,7 @@ function useAuth(){
     }
 
     return (
-        {register, login, isAuthenticated}
+        {register, login, logout, isAuthenticated, userData}
     )
 }
 

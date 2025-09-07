@@ -2,6 +2,7 @@ import React, {useEffect} from "react";
 import "./style.css";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../../Hooks/useAuth";
+import Header from "../../Components/Header";
 
 function Dashboard(){
     const navigate = useNavigate();
@@ -21,7 +22,9 @@ function Dashboard(){
 
     return (
         <div className="dashboard">
-
+            <div className="dashboard-container">
+                <Header />
+            </div>
         </div>
     );
 }
