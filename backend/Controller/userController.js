@@ -1,20 +1,21 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const configs = require("../Config/index.js");
+const mysqlDA = require("../Data_Access/index.js");
 
 const userController = {
     register: async (req, res) => {
         try {
             const { name, email, password } = req.body;
 
-            const existingUser = await mysqlDA.getOneData({email});
+            const existingUser = await mysqlDA.getOneData("users", {email});
             if (existingUser) {
                 return res.json({ message: "User already exists" });
             }
 
             const encryptedPassword = await bcrypt.hash(password, 10);
-            const newUser = {name, email, hashedPassword: encryptedPassword};
-            await mysqlDA.create(newUser);
+            const newUser = {name, email, hashedpassword: encryptedPassword};
+            await mysqlDA.create("users", newUser);
 
             jwt.sign(newUser, configs.JWT_SECRET, { expiresIn: "2h" }, (err, token) => {
                 if (err) {
@@ -32,15 +33,15 @@ const userController = {
     login: async (req, res) => {
         try {
             const { email, password } = req.body;
-            const user = await mysqlDA.getOneData({email});
+            const user = await mysqlDA.getOneData("users", {email});
             if (!user) {
                 return res.json({ message: "User not found" });
             }
-            const isPasswordValid = await bcrypt.compare(password, user.hashedPassword);
+            const isPasswordValid = await bcrypt.compare(password, user.hashedpassword);
             if (!isPasswordValid) {
                 return res.json({ message: "Invalid password" });
             }
-            jwt.sign({ name: user.name, email: user.email, hashedPassword: user.hashedPassword }, configs.JWT_SECRET, { expiresIn: "2h" }, (err, token) => {
+            jwt.sign({ name: user.name, email: user.email, hashedpassword: user.hashedpassword }, configs.JWT_SECRET, { expiresIn: "2h" }, (err, token) => {
                 if (err) {
                     console.log("jwt sign failed", err);
                     res.json({ message: "jwt sign failed" });
@@ -57,8 +58,8 @@ const userController = {
         try {
             const {token} = req.body;
             const decoded = jwt.verify(token, configs.JWT_SECRET);
-            const user = await mysqlDA.getOneData({email: decoded.email});
-            if(user && (user.hashedPassword == decoded.hashedPassword)){
+            const user = await mysqlDA.getOneData("users", {email: decoded.email});
+            if(user && (user.hashedpassword == decoded.hashedpassword)){
                 return res.json({message: "isAuth success"});
             }
             res.json({message: "isAuth failed"});
@@ -72,7 +73,7 @@ const userController = {
         try {
             const { token } = req.body;
             const decoded = jwt.verify(token, configs.JWT_SECRET);
-            const user = await mysqlDA.getOneData({email: decoded.email});
+            const user = await mysqlDA.getOneData("users", {email: decoded.email});
             if (!user) {
                 return res.json({ message: "User not found" });
             }

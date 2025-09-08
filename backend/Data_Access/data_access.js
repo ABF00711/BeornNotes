@@ -35,17 +35,46 @@ class DataAccess{
         }
     }
 
-    async getAllData () {
+    async getAllData (tableName) {
         try {
-            return await this.dbModel.find();
+            if (!tableName) {
+                throw new Error('Table name is required');
+            }
+            
+            const sql = `SELECT * FROM ${tableName}`;
+            const [rows] = await this.dbModel.execute(sql);
+            return rows;
         } catch (error) {
-            console.log("DA_getAllDataError: ", error)
+            console.log("DA_getAllDataError: ", error);
+            throw error;
         }
     }
 
-    async getOneData (filter) {
+    async getOneData (tableName, filter) {
         try {
-            return await this.dbModel.findOne(filter);
+            if (!tableName || !filter || typeof filter !== 'object') {
+                throw new Error('Invalid tableName or filter provided');
+            }
+
+            const conditions = [];
+            const values = [];
+    
+            for (const key in filter) {
+                if (filter.hasOwnProperty(key) && filter[key] !== undefined) {
+                    conditions.push(`${key} = ?`);
+                    values.push(filter[key]);
+                }
+            }
+            if (conditions.length === 0) {
+                throw new Error('No valid filter conditions provided');
+            }
+
+            const whereClause = conditions.join(' AND ');
+            const sql = `SELECT * FROM ${tableName} WHERE ${whereClause} LIMIT 1`;
+            
+            const [rows] = await this.dbModel.execute(sql, values);
+            
+            return rows[0] || null;        
         } catch (error) {
             console.log("DA_getOneDataError: ", error);
         }

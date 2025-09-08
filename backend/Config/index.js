@@ -1,7 +1,12 @@
 const configs = {
     JWT_SECRET: 'alanSawyer',
-    mongoURI: 'mongodb://localhost:27017/BeornNotes',
-    serverPort: 5000
+    serverPort: 5000,
+    mysqlServer: {
+        host: "localhost",
+        user: "root",
+        password: "",
+        database: "beornnotes2"
+    }
 }
 
 module.exports = configs
