@@ -23,6 +23,7 @@ const userController = {
                     res.json({ message: "jwt sign failed" });
                 }
                 res.json({ message: "register success", user: newUser, token });
+                console.log("registered: ", newUser.email, ":", newUser.name);
             });
         } catch (error) {
             console.log("register failed", error);
@@ -46,6 +47,7 @@ const userController = {
                     console.log("jwt sign failed", err);
                     res.json({ message: "jwt sign failed" });
                 }
+                console.log("logged in: ", user.email, ":", user.name);
                 res.json({ message: "login success", user, token });
             });
         } catch (error) {

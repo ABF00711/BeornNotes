@@ -5,7 +5,7 @@ const configs = {
         host: "localhost",
         user: "root",
         password: "",
-        database: "beornnotes2"
+        database: "beornnotes"
     }
 }
 
