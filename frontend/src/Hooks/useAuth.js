@@ -6,9 +6,15 @@ import {toast} from "react-toastify";
 function useAuth(){
     const {userData, setUserData, token, setToken} = useContext(MyContext);
 
-    const register = async (newUser) => {
+    const register = async (formData) => {
         try {
-            const res = await services.register({name:newUser.name, email:newUser.email, password:newUser.password});
+            const newUser = {};
+            for (const key in formData) {
+                if (key == "confirmPassword") continue;
+                if(formData[key] == "") formData[key] = null;
+                newUser[key] = formData[key];
+            }
+            const res = await services.register({userData: newUser});
             if (res.message == "register success"){
                 setUserData(res.user);
                 setToken(res.token);

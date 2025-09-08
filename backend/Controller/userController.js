@@ -6,15 +6,22 @@ const mysqlDA = require("../Data_Access/index.js");
 const userController = {
     register: async (req, res) => {
         try {
-            const { name, email, password } = req.body;
+            const {userData} = req.body;
 
-            const existingUser = await mysqlDA.getOneData("users", {email});
+            const existingUser = await mysqlDA.getOneData("users", {email: userData.email});
             if (existingUser) {
                 return res.json({ message: "User already exists" });
             }
 
-            const encryptedPassword = await bcrypt.hash(password, 10);
-            const newUser = {name, email, hashedpassword: encryptedPassword};
+            const encryptedPassword = await bcrypt.hash(userData.password, 10);
+
+            const newUser = {}
+            newUser["hashedpassword"] = encryptedPassword;
+            for (const key in userData) {
+                if (key == "password") continue;
+                newUser[key] = userData[key];
+            }
+            
             await mysqlDA.create("users", newUser);
 
             jwt.sign(newUser, configs.JWT_SECRET, { expiresIn: "2h" }, (err, token) => {

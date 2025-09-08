@@ -28,6 +28,15 @@ const services = {
         } catch (error) {
             console.log("ServicesIsAuthError: ", error);
         }
+    },
+    
+    getSearchConfig: async () => {
+        try {
+            const res = await axios.get(services.serverURL + "/searchConfigData");
+            return res.data;
+        } catch (error) {
+            console.log("ServicesGetSearchConfigError: ", error)
+        }
     }
 }
 
