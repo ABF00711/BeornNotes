@@ -1,0 +1,4 @@
+/* Import the submenu styles from Sidebar */
+@import "../../Pages/Sidebar/style.css";
+
+/* Additional MenuItem specific styles can be added here if needed */

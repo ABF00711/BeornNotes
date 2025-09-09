@@ -1,6 +1,4 @@
 import { createContext, useState, useContext, useMemo, useEffect } from "react";
-import services from "../Services";
-import useSearchConfig from "../Hooks/useSearchConfig";
 
 const DataContext = createContext([]);
 
@@ -13,7 +11,17 @@ function ContextProvider({children}){
     })
     const [token, setToken] = useState("");
     const [searchConfig, setSearchConfig] = useState([]);
-    const [menuItems, setMenuItems] = useState([]);
+    const [menuItems, setMenuItems] = useState([
+        {
+            id:0,
+            screen_id: "dashboard",
+            title: "Dashboard",
+            icon: "📊",
+            path: "/",
+            active: true,
+            parent_id: null
+        },
+    ]);
 
     useEffect(() => {
         localStorage.setItem("jwtToken", token);
