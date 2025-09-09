@@ -8,9 +8,13 @@ const userController = {
         try {
             const {userData} = req.body;
 
-            const existingUser = await mysqlDA.getOneData("users", {email: userData.email});
-            if (existingUser) {
-                return res.json({ message: "User already exists" });
+            const existingEmail = await mysqlDA.getOneData("users", {email: userData.email});
+            if (existingEmail) {
+                return res.json({ message: "Email already exists" });
+            }
+            const existingName = await mysqlDA.getOneData("users", {name: userData.name});
+            if(existingName){
+                return res.json({ message: "Username already exists" });
             }
 
             const encryptedPassword = await bcrypt.hash(userData.password, 10);
@@ -21,7 +25,7 @@ const userController = {
                 if (key == "password") continue;
                 newUser[key] = userData[key];
             }
-            
+
             await mysqlDA.create("users", newUser);
 
             jwt.sign(newUser, configs.JWT_SECRET, { expiresIn: "2h" }, (err, token) => {

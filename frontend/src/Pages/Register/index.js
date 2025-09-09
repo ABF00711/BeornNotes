@@ -6,9 +6,9 @@ import { toast } from "react-toastify";
 import useSearchConfig from "../../Hooks/useSearchConfig";
 import { MyContext } from "../../Context";
 import InputGroup from "../../Components/InputGroup";
-import TextField from "../../Components/Fields/TextField";
-import EmailField from "../../Components/Fields/EmailField";
-import PasswordField from "../../Components/Fields/PasswordField";
+import TextField from "../../Components/TextField";
+import EmailField from "../../Components/EmailField";
+import PasswordField from "../../Components/PasswordField";
 
 function Register() {
     const navigate = useNavigate();
@@ -41,12 +41,13 @@ function Register() {
     };
 
     const validateFields = () => {
-        if(formData.password == "")return false;
-        if(formData.name == "" || formData.email == "")return false;
-        registerData.map((item) => {
-            if(item.mandatory && (formData[item.field_name] == ""))return false;
+        let result = true;
+        if(formData.password == "") result = false;
+        if(formData.name == "" || formData.email == "") result = false;
+        registerData.forEach((item) => {
+            if(item.mandatory && (formData[item.field_name].trim(" ") == "")) result = false;
         })
-        return true;
+        return result;
     }
 
     const handleSubmit = async (e) => {
@@ -56,7 +57,7 @@ function Register() {
             toast.error("Password and Confirm Password do not match!", { position: "top-right" });
             return;
         }
-        if(!validateFields())return;
+        if(!validateFields()) return;
 
         if (await register(formData)) {
             navigate("/")
@@ -81,7 +82,7 @@ function Register() {
                 <form className="auth-form" onSubmit={handleSubmit}>
                     <TextField
                         name="name"
-                        label="Full Name"
+                        label="Username"
                         value={formData.name}
                         onChange={handleChange}
                         required={true}

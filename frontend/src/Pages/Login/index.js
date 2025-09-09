@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import "./style.css";
 import useAuth from "../../Hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import PasswordField from "../../Components/PasswordField";
 
 function Login(){
     const navigate = useNavigate();
@@ -16,6 +17,7 @@ function Login(){
             [e.target.name]: e.target.value
         })
     }
+    const [submitted, setSubmitted] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -44,16 +46,14 @@ function Login(){
                         />
                     </div>
                     
-                    <div className="input-group">
-                        <input 
-                            type="password" 
-                            placeholder="Password" 
-                            className="auth-input"
-                            required
-                            name = "password"
-                            onChange = {handleChange}
-                        />
-                    </div>
+                    <PasswordField 
+                        name = "password"
+                        label = "Password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        required = {true}
+                        submitted={submitted}
+                    />
                     
                     <div className="form-options">
                         <label className="remember-me">
