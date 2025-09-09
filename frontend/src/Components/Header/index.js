@@ -56,10 +56,6 @@ function Header(){
         <div className="header">
             <div className="header-container">
                 <div className="header-left">
-                    <div className="logo-container">
-                        <img src="/logo.png" alt="BeornNotes Logo" className="logo" />
-                        <h1 className="app-title">BeornNotes</h1>
-                    </div>
                 </div>
                 
                 <div className="header-right">
