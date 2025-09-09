@@ -1,28 +1,28 @@
 import React, { useContext } from "react";
 import { MyContext } from "../Context";
 import services from "../Services";
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 
-function useAuth(){
-    const {userData, setUserData, token, setToken} = useContext(MyContext);
+function useAuth() {
+    const { userData, setUserData, token, setToken } = useContext(MyContext);
 
     const register = async (formData) => {
         try {
             const newUser = {};
             for (const key in formData) {
                 if (key == "confirmPassword") continue;
-                if(formData[key] == "") formData[key] = null;
+                if (formData[key] == "") formData[key] = null;
                 newUser[key] = formData[key];
             }
-            const res = await services.register({userData: newUser});
-            if (res.message == "register success"){
+            const res = await services.register({ userData: newUser });
+            if (res.message == "register success") {
                 setUserData(res.user);
                 setToken(res.token);
                 localStorage.setItem("jwtToken", res.token);
-                toast.success(res.message, {position: "top-right"});
+                toast.success(res.message, { position: "top-right" });
                 return true;
             }
-            toast.error(res.message, {position: "top-right"});
+            toast.error(res.message, { position: "top-right" });
             return false;
         } catch (error) {
             console.log("registerError: ", error);
@@ -31,15 +31,28 @@ function useAuth(){
 
     const login = async (user) => {
         try {
-            const res = await services.login({email: user.email, password: user.password});
-            if (res.message == "login success"){
+            const newUser = {};
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const isFormatInvalid = emailRegex.test(String(user.email).trim());
+
+            if (!isFormatInvalid) {
+                newUser.name = user.email;
+                newUser.password = user.password;
+            }else{
+                newUser.email = user.email;
+                newUser.password = user.password;
+            }
+
+            const res = await services.login({newUser});
+            if (res.message == "login success") {
                 setUserData(res.user);
                 setToken(res.token);
                 localStorage.setItem("jwtToken", res.token);
-                toast.success(res.message, {position: "top-right"});
+                toast.success(res.message, { position: "top-right" });
                 return true;
             }
-            toast.error(res.message, {position: "top-right"});
+            toast.error(res.message, { position: "top-right" });
             return false;
         } catch (error) {
             console.log("loginError: ", error);
@@ -48,7 +61,7 @@ function useAuth(){
 
     const logout = () => {
         try {
-            setUserData({name: "", email: ""});
+            setUserData({ name: "", email: "" });
             setToken("");
             localStorage.setItem("jwtToken", "");
         } catch (error) {
@@ -58,8 +71,8 @@ function useAuth(){
 
     const isAuthenticated = async () => {
         const jwtToken = localStorage.getItem("jwtToken");
-        if (jwtToken !== ""){
-            const res = await services.isAuth({token: jwtToken});
+        if (jwtToken !== "") {
+            const res = await services.isAuth({ token: jwtToken });
             if (res.message == "isAuth success") return true;
             return false;
         }
@@ -67,7 +80,7 @@ function useAuth(){
     }
 
     return (
-        {register, login, logout, isAuthenticated, userData}
+        { register, login, logout, isAuthenticated, userData }
     )
 }
 

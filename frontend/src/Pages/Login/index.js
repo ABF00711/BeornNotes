@@ -1,16 +1,17 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import "./style.css";
 import useAuth from "../../Hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import PasswordField from "../../Components/PasswordField";
+import TextField from "../../Components/TextField";
 
-function Login(){
+function Login() {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         email: "",
         password: ""
     })
-    const {login} = useAuth();
+    const { login } = useAuth();
     const handleChange = (e) => {
         setFormData({
             ...formData,
@@ -21,7 +22,8 @@ function Login(){
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (await login(formData)){
+
+        if (await login(formData)) {
             navigate("/");
         }
     }
@@ -33,28 +35,26 @@ function Login(){
                     <h1>Welcome Back</h1>
                     <p>Sign in to your BeornNotes account</p>
                 </div>
-                
+
                 <form className="auth-form" onSubmit={handleSubmit}>
-                    <div className="input-group">
-                        <input 
-                            type="email" 
-                            placeholder="Email address" 
-                            className="auth-input"
-                            required
-                            name = "email"
-                            onChange = {handleChange}
-                        />
-                    </div>
-                    
-                    <PasswordField 
-                        name = "password"
-                        label = "Password"
-                        value={formData.password}
+                    <TextField
+                        name="email"
+                        label="Username or Email"
+                        value={formData.name}
                         onChange={handleChange}
-                        required = {true}
+                        required={true}
                         submitted={submitted}
                     />
-                    
+
+                    <PasswordField
+                        name="password"
+                        label="Password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        required={true}
+                        submitted={submitted}
+                    />
+
                     <div className="form-options">
                         <label className="remember-me">
                             <input type="checkbox" />
@@ -62,12 +62,12 @@ function Login(){
                         </label>
                         <a href="#" className="forgot-password">Forgot password?</a>
                     </div>
-                    
+
                     <button type="submit" className="auth-button">
                         Sign In
                     </button>
                 </form>
-                
+
                 <div className="auth-footer">
                     <p>Don't have an account? <a href="/register" className="auth-link">Sign up</a></p>
                 </div>

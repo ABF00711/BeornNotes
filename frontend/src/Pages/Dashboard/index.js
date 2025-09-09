@@ -24,6 +24,9 @@ function Dashboard(){
         <div className="dashboard">
             <div className="dashboard-container">
                 <Header />
+                <div className="main">
+                    
+                </div>
             </div>
         </div>
     );

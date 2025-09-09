@@ -44,12 +44,20 @@ const userController = {
 
     login: async (req, res) => {
         try {
-            const { email, password } = req.body;
-            const user = await mysqlDA.getOneData("users", {email});
+            const { newUser } = req.body;
+            
+            let filter = {};
+            if(newUser.email){
+                filter = {email: newUser.email};
+            }else{
+                filter = {name: newUser.name};
+            }
+
+            const user = await mysqlDA.getOneData("users", filter);
             if (!user) {
                 return res.json({ message: "User not found" });
             }
-            const isPasswordValid = await bcrypt.compare(password, user.hashedpassword);
+            const isPasswordValid = await bcrypt.compare(newUser.password, user.hashedpassword);
             if (!isPasswordValid) {
                 return res.json({ message: "Invalid password" });
             }
