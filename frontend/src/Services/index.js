@@ -37,6 +37,15 @@ const services = {
         } catch (error) {
             console.log("ServicesGetSearchConfigError: ", error)
         }
+    },
+
+    getOptionData: async (lookup_sql) => {
+        try {
+            const res = await axios.post(services.serverURL + "/optionData", {lookup_sql});
+            return res.data;
+        } catch (error) {
+            console.log("ServicesGetOptionDataError: ", error);
+        }
     }
 }
 

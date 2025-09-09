@@ -95,6 +95,15 @@ class DataAccess{
             console.log("DA_deleteError: ", error);
         }
     }
+
+    async excuteSql (sql){
+        try {
+            const [rows] = await this.dbModel.execute(sql);
+            return rows;
+        } catch (error) {
+            console.log("DA_excuteSqlError: ", error);
+        }
+    }
 }
 
 module.exports = DataAccess;

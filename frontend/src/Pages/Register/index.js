@@ -38,6 +38,7 @@ function Register() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         if (formData.password !== formData.confirmPassword) {
             toast.error("Password and Confirm Password do not match!", { position: "top-right" });
             return;
@@ -111,7 +112,9 @@ function Register() {
                     </div>
 
                     {registerData.map((item) => {
-                        return <InputGroup props={{ fieldFormat: item, value: formData[item.field_name], handleChange }} />
+                        return (
+                        <InputGroup props={{ fieldFormat: item, value: formData[item.field_name], handleChange }} />
+                    )
                     })}
 
                     <div className="terms-section">
