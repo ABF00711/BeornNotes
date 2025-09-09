@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./style.css";
 
-function Popup({ fieldFormat, value, handleChange, options = [] }) {
+function Popup({ fieldFormat, value, handleChange, options = [], submitted = false }) {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedOption, setSelectedOption] = useState(null);
     const popupRef = useRef(null);
@@ -59,36 +59,41 @@ function Popup({ fieldFormat, value, handleChange, options = [] }) {
         }
     };
 
+    const invalid = fieldFormat.mandatory && submitted && (!value || String(value).trim() === "");
     return (
-        <div className="popup-container" ref={popupRef}>
-            <div 
-                className={`popup-trigger ${isOpen ? 'open' : ''} ${fieldFormat.mandatory && !value ? 'required' : ''}`}
-                onClick={togglePopup}
-                onKeyDown={handleKeyDown}
-                tabIndex={0}
-                role="button"
-                aria-haspopup="listbox"
-                aria-expanded={isOpen}
-            >
-                <span className="popup-value">
-                    {selectedOption ? selectedOption.name : `Choose ${fieldFormat.field_label}`}
-                </span>
-                <svg 
-                    className={`popup-arrow ${isOpen ? 'open' : ''}`}
-                    width="12" 
-                    height="8" 
-                    viewBox="0 0 12 8" 
-                    fill="none"
+        <div className="field row" ref={popupRef}>
+            <label htmlFor={fieldFormat.field_name} className="field-label">
+                {fieldFormat.field_label}{fieldFormat.mandatory ? " *" : ""}
+            </label>
+            <div className="popup-container">
+                <div 
+                    className={`popup-trigger ${isOpen ? 'open' : ''} ${invalid ? 'field-input--invalid' : ''}`}
+                    onClick={togglePopup}
+                    onKeyDown={handleKeyDown}
+                    tabIndex={0}
+                    role="button"
+                    aria-haspopup="listbox"
+                    aria-expanded={isOpen}
                 >
-                    <path
-                        d="M1 1.5L6 6.5L11 1.5"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                    />
-                </svg>
-            </div>
+                    <span className="popup-value">
+                        {selectedOption ? selectedOption.name : `Choose ${fieldFormat.field_label}`}
+                    </span>
+                    <svg 
+                        className={`popup-arrow ${isOpen ? 'open' : ''}`}
+                        width="12" 
+                        height="8" 
+                        viewBox="0 0 12 8" 
+                        fill="none"
+                    >
+                        <path
+                            d="M1 1.5L6 6.5L11 1.5"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                        />
+                    </svg>
+                </div>
             
             {isOpen && (
                 <div className="popup-dropdown">
@@ -109,6 +114,7 @@ function Popup({ fieldFormat, value, handleChange, options = [] }) {
                     )}
                 </div>
             )}
+            </div>
         </div>
     );
 }

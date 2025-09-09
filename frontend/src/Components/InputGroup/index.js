@@ -5,7 +5,7 @@ import Combobox from "../Combobox";
 import Popup from "../Popup";
 
 function InputGroup({ props }) {
-    const { fieldFormat, value, handleChange } = props;
+    const { fieldFormat, value, handleChange, submitted } = props;
     const [popupData, setPopupData] = useState([]);
     const [comboboxData, setComboboxData] = useState([]);
 
@@ -35,6 +35,7 @@ function InputGroup({ props }) {
                 value={value}
                 handleChange={handleChange}
                 options={comboboxData}
+                submitted={submitted}
             />
         );
     }
@@ -47,21 +48,26 @@ function InputGroup({ props }) {
                 value={value}
                 handleChange={handleChange}
                 options={popupData}
+                submitted={submitted}
             />
         );
     }
 
+    const invalid = fieldFormat.mandatory && submitted && (!value || String(value).trim() === "");
     return (
-        <div className="input-group" style={fieldFormat.mandatory && value ? {borderColor: "red"} : {}}>
-            <input
-                type={fieldFormat.field_type}
-                name={fieldFormat.field_name}
-                placeholder={fieldFormat.field_label}
-                className="auth-input"
-                value={value}
-                onChange={handleChange}
-                required={fieldFormat.mandatory}
-            />
+        <div className="input-group">
+            <div className="field row">
+                <label htmlFor={fieldFormat.field_name} className="field-label">{fieldFormat.field_label}{fieldFormat.mandatory ? " *" : ""}</label>
+                <input
+                    id={fieldFormat.field_name}
+                    type={fieldFormat.field_type}
+                    name={fieldFormat.field_name}
+                    className={`field-input ${invalid ? "field-input--invalid" : ""}`}
+                    value={value}
+                    onChange={handleChange}
+                    autoComplete="off"
+                />
+            </div>
         </div>
     );
 }

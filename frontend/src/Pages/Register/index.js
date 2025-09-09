@@ -6,6 +6,9 @@ import { toast } from "react-toastify";
 import useSearchConfig from "../../Hooks/useSearchConfig";
 import { MyContext } from "../../Context";
 import InputGroup from "../../Components/InputGroup";
+import TextField from "../../Components/Fields/TextField";
+import EmailField from "../../Components/Fields/EmailField";
+import PasswordField from "../../Components/Fields/PasswordField";
 
 function Register() {
     const navigate = useNavigate();
@@ -19,6 +22,7 @@ function Register() {
     });
     const { register } = useAuth();
     const [registerData, setRegisterData] = useState([]);
+    const [submitted, setSubmitted] = useState(false);
 
     const getRigisterData = () => {
         const _registerData = searchConfig.filter((item) => { return item.table_name == "registeration" });
@@ -36,13 +40,24 @@ function Register() {
         });
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const validateFields = () => {
+        if(formData.password == "")return false;
+        if(formData.name == "" || formData.email == "")return false;
+        registerData.map((item) => {
+            if(item.mandatory && (formData[item.field_name] == ""))return false;
+        })
+        return true;
+    }
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();     
+        setSubmitted(true); 
         if (formData.password !== formData.confirmPassword) {
             toast.error("Password and Confirm Password do not match!", { position: "top-right" });
             return;
         }
+        if(!validateFields())return;
+
         if (await register(formData)) {
             navigate("/")
         }
@@ -63,72 +78,54 @@ function Register() {
                     <h1>Create Account</h1>
                     <p>Join BeornNotes and start managing your customers</p>
                 </div>
-
                 <form className="auth-form" onSubmit={handleSubmit}>
-
-                    <div className="input-group">
-                        <input
-                            type="text"
-                            name="name"
-                            placeholder="Full Name"
-                            className="auth-input"
-                            value={formData.name}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-                    <div className="input-group">
-                        <input
-                            type="text"
-                            name="email"
-                            placeholder="Email"
-                            className="auth-input"
-                            value={formData.email}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-                    <div className="input-group">
-                        <input
-                            type="password"
-                            name="password"
-                            placeholder="Password"
-                            className="auth-input"
-                            value={formData.password}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-                    <div className="input-group">
-                        <input
-                            type="password"
-                            name="confirmPassword"
-                            placeholder="ConfirmPassword"
-                            className="auth-input"
-                            value={formData.confirmPassword}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-
+                    <TextField
+                        name="name"
+                        label="Full Name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        required={true}
+                        submitted={submitted}
+                    />
+                    <EmailField
+                        name="email"
+                        label="Email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        required={true}
+                        submitted={submitted}
+                    />
+                    <PasswordField
+                        name="password"
+                        label="Password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        required={true}
+                        submitted={submitted}
+                    />
+                    <PasswordField
+                        name="confirmPassword"
+                        label="Confirm Password"
+                        value={formData.confirmPassword}
+                        onChange={handleChange}
+                        required={true}
+                        submitted={submitted}
+                    />
                     {registerData.map((item) => {
                         return (
-                        <InputGroup props={{ fieldFormat: item, value: formData[item.field_name], handleChange }} />
+                        <InputGroup props={{ fieldFormat: item, value: formData[item.field_name], handleChange, submitted }} />
                     )
                     })}
-
                     <div className="terms-section">
                         <label className="terms-checkbox">
                             <input type="checkbox" required />
                             <span>I agree to the <a href="#" className="terms-link">Terms of Service</a> and <a href="#" className="terms-link">Privacy Policy</a></span>
                         </label>
                     </div>
-
                     <button type="submit" className="auth-button">
                         Create Account
                     </button>
                 </form>
-
                 <div className="auth-footer">
                     <p>Already have an account? <a href="/" className="auth-link">Sign in</a></p>
                 </div>

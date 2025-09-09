@@ -1,11 +1,18 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./style.css";
 
-function Combobox({ fieldFormat, value, handleChange, options = [] }) {
+function Combobox({ fieldFormat, value, handleChange, options = [], submitted = false }) {
     const [searchTerm, setSearchTerm] = useState("");
     const [isOpen, setIsOpen] = useState(false);
     const [filteredData, setFilteredData] = useState([]);
     const comboboxRef = useRef(null);
+
+    // Keep input in sync with external value
+    useEffect(() => {
+        if (!searchTerm && value) {
+            setSearchTerm(value);
+        }
+    }, [value]);
 
     // Filter options based on search term
     useEffect(() => {
@@ -73,40 +80,45 @@ function Combobox({ fieldFormat, value, handleChange, options = [] }) {
         }
     };
 
+    const invalid = fieldFormat.mandatory && submitted && (!value || String(value).trim() === "");
     return (
-        <div className="combobox-container" ref={comboboxRef}>
-            <input
-                type="text"
-                name={fieldFormat.field_name}
-                className="auth-input combobox-input"
-                placeholder={`Search ${fieldFormat.field_label}...`}
-                value={searchTerm}
-                onChange={handleInputChange}
-                onFocus={handleFocus}
-                onKeyDown={handleKeyDown}
-                required={fieldFormat.mandatory}
-                autoComplete="off"
-            />
-            
-            {isOpen && (
-                <div className="combobox-dropdown">
-                    {filteredData.length > 0 ? (
-                        filteredData.map((item, index) => (
-                            <div
-                                key={index}
-                                className="combobox-option"
-                                onClick={() => handleOptionSelect(item)}
-                            >
-                                {item.name}
+        <div className="field row" ref={comboboxRef}>
+            <label htmlFor={fieldFormat.field_name} className="field-label">
+                {fieldFormat.field_label}{fieldFormat.mandatory ? " *" : ""}
+            </label>
+            <div className="combobox-container">
+                <input
+                    id={fieldFormat.field_name}
+                    type="text"
+                    name={fieldFormat.field_name}
+                    className={`field-input combobox-input ${invalid ? "field-input--invalid" : ""}`}
+                    placeholder={`Search ${fieldFormat.field_label}...`}
+                    value={searchTerm}
+                    onChange={handleInputChange}
+                    onFocus={handleFocus}
+                    onKeyDown={handleKeyDown}
+                    autoComplete="off"
+                />
+                {isOpen && (
+                    <div className="combobox-dropdown">
+                        {filteredData.length > 0 ? (
+                            filteredData.map((item, index) => (
+                                <div
+                                    key={index}
+                                    className="combobox-option"
+                                    onClick={() => handleOptionSelect(item)}
+                                >
+                                    {item.name}
+                                </div>
+                            ))
+                        ) : (
+                            <div className="combobox-option no-results">
+                                No results found
                             </div>
-                        ))
-                    ) : (
-                        <div className="combobox-option no-results">
-                            No results found
-                        </div>
-                    )}
-                </div>
-            )}
+                        )}
+                    </div>
+                )}
+            </div>
         </div>
     );
 }
