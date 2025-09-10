@@ -8,7 +8,6 @@
     z-index: 999;
     box-sizing: border-box;
     overflow: visible;
-    padding-left: 280px;
 }
 
 .navbar-container {
@@ -31,6 +30,10 @@
     -ms-overflow-style: none;
     flex: 1;
     min-width: 0;
+}
+
+.M_L_50{
+    margin-left: 50px;
 }
 
 .breadcrumb::-webkit-scrollbar {
