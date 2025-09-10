@@ -53,10 +53,11 @@ const services = {
         }
     },
 
-    getMenuItems: async (token) => {
+    getMenuItems: async () => {
         try {
             services.setAuthToken();
             const res = await axios.get(services.serverURL + "/menuItems");
+            return res.data;
         } catch (error) {
             console.log("ServicesGetMenuItemsError: ", error)
         }

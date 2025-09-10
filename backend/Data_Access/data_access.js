@@ -80,6 +80,36 @@ class DataAccess{
         }
     }
 
+    async getData (tableName, filter) {
+        try {
+            if (!tableName || !filter || typeof filter !== 'object') {
+                throw new Error('Invalid tableName or filter provided');
+            }
+
+            const conditions = [];
+            const values = [];
+    
+            for (const key in filter) {
+                if (filter.hasOwnProperty(key) && filter[key] !== undefined) {
+                    conditions.push(`${key} = ?`);
+                    values.push(filter[key]);
+                }
+            }
+            if (conditions.length === 0) {
+                throw new Error('No valid filter conditions provided');
+            }
+
+            const whereClause = conditions.join(' AND ');
+            const sql = `SELECT * FROM ${tableName} WHERE ${whereClause}`;
+            
+            const [rows] = await this.dbModel.execute(sql, values);
+            
+            return rows || null;        
+        } catch (error) {
+            console.log("DA_getOneDataError: ", error);
+        }
+    }
+
     async update (id, newData){
         try {
             return await this.dbModel.findByIdAndUpdate(id, newData, {new:true});

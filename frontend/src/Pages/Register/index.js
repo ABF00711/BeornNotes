@@ -9,11 +9,13 @@ import InputGroup from "../../Components/InputGroup";
 import TextField from "../../Components/TextField";
 import EmailField from "../../Components/EmailField";
 import PasswordField from "../../Components/PasswordField";
+import useMenuItems from "../../Hooks/useMenuItems";
 
 function Register() {
     const navigate = useNavigate();
     const { searchConfig } = useContext(MyContext);
     const { getSearchConfigData } = useSearchConfig();
+    const {getMenuItems} = useMenuItems();
     const [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -60,6 +62,7 @@ function Register() {
         if(!validateFields()) return;
 
         if (await register(formData)) {
+            getMenuItems();
             navigate("/")
         }
     };

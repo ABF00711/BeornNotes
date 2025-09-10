@@ -9,7 +9,6 @@ import useMenuItems from "../../Hooks/useMenuItems";
 function Dashboard() {
     const navigate = useNavigate();
     const { isAuthenticated } = useAuth();
-    const {getMenuItems} = useMenuItems();
 
     const isAuth = async () => {
         const res = await isAuthenticated();
@@ -24,7 +23,6 @@ function Dashboard() {
 
     useEffect(() => {
         isAuth();
-        getMenuItems();
     }, [])
 
     return (

@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { MyContext } from "../Context";
+import services from "../Services";
 
 
 function useMenuItems () {
@@ -7,7 +8,10 @@ function useMenuItems () {
 
     const getMenuItems = async () => {
         try {
-            
+            const res = await services.getMenuItems();
+            if(res.message == "getMenuItems success"){
+                setMenuItems(res.user_menu);
+            }
         } catch (err) {
             console.log("getMenuItemsError: ", err);
         }        

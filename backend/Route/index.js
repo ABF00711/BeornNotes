@@ -2,6 +2,8 @@ const express = require("express");
 const userController = require("../Controller/userController.js");
 const searchConfigController = require("../Controller/searchConfigController.js");
 const optionDataController = require("../Controller/optionDataController.js");
+const authMiddleware = require("../middleware/index.js");
+const menuController = require("../Controller/menuController.js");
 const router = express.Router();
 
 router.get('/searchConfigData', searchConfigController.getAll);
@@ -12,6 +14,6 @@ router.post('/login', userController.login);
 router.post('/isAuth', userController.isAuth);
 router.post('/logout', userController.logout);
 
-router.get('/menuItems', )
+router.get('/menuItems', authMiddleware, menuController.getMenuItems)
 
 module.exports = router;
