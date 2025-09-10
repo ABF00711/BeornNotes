@@ -1,11 +1,205 @@
-.tabbedBtn{
-    width: 200px;
-    border-radius: 5px;
-    border: 1px grey;
-    background-color: aliceblue;
-    padding: 8px;
-}
-.removeBtn{
-    margin-left: 20px;
+/* Modern Tabbed Button Design */
+.tabbed-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 120px;
+    max-width: 200px;
+    height: 36px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px 8px 0 0;
+    padding: 0 12px;
+    margin-right: 4px;
     cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+    user-select: none;
+}
+
+.tabbed-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.tabbed-btn:hover::before {
+    opacity: 1;
+}
+
+.tabbed-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.tabbed-btn.active {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
+    border-bottom-color: transparent;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.tabbed-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: white;
+    border-radius: 1px 1px 0 0;
+}
+
+.tab-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    min-width: 0;
+    position: relative;
+    z-index: 1;
+}
+
+.tab-icon {
+    font-size: 14px;
+    flex-shrink: 0;
+    opacity: 0.8;
+    transition: opacity 0.2s ease;
+}
+
+.tab-title {
+    color: white;
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+}
+
+.tabbed-btn:hover .tab-title {
+    font-weight: 600;
+}
+
+.tabbed-btn.active .tab-title {
+    font-weight: 600;
+    color: white;
+}
+
+.tab-close {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 12px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+    margin-left: 8px;
+}
+
+.tab-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    transform: scale(1.1);
+}
+
+.tabbed-btn.active .tab-close {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .tabbed-btn {
+        min-width: 100px;
+        max-width: 150px;
+        height: 32px;
+        padding: 0 8px;
+        margin-right: 2px;
+    }
+    
+    .tab-title {
+        font-size: 12px;
+    }
+    
+    .tab-icon {
+        font-size: 12px;
+    }
+    
+    .tab-close {
+        width: 18px;
+        height: 18px;
+        font-size: 10px;
+        margin-left: 6px;
+    }
+}
+
+@media (max-width: 480px) {
+    .tabbed-btn {
+        min-width: 80px;
+        max-width: 120px;
+        height: 30px;
+        padding: 0 6px;
+    }
+    
+    .tab-title {
+        font-size: 11px;
+    }
+    
+    .tab-icon {
+        font-size: 11px;
+    }
+    
+    .tab-close {
+        width: 16px;
+        height: 16px;
+        font-size: 9px;
+        margin-left: 4px;
+    }
+}
+
+/* Animation for tab addition/removal */
+.tabbed-btn {
+    animation: tabSlideIn 0.3s ease-out;
+}
+
+@keyframes tabSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Focus states for accessibility */
+.tabbed-btn:focus {
+    outline: 2px solid rgba(255, 255, 255, 0.5);
+    outline-offset: 2px;
+}
+
+.tab-close:focus {
+    outline: 2px solid rgba(255, 255, 255, 0.5);
+    outline-offset: 1px;
 }

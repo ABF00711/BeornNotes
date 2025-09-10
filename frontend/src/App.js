@@ -6,6 +6,7 @@ import ContextProvider from './Context';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Dashboard from './Pages/Dashboard';
+import Customers from './Pages/Customers';
 
 function App() {
 
@@ -17,6 +18,7 @@ function App() {
             <Route path="/" element={<Dashboard />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/customers" element={<Customers />} />
           </Routes>
           <ToastContainer />
         </BrowserRouter>

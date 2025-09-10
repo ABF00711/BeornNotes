@@ -25,7 +25,16 @@
 .breadcrumb {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    flex: 1;
+    min-width: 0;
+}
+
+.breadcrumb::-webkit-scrollbar {
+    display: none;
 }
 
 .breadcrumb-separator {
