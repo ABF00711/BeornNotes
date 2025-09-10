@@ -2,12 +2,10 @@ import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Register from './Pages/Register';
 import Login from './Pages/Login';
-import ContextProvider, { MyContext } from './Context';
+import ContextProvider from './Context';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Dashboard from './Pages/Dashboard';
-import useSearchConfig from './Hooks/useSearchConfig';
-import { useContext, useEffect } from 'react';
 
 function App() {
 

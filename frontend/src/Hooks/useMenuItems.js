@@ -3,22 +3,31 @@ import { MyContext } from "../Context";
 import services from "../Services";
 
 
-function useMenuItems () {
-    const {menuItems, setMenuItems} = useContext(MyContext);
+function useMenuItems() {
+    const { menuItems, setMenuItems } = useContext(MyContext);
 
     const getMenuItems = async () => {
         try {
             const res = await services.getMenuItems();
-            if(res.message == "getMenuItems success"){
-                setMenuItems(res.user_menu);
+            if (res.message == "getMenuItems success") {
+                let _menuItems = [{
+                    id: 0,
+                    screen_id: "dashboard",
+                    title: "Dashboard",
+                    icon: "📊",
+                    path: "/",
+                    active: "",
+                    parent_id: null
+                }];
+                setMenuItems(_menuItems.concat(res.user_menu));
             }
         } catch (err) {
             console.log("getMenuItemsError: ", err);
-        }        
+        }
     }
 
     return (
-        {getMenuItems, menuItems}
+        { getMenuItems, menuItems }
     );
 }
 

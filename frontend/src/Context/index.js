@@ -12,17 +12,7 @@ function ContextProvider({children}){
     })
     const [token, setToken] = useState("");
     const [searchConfig, setSearchConfig] = useState([]);
-    const [menuItems, setMenuItems] = useState([
-        {
-            id:0,
-            screen_id: "dashboard",
-            title: "Dashboard",
-            icon: "📊",
-            path: "/",
-            active: "",
-            parent_id: null
-        },
-    ]);
+    const [menuItems, setMenuItems] = useState([]);
 
     useEffect(() => {
         localStorage.setItem("jwtToken", token);
