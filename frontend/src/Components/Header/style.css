@@ -76,6 +76,7 @@
     position: relative;
     cursor: pointer;
     user-select: none;
+    padding-left: 20px;
 }
 
 .user-info {

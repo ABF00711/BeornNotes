@@ -1,0 +1,237 @@
+/* Navbar Design - Matching Header and Sidebar */
+.navbar {
+    width: 100%;
+    height: 60px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 999;
+    box-sizing: border-box;
+    overflow: visible;
+}
+
+.navbar-container {
+    width: 100%;
+    height: 100%;
+    padding: 0 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+}
+
+/* Breadcrumb Navigation */
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.breadcrumb-separator {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.breadcrumb-item {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.breadcrumb-item:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    transform: translateY(-1px);
+}
+
+.breadcrumb-item.active {
+    color: white;
+    background: rgba(255, 255, 255, 0.15);
+    font-weight: 600;
+    cursor: default;
+}
+
+.breadcrumb-item:disabled {
+    cursor: default;
+}
+
+/* Navbar Actions */
+.navbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+/* Search Container */
+.search-container {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 25px;
+    padding: 4px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+.search-container:focus-within {
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.search-input {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 14px;
+    padding: 8px 16px;
+    outline: none;
+    width: 200px;
+    transition: width 0.3s ease;
+}
+
+.search-input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.search-input:focus {
+    width: 250px;
+}
+
+.search-btn {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 16px;
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 20px;
+    transition: all 0.2s ease;
+}
+
+.search-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+/* Quick Actions */
+.quick-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.action-btn {
+    position: relative;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: white;
+    font-size: 18px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.action-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.notification-badge {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    background: #ff4757;
+    color: white;
+    font-size: 10px;
+    font-weight: 600;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid white;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .navbar {
+        height: 50px;
+    }
+    
+    .navbar-container {
+        padding: 0 20px;
+    }
+    
+    .search-input {
+        width: 150px;
+    }
+    
+    .search-input:focus {
+        width: 180px;
+    }
+    
+    .breadcrumb-item {
+        font-size: 13px;
+        padding: 4px 8px;
+    }
+    
+    .action-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar-container {
+        padding: 0 15px;
+    }
+    
+    .search-container {
+        display: none;
+    }
+    
+    .breadcrumb {
+        gap: 4px;
+    }
+    
+    .breadcrumb-item {
+        font-size: 12px;
+        padding: 3px 6px;
+    }
+    
+    .quick-actions {
+        gap: 8px;
+    }
+    
+    .action-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
+    }
+}

@@ -14,7 +14,7 @@ function MenuItem({
             <div className="nav-parent">
                 <button
                     className={`nav-link ${item.active ? 'active' : ''}`}
-                    onClick={() => hasChildren ? onToggle(item.id) : onNavigate(item.path)}
+                    onClick={() => hasChildren ? onToggle(item.id) : onNavigate(item)}
                     title={isCollapsed ? item.title : ""}
                 >
                     <span className="nav-icon">{item.icon}</span>

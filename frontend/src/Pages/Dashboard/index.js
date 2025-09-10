@@ -5,6 +5,7 @@ import useAuth from "../../Hooks/useAuth";
 import Header from "../../Components/Header";
 import Sidebar from "../Sidebar";
 import useMenuItems from "../../Hooks/useMenuItems";
+import Navbar from "../Navbar";
 
 function Dashboard() {
     const navigate = useNavigate();
@@ -28,6 +29,7 @@ function Dashboard() {
     return (
         <div className="dashboard">
             <Header />
+            <Navbar />
             <div className="dashboard-container">
                 <div className="main">
                     <h1>Welcome to BeornNotes Dashboard</h1>

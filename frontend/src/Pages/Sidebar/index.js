@@ -1,10 +1,9 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./style.css";
-import { MyContext } from "../../Context";
-import useAuth from "../../Hooks/useAuth";
 import useMenuItems from "../../Hooks/useMenuItems";
 import MenuItem from "../../Components/MenuItem";
+import useTabbedBtns from "../../Hooks/useTabbedBtns";
 
 function Sidebar() {
     const navigate = useNavigate();
@@ -12,6 +11,7 @@ function Sidebar() {
     const {menuItems} = useMenuItems();
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [expandedMenus, setExpandedMenus] = useState(new Set());
+    const {addTabbedBtns} = useTabbedBtns();
 
     // Auto-expand parent menus when child is active
     useEffect(() => {
@@ -21,8 +21,9 @@ function Sidebar() {
         }
     }, [location.pathname]);
 
-    const handleNavigation = (path) => {
-        navigate(path);
+    const handleNavigation = (item) => {
+        addTabbedBtns(item);
+        navigate(item.path);
     };
 
     const toggleSidebar = () => {

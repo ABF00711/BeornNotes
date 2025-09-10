@@ -5,14 +5,15 @@ const DataContext = createContext([]);
 
 export const MyContext = DataContext;
 
-function ContextProvider({children}){
+function ContextProvider({ children }) {
     const [userData, setUserData] = useState({
-        name:"",
-        email:""
+        name: "",
+        email: ""
     })
     const [token, setToken] = useState("");
     const [searchConfig, setSearchConfig] = useState([]);
     const [menuItems, setMenuItems] = useState([]);
+    const [tabbedBtns, setTabbedBtns] = useState([]);
 
     useEffect(() => {
         localStorage.setItem("jwtToken", token);
@@ -20,7 +21,13 @@ function ContextProvider({children}){
 
 
     return (
-        <DataContext.Provider value={{userData, setUserData, token, setToken, searchConfig, setSearchConfig, menuItems, setMenuItems}}>
+        <DataContext.Provider value={{
+            userData, setUserData,
+            token, setToken,
+            searchConfig, setSearchConfig,
+            menuItems, setMenuItems,
+            tabbedBtns, setTabbedBtns
+        }}>
             {children}
         </DataContext.Provider>
     )
