@@ -3,6 +3,11 @@ import axios from "axios";
 const services = {
     serverURL: "http://localhost:5000/api",
 
+    setAuthToken: () => {
+        const token = localStorage.getItem("jwtToken");
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    },
+
     register: async (userData) => {
         try {
             const res = await axios.post(services.serverURL + "/register", userData);
@@ -45,6 +50,15 @@ const services = {
             return res.data;
         } catch (error) {
             console.log("ServicesGetOptionDataError: ", error);
+        }
+    },
+
+    getMenuItems: async (token) => {
+        try {
+            services.setAuthToken();
+            const res = await axios.get(services.serverURL + "/menuItems");
+        } catch (error) {
+            console.log("ServicesGetMenuItemsError: ", error)
         }
     }
 }

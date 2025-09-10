@@ -4,10 +4,12 @@ import { useNavigate } from "react-router-dom";
 import useAuth from "../../Hooks/useAuth";
 import Header from "../../Components/Header";
 import Sidebar from "../Sidebar";
+import useMenuItems from "../../Hooks/useMenuItems";
 
 function Dashboard() {
     const navigate = useNavigate();
     const { isAuthenticated } = useAuth();
+    const {getMenuItems} = useMenuItems();
 
     const isAuth = async () => {
         const res = await isAuthenticated();
@@ -21,7 +23,8 @@ function Dashboard() {
     
 
     useEffect(() => {
-        isAuth()
+        isAuth();
+        getMenuItems();
     }, [])
 
     return (

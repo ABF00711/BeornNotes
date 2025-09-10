@@ -1,4 +1,5 @@
 import { createContext, useState, useContext, useMemo, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 const DataContext = createContext([]);
 
@@ -18,7 +19,7 @@ function ContextProvider({children}){
             title: "Dashboard",
             icon: "📊",
             path: "/",
-            active: true,
+            active: "",
             parent_id: null
         },
     ]);

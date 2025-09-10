@@ -66,6 +66,7 @@ function Sidebar() {
                     {parentItems.map((parent) => {
                         const hasChildren = parent.children && parent.children.length > 0;
                         const isExpanded = expandedMenus.has(parent.id);
+                        parent.active = location.pathname === parent.path;
                         
                         return (
                             <MenuItem

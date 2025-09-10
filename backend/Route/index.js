@@ -12,4 +12,6 @@ router.post('/login', userController.login);
 router.post('/isAuth', userController.isAuth);
 router.post('/logout', userController.logout);
 
+router.get('/menuItems', )
+
 module.exports = router;
