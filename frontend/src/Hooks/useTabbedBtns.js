@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { MyContext } from "../Context";
 
 function useTabbedBtns () {
@@ -6,9 +6,9 @@ function useTabbedBtns () {
 
     const addTabbedBtns = (item) => {
         try {
-            if (tabbedBtns.indexOf((btn) => btn.title == item.title)){
-                let _tabbedBtns = [...tabbedBtns];
-                _tabbedBtns.push(item);
+            if (!tabbedBtns.some((btn) => btn.title == item.title)){
+                let _tabbedBtns = [...tabbedBtns, item];
+                localStorage.setItem("tabbedBtns", JSON.stringify(_tabbedBtns));
                 setTabbedBtns(_tabbedBtns);
             }
         } catch (error) {
@@ -16,8 +16,34 @@ function useTabbedBtns () {
         }
     }
 
+    const getTabbedBtns = () => {
+        try {
+            const btnInfo = localStorage.getItem("tabbedBtns");
+            
+            if(!btnInfo) {
+                setTabbedBtns([]); 
+                return;
+            }
+            const parse = JSON.parse(btnInfo);
+            setTabbedBtns(parse);
+        } catch (error) {
+            console.log("getTabbedBtnsError: ", error);
+            setTabbedBtns([]);
+        }
+    }
+
+    const removeTabbedBtn = (btnInfo) => {
+        try {
+            let _tabbedBtns = [...tabbedBtns];
+            setTabbedBtns(_tabbedBtns.filter(item => item.title !== btnInfo.title));
+        } catch (error) {
+            console.log("removeTabbedBtnsError: ", error);
+            setTabbedBtns([]);
+        }
+    }
+
     return (
-        {tabbedBtns, addTabbedBtns}
+        {tabbedBtns, addTabbedBtns, getTabbedBtns, removeTabbedBtn}
     );
 }
 

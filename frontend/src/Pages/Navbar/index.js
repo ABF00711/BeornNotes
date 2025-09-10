@@ -1,45 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./style.css";
+import useTabbedBtns from "../../Hooks/useTabbedBtns";
+import TabbedBtn from "../../Components/TabbedBtn";
 
 function Navbar() {
-    const navigate = useNavigate();
-    const location = useLocation();
+    const {tabbedBtns, getTabbedBtns} = useTabbedBtns();
 
-    // Generate breadcrumb from current path
-    const generateBreadcrumb = () => {
-        const pathSegments = location.pathname.split('/').filter(segment => segment);
-        const breadcrumbs = [{ label: 'Dashboard', path: '/' }];
-        
-        let currentPath = '';
-        pathSegments.forEach(segment => {
-            currentPath += `/${segment}`;
-            const label = segment.charAt(0).toUpperCase() + segment.slice(1).replace('_', ' ');
-            breadcrumbs.push({ label, path: currentPath });
-        });
-        
-        return breadcrumbs;
-    };
-
-    const breadcrumbs = generateBreadcrumb();
+    useEffect(() => {
+        getTabbedBtns();
+    }, [])
 
     return (
         <div className="navbar">
             <div className="navbar-container">
                 {/* Breadcrumb Navigation */}
                 <div className="breadcrumb">
-                    {breadcrumbs.map((crumb, index) => (
-                        <React.Fragment key={crumb.path}>
-                            {index > 0 && <span className="breadcrumb-separator">›</span>}
-                            <button
-                                className={`breadcrumb-item ${index === breadcrumbs.length - 1 ? 'active' : ''}`}
-                                onClick={() => navigate(crumb.path)}
-                                disabled={index === breadcrumbs.length - 1}
-                            >
-                                {crumb.label}
-                            </button>
-                        </React.Fragment>
-                    ))}
+                    {tabbedBtns.map((btnInfo) => {
+                        if(!btnInfo)return;
+                        return <TabbedBtn btnInfo = {btnInfo} />;
+                    })}
                 </div>
 
                 {/* Right side actions */}

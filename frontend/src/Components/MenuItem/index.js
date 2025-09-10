@@ -44,7 +44,7 @@ function Submenu({ children, onNavigate }) {
                 <li key={child.screen_id} className="submenu-item">
                     <button
                         className={`submenu-link ${child.active ? 'active' : ''}`}
-                        onClick={() => onNavigate(child.path)}
+                        onClick={() => onNavigate(child)}
                         title={child.title}
                     >
                         <span className="submenu-icon">{child.icon}</span>

@@ -4,12 +4,13 @@ import "./style.css";
 import useMenuItems from "../../Hooks/useMenuItems";
 import MenuItem from "../../Components/MenuItem";
 import useTabbedBtns from "../../Hooks/useTabbedBtns";
+import { MyContext } from "../../Context";
 
 function Sidebar() {
     const navigate = useNavigate();
     const location = useLocation();
-    const {menuItems} = useMenuItems();
-    const [isCollapsed, setIsCollapsed] = useState(false);
+    const {menuItems, getMenuItems} = useMenuItems();
+    const {isCollapsed, setIsCollapsed} = useContext(MyContext);
     const [expandedMenus, setExpandedMenus] = useState(new Set());
     const {addTabbedBtns} = useTabbedBtns();
 
@@ -49,6 +50,10 @@ function Sidebar() {
             ...parent,
             children: menuItems.filter(child => child.parent_id === parent.id)
         }));
+
+    useEffect(() => {
+        getMenuItems();
+    }, [])
 
     return (
         <div className={`sidebar ${isCollapsed ? 'collapsed' : ''}`}>

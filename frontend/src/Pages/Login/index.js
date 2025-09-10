@@ -8,7 +8,6 @@ import useMenuItems from "../../Hooks/useMenuItems";
 
 function Login() {
     const navigate = useNavigate();
-    const {getMenuItems} = useMenuItems();
     const [formData, setFormData] = useState({
         email: "",
         password: ""
@@ -26,7 +25,6 @@ function Login() {
         e.preventDefault();
 
         if (await login(formData)) {
-            getMenuItems();
             navigate("/");
         }
     }

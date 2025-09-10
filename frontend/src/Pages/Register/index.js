@@ -15,7 +15,6 @@ function Register() {
     const navigate = useNavigate();
     const { searchConfig } = useContext(MyContext);
     const { getSearchConfigData } = useSearchConfig();
-    const {getMenuItems} = useMenuItems();
     const [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -62,7 +61,6 @@ function Register() {
         if(!validateFields()) return;
 
         if (await register(formData)) {
-            getMenuItems();
             navigate("/")
         }
     };

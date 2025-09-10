@@ -8,6 +8,7 @@
     z-index: 999;
     box-sizing: border-box;
     overflow: visible;
+    padding-left: 280px;
 }
 
 .navbar-container {

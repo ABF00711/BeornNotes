@@ -14,11 +14,7 @@ function ContextProvider({ children }) {
     const [searchConfig, setSearchConfig] = useState([]);
     const [menuItems, setMenuItems] = useState([]);
     const [tabbedBtns, setTabbedBtns] = useState([]);
-
-    useEffect(() => {
-        localStorage.setItem("jwtToken", token);
-    }, [token])
-
+    const [isCollapsed, setIsCollapsed] = useState(false);
 
     return (
         <DataContext.Provider value={{
@@ -26,7 +22,8 @@ function ContextProvider({ children }) {
             token, setToken,
             searchConfig, setSearchConfig,
             menuItems, setMenuItems,
-            tabbedBtns, setTabbedBtns
+            tabbedBtns, setTabbedBtns,
+            isCollapsed, setIsCollapsed
         }}>
             {children}
         </DataContext.Provider>

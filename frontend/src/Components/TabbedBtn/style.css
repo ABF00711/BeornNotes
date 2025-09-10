@@ -1,0 +1,11 @@
+.tabbedBtn{
+    width: 200px;
+    border-radius: 5px;
+    border: 1px grey;
+    background-color: aliceblue;
+    padding: 8px;
+}
+.removeBtn{
+    margin-left: 20px;
+    cursor: pointer;
+}
