@@ -5,9 +5,10 @@ import services from "../Services";
 function useDynamicData () {
     const {dynamicData, setDynamicData} = useContext(MyContext);
 
-    const getDynamicData = async (tableName) => {
+    const getDynamicData = async (tableView) => {
         try {
-            const res = await services.getDynamicData(tableName);
+            console.log("tableView: ", tableView);
+            const res = await services.getDynamicData(tableView);
             if(res.messsage = "getDynamicData success"){
                 setDynamicData(res.dynamicData);
             }

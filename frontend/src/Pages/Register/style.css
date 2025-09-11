@@ -20,20 +20,20 @@
 .terms-checkbox input[type="checkbox"] {
     width: 18px;
     height: 18px;
-    accent-color: #667eea;
+    accent-color: #74b9ff;
     margin-top: 2px;
     flex-shrink: 0;
 }
 
 .terms-link {
-    color: #667eea;
+    color: #74b9ff;
     text-decoration: none;
     font-weight: 500;
     transition: color 0.3s ease;
 }
 
 .terms-link:hover {
-    color: #764ba2;
+    color: #0984e3;
     text-decoration: underline;
 }
 
@@ -125,7 +125,7 @@
 .input-group.focused .auth-input::placeholder {
     transform: translateY(-20px);
     font-size: 12px;
-    color: #667eea;
+    color: #74b9ff;
 }
 
 /* Social Login Options */
@@ -178,8 +178,8 @@
 }
 
 .social-button:hover {
-    border-color: #667eea;
-    color: #667eea;
+    border-color: #74b9ff;
+    color: #74b9ff;
     transform: translateY(-2px);
 }
 

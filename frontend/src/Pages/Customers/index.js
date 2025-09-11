@@ -15,7 +15,7 @@ function Customers() {
             <Header />
             <Navbar />
             <div className={`dashboard-container ${!isCollapsed ? 'M_L_280' : ''}`}>
-                <DynamicGrid />
+                <DynamicGrid tableView={"customers"} />
             </div>
             <Sidebar />
         </div>

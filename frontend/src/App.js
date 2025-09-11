@@ -7,11 +7,11 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Dashboard from './Pages/Dashboard';
 import Customers from './Pages/Customers';
-import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community'; 
+import { AllCommunityModule, ModuleRegistry, SideBarModule } from 'ag-grid-community'; 
 // import 'ag-grid-community/styles/ag-grid.css';
 
 // Register all Community features
-ModuleRegistry.registerModules([AllCommunityModule]);
+ModuleRegistry.registerModules([AllCommunityModule ]);
 
 function App() {
 

@@ -8,7 +8,7 @@ function useSearchConfig () {
     const getSearchConfigData = async () => {
         try {
             const res = await services.getSearchConfig();
-            if(res.searchConfigData){
+            if(res.message == "getSearchConfigData success"){
                 setSearchConfig(res.searchConfigData);
             }
         } catch (error) {

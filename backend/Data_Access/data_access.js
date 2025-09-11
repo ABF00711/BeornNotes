@@ -80,6 +80,8 @@ class DataAccess{
         }
     }
 
+    
+
     async getData (tableName, filter) {
         try {
             if (!tableName || !filter || typeof filter !== 'object') {
