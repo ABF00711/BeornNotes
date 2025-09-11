@@ -12,6 +12,7 @@ function ContextProvider({ children }) {
     })
     const [token, setToken] = useState("");
     const [searchConfig, setSearchConfig] = useState([]);
+    const [dynamicData, setDynamicData] = useState([]);
     const [menuItems, setMenuItems] = useState([]);
     const [tabbedBtns, setTabbedBtns] = useState([]);
     const [isCollapsed, setIsCollapsed] = useState(false);
@@ -23,7 +24,8 @@ function ContextProvider({ children }) {
             searchConfig, setSearchConfig,
             menuItems, setMenuItems,
             tabbedBtns, setTabbedBtns,
-            isCollapsed, setIsCollapsed
+            isCollapsed, setIsCollapsed,
+            dynamicData, setDynamicData
         }}>
             {children}
         </DataContext.Provider>

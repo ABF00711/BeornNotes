@@ -61,6 +61,16 @@ const services = {
         } catch (error) {
             console.log("ServicesGetMenuItemsError: ", error)
         }
+    },
+    
+    getDynamicData: async (tableName) => {
+        try {
+            services.setAuthToken();
+            const res = await axios.post(services.serverURL + "/dynamicData", {tableName});
+            return res.data;
+        } catch (error) {
+            console.log("ServicesGetDynamicDataError: ", error)
+        }
     }
 }
 
