@@ -6,33 +6,11 @@ import useDynamicData from "../../Hooks/useDynamicData";
 import useSearchConfig from "../../Hooks/useSearchConfig";
 
 function DynamicGrid({ tableView }) {
-    const { dynamicData, getDynamicData } = useDynamicData();
+    const { dynamicData, getDynamicData, getColumDefs } = useDynamicData();
     const { searchConfig, getSearchConfigData } = useSearchConfig();
     const gridRef = useRef();
     const [columnDefs, setColumnDefs] = useState([
     ]);
-
-    const getColumDefs = () => {
-        try {
-            const columnData = searchConfig
-                .filter(item => item.table_name == tableView)
-                .map((item, index) => {
-                    if (item.field_type == "date") {
-                        return {
-                            field: item.field_name, sortable: true, filter: true, colId: index, flex: 1,
-                            valueFormatter: (params) => {
-                                if (!params.value) return "";
-                                return new Date(params.value).toISOString().split("T")[0];
-                            }
-                        }
-                    }
-                    return { field: item.field_name, sortable: true, filter: true, colId: index, flex: 1 };
-                })
-            setColumnDefs(columnData);
-        } catch (error) {
-            console.log("getColumnDefsError: ", error);
-        }
-    }
 
     const removeData = (params) => {
         console.log("Row index:", params.rowIndex);
@@ -58,7 +36,7 @@ function DynamicGrid({ tableView }) {
     }, []);
 
     useEffect(() => {
-        getColumDefs();
+        setColumnDefs(getColumDefs(tableView));
     }, [searchConfig])
 
     useEffect(() => {
@@ -68,6 +46,32 @@ function DynamicGrid({ tableView }) {
 
     return (
         <div className="dynamic-grid">
+            <div className="grid-toolbar">
+                <div className="toolbar-left">
+                    <button type="button" className="btn btn-primary">
+                        <span className="btn-icon">＋</span>
+                        <span className="btn-label">Add</span>
+                    </button>
+                </div>
+                <div className="toolbar-right">
+                    <button type="button" className="btn btn-outline">
+                        <span className="btn-icon">🗂️</span>
+                        <span className="btn-label">Layouts</span>
+                    </button>
+                    <button type="button" className="btn btn-outline">
+                        <span className="btn-icon">🔍</span>
+                        <span className="btn-label">Filters</span>
+                    </button>
+                    <button type="button" className="btn btn-outline">
+                        <span className="btn-icon">📑</span>
+                        <span className="btn-label">Columns</span>
+                    </button>
+                    <div className="total-count">
+                        <span className="total-label">Total:</span>
+                        <span className="total-value">{Array.isArray(dynamicData) ? dynamicData.length : 0}</span>
+                    </div>
+                </div>
+            </div>
             <div className="table">
                 <AgGridReact
                     ref={gridRef}
