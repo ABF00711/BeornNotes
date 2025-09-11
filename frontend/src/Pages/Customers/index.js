@@ -6,6 +6,7 @@ import Sidebar from "../Sidebar";
 import DynamicGrid from "../../Components/DynamicGrid";
 import { MyContext } from "../../Context";
 
+
 function Customers() {
     const {isCollapsed} = useContext(MyContext);
 
