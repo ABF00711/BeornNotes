@@ -4,14 +4,14 @@ import { AgGridReact } from 'ag-grid-react';
 import { themeAlpine } from "ag-grid-community";
 import useDynamicData from "../../Hooks/useDynamicData";
 import useSearchConfig from "../../Hooks/useSearchConfig";
+import ColumnVisible from "../ColumnVisible";
 
 function DynamicGrid({ tableView }) {
     const { dynamicData, getDynamicData, getColumDefs } = useDynamicData();
     const { searchConfig, getSearchConfigData } = useSearchConfig();
     const gridRef = useRef();
-    const [columnDefs, setColumnDefs] = useState([
-    ]);
-
+    const [columnDefs, setColumnDefs] = useState([]);
+    const [columnVisible, setColumnVisible] = useState(false);
     const removeData = (params) => {
         console.log("Row index:", params.rowIndex);
     }
@@ -24,11 +24,6 @@ function DynamicGrid({ tableView }) {
         const savedFilters = JSON.parse(localStorage.getItem("filters") || "{}");
         gridRef.current.api.setFilterModel(savedFilters);
         gridRef.current.api.onFilterChanged();
-    };
-
-    const logColumnState = () => {
-        const columnState = gridRef.current.columnApi.getColumnState();
-        console.log("Column state:", columnState);
     };
 
     const onGridReady = useCallback((params) => {
@@ -62,10 +57,13 @@ function DynamicGrid({ tableView }) {
                         <span className="btn-icon">🔍</span>
                         <span className="btn-label">Filters</span>
                     </button>
-                    <button type="button" className="btn btn-outline">
-                        <span className="btn-icon">📑</span>
-                        <span className="btn-label">Columns</span>
-                    </button>
+                    <div>
+                        <button type="button" className="btn btn-outline" onClick={() => setColumnVisible(!columnVisible)}>
+                            <span className="btn-icon">🔍</span>
+                            <span className="btn-label">Columns</span>
+                        </button>
+                        {columnVisible && <ColumnVisible columnDefs={columnDefs} setColumnDefs={setColumnDefs} />}
+                    </div>
                     <div className="total-count">
                         <span className="total-label">Total:</span>
                         <span className="total-value">{Array.isArray(dynamicData) ? dynamicData.length : 0}</span>

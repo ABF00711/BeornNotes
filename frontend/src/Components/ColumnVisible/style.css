@@ -1,0 +1,23 @@
+.columnVisible{
+    display: flex;
+    flex-direction: column;
+    width: 130px;
+    height: 200px;
+    padding: 10px;
+    background-color: rgb(215, 233, 250);
+    border-radius: 10px;
+    box-shadow: 1px 1px 3px grey;
+    position: absolute;
+    z-index: 1000;
+}
+.columnVisible-reset{
+    margin-bottom: 10px;
+    padding: 5px;
+    border-radius: 5px;
+    background-color: rgb(215, 233, 250);
+    box-shadow: 1px 1px 3px grey;
+    cursor: pointer;
+}
+.columnVisible-reset:hover{
+    background-color: rgb(222, 255, 255);
+}
