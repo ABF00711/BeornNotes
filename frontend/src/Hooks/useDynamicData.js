@@ -49,6 +49,18 @@ function useDynamicData () {
         }
     }
 
+    const deleteDynamicData = async (tablename, selectedRows) => {
+        try {
+            const res = await services.deleteDynamicData(tablename, selectedRows);
+            if(res.message === "deleteDynamicData success"){
+                toast.success("Deleted rows selected successfully");
+                getDynamicData(tablename);
+            }
+        } catch (error) {
+            console.log("deleteDynamicData: ", error);
+        }
+    }
+
     const getColumDefs = (tableView) => {
         try {
             const columnData = searchConfig
@@ -72,7 +84,7 @@ function useDynamicData () {
     }
 
     return (
-        {dynamicData, getDynamicData, getColumDefs, createDynamicData, updateDynamicData}
+        {dynamicData, getDynamicData, getColumDefs, createDynamicData, updateDynamicData, deleteDynamicData}
     );
 }
 

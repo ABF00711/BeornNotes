@@ -40,6 +40,19 @@ const dynamicDataController = {
             console.log("updateDynamicDataError: ", error);
             res.json({message: "updateDynamicData failed"});
         }
+    },
+
+    deleteDynamicData: async (req, res) => {
+        try {
+            const {tablename, selectedRows} = req.body;
+            const selectedRowIds = selectedRows.map((item) => item.id);
+            const sql = `Delete From ${tablename} Where id In (${selectedRowIds.join(", ")})`;
+            await mysqlDA.excuteSql(sql);
+            res.json({message: "deleteDynamicData success"});
+        } catch (error) {
+            console.log("deleteDynamicDataError: ", error);
+            res.json({message: "deleteDynamicData failed"});
+        }
     }
 }
 

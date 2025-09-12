@@ -30,7 +30,7 @@ function Add({ table_name }) {
     }, [searchConfig])
 
     return (
-        <div className="toolbar-left">
+        <>
             <button onClick={() => setIsOpen(true)} type="button" className="btn btn-primary">
                 <span className="btn-icon">＋</span>
                 <span className="btn-label">Add</span>
@@ -44,7 +44,7 @@ function Add({ table_name }) {
                 fieldsData={fieldsData}
                 initData={formData}
             />
-        </div>
+        </>
     );
 }
 

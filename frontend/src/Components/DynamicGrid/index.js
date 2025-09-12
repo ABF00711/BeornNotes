@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import "./style.css";
 import { AgGridReact } from 'ag-grid-react';
 import { themeAlpine } from "ag-grid-community";
@@ -7,6 +7,7 @@ import useSearchConfig from "../../Hooks/useSearchConfig";
 import ColumnVisible from "./ColumnVisible";
 import Add from "./Add";
 import Update from "./Update";
+import Delete from "./Delete";
 
 function DynamicGrid({ tableView }) {
     const { dynamicData, getDynamicData, getColumDefs } = useDynamicData();
@@ -15,6 +16,13 @@ function DynamicGrid({ tableView }) {
     const [columnDefs, setColumnDefs] = useState([]);
     const [isOpenUpdate, setIsOpenUpdate] = useState(false);
     const [updateData, setUpdateData] = useState(null);
+    const rowSelection = useMemo(() => {
+        return {
+            mode: "multiRow",
+            groupSelects: "descendants",
+            headerCheckbox: true,
+        };
+    }, []);
 
     const openUpdateModal = (params) => {
         setUpdateData(params.data);
@@ -24,6 +32,7 @@ function DynamicGrid({ tableView }) {
     const saveFilterInfo = (params) => {
         console.log(params.api.getFilterModel())
     }
+
 
     const restoreFilters = () => {
         const savedFilters = JSON.parse(localStorage.getItem("filters") || "{}");
@@ -47,7 +56,10 @@ function DynamicGrid({ tableView }) {
     return (
         <div className="dynamic-grid">
             <div className="grid-toolbar">
-                <Add table_name={tableView} />
+                <div className="toolbar-left">
+                    <Add table_name={tableView} />
+                    <Delete tablename = {tableView} gridRef = {gridRef} /> 
+                </div>
                 <div className="toolbar-right">
                     <button type="button" className="btn btn-outline">
                         <span className="btn-icon">🗂️</span>
@@ -73,9 +85,10 @@ function DynamicGrid({ tableView }) {
                     theme={themeAlpine}
                     onRowDoubleClicked={openUpdateModal}
                     onFilterChanged={saveFilterInfo}
+                    rowSelection={rowSelection}
                 />
             </div>
-            <Update tablename={tableView} isOpen = {isOpenUpdate} setIsOpen = {setIsOpenUpdate} updateData = {updateData} />
+            <Update tablename={tableView} isOpen={isOpenUpdate} setIsOpen={setIsOpenUpdate} updateData={updateData} />
         </div>
     );
 }

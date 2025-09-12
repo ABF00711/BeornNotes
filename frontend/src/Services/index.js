@@ -91,6 +91,16 @@ const services = {
         } catch (error) {
             console.log("ServicesUpdateDynamicDataError: ", error);
         }
+    },
+
+    deleteDynamicData: async (tablename, selectedRows) => {
+        try {
+            services.setAuthToken();
+            const res = await axios.post(services.serverURL + "/dynamicData/delete", {tablename, selectedRows});
+            return res.data;
+        } catch (error) {
+            console.log("ServicesDeleteDynamicDataError: ", error);
+        }
     }
 }
 

@@ -44,6 +44,18 @@
     border-color: #0984e3;
     color: #ffffff;
 }
+.btn-dangerous{
+    background: linear-gradient(135deg, #ff7674 0%, #e36b09 100%);
+    border-color: #e30909;
+    color: #ffffff;
+}
+.btn-dangerous-active{
+    background: linear-gradient(135deg, #ff7674 0%, #e30909 100%);
+}
+.btn-dangerous:hover{
+    transform: translateY(-1px);
+    background: #ff7b7b;
+}
 .btn-outline{
     background: #ffffff;
     border: 1px solid #cfe6ff;
