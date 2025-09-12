@@ -81,6 +81,16 @@ const services = {
         } catch (error) {
             console.log("ServicesCreateDynamicDataError: ", error)
         }
+    },
+
+    updateDynamicData: async (tablename, newData) => {
+        try {
+            services.setAuthToken();
+            const res = await axios.post(services.serverURL + "/dynamicData/update", {tablename, newData});
+            return res.data;
+        } catch (error) {
+            console.log("ServicesUpdateDynamicDataError: ", error);
+        }
     }
 }
 

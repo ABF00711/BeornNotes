@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import {Modal} from "antd";
+import React, { useEffect, useState } from "react";
+import { Modal } from "antd";
 import "./style.css";
 import InputGroup from "../InputGroup";
 import useDynamicData from "../../Hooks/useDynamicData";
@@ -7,7 +7,7 @@ import useDynamicData from "../../Hooks/useDynamicData";
 function DynamicModal({ table_name, isOpen, setIsOpen, title, role, fieldsData, initData = {} }) {
     const [submitted, setSubmitted] = useState(false);
     const [formData, setFormData] = useState(initData);
-    const {createDynamicData, updateDynamicData} = useDynamicData();
+    const { createDynamicData, updateDynamicData } = useDynamicData();
 
     const validateFields = () => {
         let result = true;
@@ -15,6 +15,7 @@ function DynamicModal({ table_name, isOpen, setIsOpen, title, role, fieldsData, 
         if (formData.name === "" || formData.email === "") result = false;
         fieldsData.forEach((item) => {
             if (item.mandatory && (formData[item.field_name].trim(" ") === "")) result = false;
+            if (!formData[item.field_name]) formData[item.field_name] = null;
         })
         return result;
     }
@@ -25,8 +26,8 @@ function DynamicModal({ table_name, isOpen, setIsOpen, title, role, fieldsData, 
             setSubmitted(true);
             if (!validateFields()) return;
 
-            if(role == "create") createDynamicData(table_name, formData);
-            if(role == "update")updateDynamicData(table_name, formData, formData.id);
+            if (role === "create") createDynamicData(table_name, formData);
+            if (role === "update") updateDynamicData(table_name, formData);
 
             setFormData({});
             setIsOpen(!isOpen);
@@ -41,6 +42,10 @@ function DynamicModal({ table_name, isOpen, setIsOpen, title, role, fieldsData, 
             [e.target.name]: e.target.value
         });
     };
+
+    useEffect(() => {
+        setFormData(initData);
+    }, [initData])
 
     return (
         <>

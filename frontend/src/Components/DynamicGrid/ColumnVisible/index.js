@@ -1,5 +1,5 @@
 import { Checkbox, Button } from "antd";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./style.css";
 
 function ColumnVisible({ columnDefs, setColumnDefs }) {
@@ -19,7 +19,7 @@ function ColumnVisible({ columnDefs, setColumnDefs }) {
   return (
     <div>
       <button type="button" className="btn btn-outline" onClick={() => setColumnVisible(!columnVisible)}>
-        <span className="btn-icon">🔍</span>
+        <span className="btn-icon">📑</span>
         <span className="btn-label">Columns</span>
       </button>
       {columnVisible &&

@@ -16,7 +16,6 @@ function Navbar() {
     return (
         <div className="navbar">
             <div className="navbar-container">
-                {/* Breadcrumb Navigation */}
                 <div className={`breadcrumb ${!isCollapsed ? 'M_L_280' : 'M_L_50'}`}>
                     {tabbedBtns.map((btnInfo) => {
                         if(!btnInfo)return;

@@ -23,7 +23,9 @@ function useDynamicData () {
 
             if(res.message === "createDynamicData success"){
                 toast.success(`Created a new ${tablename} data successfully`);
-                setDynamicData(prevData => ([...prevData, newData]));
+                newData.id = res.newDataId;
+                // setDynamicData(prevData => ([...prevData, newData]));
+                getDynamicData(tablename);
                 return;
             }
             toast.error(res.message);
@@ -32,8 +34,19 @@ function useDynamicData () {
         }
     }
 
-    const updateDynamicData = () => {
-
+    const updateDynamicData = async (tablename, newData) => {
+        try {
+            const res = await services.updateDynamicData(tablename, newData);
+            if(res.message == "updateDynamicData success"){
+                toast.success(`Updated ${tablename} data successfully.`);
+                // setDynamicData(dynamicData.map((item) => item.id === newData.id ? newData : item))
+                getDynamicData(tablename);
+                return;
+            }
+            toast.error(res.message);
+        } catch (error) {
+            console.log("getDynamicDataError: ", error);
+        }
     }
 
     const getColumDefs = (tableView) => {
@@ -43,10 +56,10 @@ function useDynamicData () {
                 .map((item, index) => {
                     if (item.field_type === "date") {
                         return {
-                            field: item.field_name, sortable: true, filter: true, colId: index, flex: 1,
+                            field: item.field_name, sortable: true, filter: true, colId: index, flex: 1, cellDataType: 'text',
                             valueFormatter: (params) => {
                                 if (!params.value) return "";
-                                return new Date(params.value).toISOString().split("T")[0];
+                                return new Date(params.value).toLocaleDateString().split("T")[0];
                             }
                         }
                     }

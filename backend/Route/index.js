@@ -19,5 +19,6 @@ router.get('/menuItems', authMiddleware, menuController.getMenuItems);
 
 router.post('/dynamicData/get', authMiddleware, dynamicDataController.getDynamicData);
 router.post('/dynamicData/create', authMiddleware, dynamicDataController.createDynamicData);
+router.post('/dynamicData/update', authMiddleware, dynamicDataController.updateDynamicData);
 
 module.exports = router;

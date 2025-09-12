@@ -5,17 +5,20 @@ import { themeAlpine } from "ag-grid-community";
 import useDynamicData from "../../Hooks/useDynamicData";
 import useSearchConfig from "../../Hooks/useSearchConfig";
 import ColumnVisible from "./ColumnVisible";
-import DynamicModal from "./Add";
 import Add from "./Add";
+import Update from "./Update";
 
 function DynamicGrid({ tableView }) {
     const { dynamicData, getDynamicData, getColumDefs } = useDynamicData();
     const { searchConfig, getSearchConfigData } = useSearchConfig();
     const gridRef = useRef();
     const [columnDefs, setColumnDefs] = useState([]);
+    const [isOpenUpdate, setIsOpenUpdate] = useState(false);
+    const [updateData, setUpdateData] = useState(null);
 
-    const removeData = (params) => {
-        console.log("Row index:", params.rowIndex);
+    const openUpdateModal = (params) => {
+        setUpdateData(params.data);
+        setIsOpenUpdate(!isOpenUpdate);
     }
 
     const saveFilterInfo = (params) => {
@@ -68,10 +71,11 @@ function DynamicGrid({ tableView }) {
                     columnDefs={columnDefs}
                     onGridReady={onGridReady}
                     theme={themeAlpine}
-                    onRowDoubleClicked={removeData}
+                    onRowDoubleClicked={openUpdateModal}
                     onFilterChanged={saveFilterInfo}
                 />
             </div>
+            <Update tablename={tableView} isOpen = {isOpenUpdate} setIsOpen = {setIsOpenUpdate} updateData = {updateData} />
         </div>
     );
 }

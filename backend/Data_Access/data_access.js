@@ -28,8 +28,8 @@ class DataAccess{
             const questionMarksStr = questionMarks.join(", ");
             const keysStr = keys.join(", ");
             const sql = `INSERT INTO ${tableName} (${keysStr}) VALUES (${questionMarksStr})`;
-            await this.dbModel.query(sql, values);
-            
+            const res = await this.dbModel.query(sql, values);
+            return res[0].insertId;            
         } catch (error) {
             console.log("DA_createError: ", error);
         }
@@ -112,9 +112,16 @@ class DataAccess{
         }
     }
 
-    async update (id, newData){
+    async update (tablename, newData){
         try {
-            return await this.dbModel.findByIdAndUpdate(id, newData, {new:true});
+            const setItems = [];
+            const values = [];
+            for (const key in newData) {
+                setItems.push(`${key} = ?`);
+                values.push(newData[key]);
+            }
+            const sql = `Update ${tablename} Set ${setItems.join(', ')} Where id = ${newData.id}`;
+            await this.dbModel.execute(sql, values);
         } catch (error) {
             console.log("DA_updateErro: ", error);
         }

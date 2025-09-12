@@ -23,11 +23,22 @@ const dynamicDataController = {
         try {
             const {tablename, newData} = req.body;
             newData.active = 1;
-            await mysqlDA.create(tablename, newData);
-            res.json({message: "createDynamicData success"});
+            const newDataId = await mysqlDA.create(tablename, newData);
+            res.json({message: "createDynamicData success", newDataId});
         } catch (error) {
             console.log("createDynamicDataError: ", error);
             res.json({message: "createDynamicData failed"});
+        }
+    },
+
+    updateDynamicData: async (req, res) => {
+        try {
+            const {tablename, newData} = req.body;
+            await mysqlDA.update(tablename, newData);
+            res.json({message: "updateDynamicData success"});
+        } catch (error) {
+            console.log("updateDynamicDataError: ", error);
+            res.json({message: "updateDynamicData failed"});
         }
     }
 }
