@@ -17,6 +17,7 @@ router.post('/logout', userController.logout);
 
 router.get('/menuItems', authMiddleware, menuController.getMenuItems);
 
-router.post('/dynamicData', authMiddleware, dynamicDataController.getDynamicData);
+router.post('/dynamicData/get', authMiddleware, dynamicDataController.getDynamicData);
+router.post('/dynamicData/create', authMiddleware, dynamicDataController.createDynamicData);
 
 module.exports = router;

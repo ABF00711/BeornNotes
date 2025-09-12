@@ -14,8 +14,20 @@ const dynamicDataController = {
             const dynamicData = await mysqlDA.excuteSql(sql);
             res.json({message: "getDynamicData success", dynamicData});
         } catch (error) {
-            console.log("getDynamicData: ", error);
+            console.log("getDynamicDataError: ", error);
             res.json({message: "getDynamicData failed"});
+        }
+    },
+
+    createDynamicData: async (req, res) => {
+        try {
+            const {tablename, newData} = req.body;
+            newData.active = 1;
+            await mysqlDA.create(tablename, newData);
+            res.json({message: "createDynamicData success"});
+        } catch (error) {
+            console.log("createDynamicDataError: ", error);
+            res.json({message: "createDynamicData failed"});
         }
     }
 }
