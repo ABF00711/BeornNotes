@@ -4,7 +4,8 @@ import { AgGridReact } from 'ag-grid-react';
 import { themeAlpine } from "ag-grid-community";
 import useDynamicData from "../../Hooks/useDynamicData";
 import useSearchConfig from "../../Hooks/useSearchConfig";
-import ColumnVisible from "../ColumnVisible";
+import ColumnVisible from "./ColumnVisible";
+import DynamicModal from "./Add";
 import Add from "./Add";
 
 function DynamicGrid({ tableView }) {
@@ -12,7 +13,7 @@ function DynamicGrid({ tableView }) {
     const { searchConfig, getSearchConfigData } = useSearchConfig();
     const gridRef = useRef();
     const [columnDefs, setColumnDefs] = useState([]);
-    const [columnVisible, setColumnVisible] = useState(false);
+
     const removeData = (params) => {
         console.log("Row index:", params.rowIndex);
     }
@@ -53,13 +54,7 @@ function DynamicGrid({ tableView }) {
                         <span className="btn-icon">🔍</span>
                         <span className="btn-label">Filters</span>
                     </button>
-                    <div>
-                        <button type="button" className="btn btn-outline" onClick={() => setColumnVisible(!columnVisible)}>
-                            <span className="btn-icon">🔍</span>
-                            <span className="btn-label">Columns</span>
-                        </button>
-                        {columnVisible && <ColumnVisible columnDefs={columnDefs} setColumnDefs={setColumnDefs} />}
-                    </div>
+                    <ColumnVisible columnDefs={columnDefs} setColumnDefs={setColumnDefs} />
                     <div className="total-count">
                         <span className="total-label">Total:</span>
                         <span className="total-value">{Array.isArray(dynamicData) ? dynamicData.length : 0}</span>

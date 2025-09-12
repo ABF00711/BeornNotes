@@ -9,7 +9,7 @@ function useDynamicData () {
     const getDynamicData = async (tableView) => {
         try {
             const res = await services.getDynamicData(tableView);
-            if(res.message = "getDynamicData success"){
+            if(res.message === "getDynamicData success"){
                 setDynamicData(res.dynamicData);
             }
         } catch (error) {
@@ -21,7 +21,7 @@ function useDynamicData () {
         try {
             const res = await services.createDynamicData(tablename, newData);
 
-            if(res.message == "createDynamicData success"){
+            if(res.message === "createDynamicData success"){
                 toast.success(`Created a new ${tablename} data successfully`);
                 setDynamicData(prevData => ([...prevData, newData]));
                 return;
@@ -32,12 +32,16 @@ function useDynamicData () {
         }
     }
 
+    const updateDynamicData = () => {
+
+    }
+
     const getColumDefs = (tableView) => {
         try {
             const columnData = searchConfig
-                .filter(item => item.table_name == tableView)
+                .filter(item => item.table_name === tableView)
                 .map((item, index) => {
-                    if (item.field_type == "date") {
+                    if (item.field_type === "date") {
                         return {
                             field: item.field_name, sortable: true, filter: true, colId: index, flex: 1,
                             valueFormatter: (params) => {
@@ -55,7 +59,7 @@ function useDynamicData () {
     }
 
     return (
-        {dynamicData, getDynamicData, getColumDefs, createDynamicData}
+        {dynamicData, getDynamicData, getColumDefs, createDynamicData, updateDynamicData}
     );
 }
 
