@@ -5,6 +5,7 @@ import { themeAlpine } from "ag-grid-community";
 import useDynamicData from "../../Hooks/useDynamicData";
 import useSearchConfig from "../../Hooks/useSearchConfig";
 import ColumnVisible from "../ColumnVisible";
+import Add from "./Add";
 
 function DynamicGrid({ tableView }) {
     const { dynamicData, getDynamicData, getColumDefs } = useDynamicData();
@@ -42,12 +43,7 @@ function DynamicGrid({ tableView }) {
     return (
         <div className="dynamic-grid">
             <div className="grid-toolbar">
-                <div className="toolbar-left">
-                    <button type="button" className="btn btn-primary">
-                        <span className="btn-icon">＋</span>
-                        <span className="btn-label">Add</span>
-                    </button>
-                </div>
+                <Add table_name={tableView} />
                 <div className="toolbar-right">
                     <button type="button" className="btn btn-outline">
                         <span className="btn-icon">🗂️</span>

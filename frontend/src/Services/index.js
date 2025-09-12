@@ -66,10 +66,20 @@ const services = {
     getDynamicData: async (tableView) => {
         try {
             services.setAuthToken();
-            const res = await axios.post(services.serverURL + "/dynamicData", {tableView});
+            const res = await axios.post(services.serverURL + "/dynamicData/get", {tableView});
             return res.data;
         } catch (error) {
             console.log("ServicesGetDynamicDataError: ", error)
+        }
+    },
+
+    createDynamicData: async (tablename, newData) => {
+        try {
+            services.setAuthToken();
+            const res = await axios.post(services.serverURL + "/dynamicData/create", {tablename, newData});
+            return res.data;
+        } catch (error) {
+            console.log("ServicesCreateDynamicDataError: ", error)
         }
     }
 }

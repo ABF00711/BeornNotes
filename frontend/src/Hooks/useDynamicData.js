@@ -1,19 +1,34 @@
 import { useContext } from "react"
 import { MyContext } from "../Context"
 import services from "../Services";
+import { toast } from "react-toastify";
 
 function useDynamicData () {
     const {dynamicData, setDynamicData, searchConfig} = useContext(MyContext);
 
     const getDynamicData = async (tableView) => {
         try {
-            console.log("tableView: ", tableView);
             const res = await services.getDynamicData(tableView);
-            if(res.messsage = "getDynamicData success"){
+            if(res.message = "getDynamicData success"){
                 setDynamicData(res.dynamicData);
             }
         } catch (error) {
             console.log("getDynamicDataError: ", error);
+        }
+    }
+
+    const createDynamicData = async (tablename, newData) => {
+        try {
+            const res = await services.createDynamicData(tablename, newData);
+
+            if(res.message == "createDynamicData success"){
+                toast.success(`Created a new ${tablename} data successfully`);
+                setDynamicData(prevData => ([...prevData, newData]));
+                return;
+            }
+            toast.error(res.message);
+        } catch (error) {
+            console.log("createDynamicDataError: ", error);
         }
     }
 
@@ -40,7 +55,7 @@ function useDynamicData () {
     }
 
     return (
-        {dynamicData, getDynamicData, getColumDefs}
+        {dynamicData, getDynamicData, getColumDefs, createDynamicData}
     );
 }
 
