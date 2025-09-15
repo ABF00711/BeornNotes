@@ -141,6 +141,46 @@ const services = {
         } catch (error) {
             console.log("ServicesDeleteSearchpatternsError: ", error);
         }
+    },
+
+    getLayouts: async (tablename) => {
+        try {
+            services.setAuthToken();
+            const res = await axios.post(services.serverURL + "/layouts/get", {tablename});
+            return res.data;
+        } catch (error) {
+            console.log("ServicesGetLayoutsError: ", error);
+        }
+    },
+
+    createLayouts: async (tablename, layoutName, layoutJson) => {
+        try {
+            services.setAuthToken();
+            const res = await axios.post(services.serverURL + "/layouts/create", {tablename, layoutName, layoutJson});
+            return res.data;
+        } catch (error) {
+            console.log("ServicesCreateLayoutsError: ", error);
+        }
+    },
+
+    updateLayouts: async (tablename, layoutName, layoutJson) => {
+        try {
+            services.setAuthToken();
+            const res = await axios.post(services.serverURL + "/layouts/update", {tablename, layoutName, layoutJson});
+            return res.data;
+        } catch (error) {
+            console.log("ServicesUpdateLayoutsError: ", error);
+        }
+    },
+
+    deleteLayouts: async(layoutId) => {
+        try {
+            services.setAuthToken();
+            const res = await axios.post(services.serverURL + "/layouts/delete", {layoutId});
+            return res.data;
+        } catch (error) {
+            console.log("ServicesDeleteLayoutsError: ", error);
+        }
     }
 }
 

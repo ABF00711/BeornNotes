@@ -6,6 +6,7 @@ const authMiddleware = require("../middleware/index.js");
 const menuController = require("../Controller/menuController.js");
 const dynamicDataController = require("../Controller/dynamicDataController.js");
 const filterController = require("../Controller/filterController.js");
+const layoutsController = require("../Controller/layoutsController.js");
 const router = express.Router();
 
 router.get('/searchConfigData', searchConfigController.getAll);
@@ -27,5 +28,10 @@ router.post('/searchpatterns/get', authMiddleware, filterController.getSearchpat
 router.post('/searchpatterns/create', authMiddleware, filterController.createSearchpatterns);
 router.post('/searchpatterns/update', authMiddleware, filterController.updateSearchpatterns);
 router.post('/searchpatterns/delete', authMiddleware, filterController.deleteSearchpatterns);
+
+router.post('/layouts/get', authMiddleware, layoutsController.getLayouts);
+router.post('/layouts/create', authMiddleware, layoutsController.createLayouts);
+router.post('/layouts/update', authMiddleware, layoutsController.updateLayouts);
+router.post('/layouts/delete', authMiddleware, layoutsController.deleteLayouts);
 
 module.exports = router;

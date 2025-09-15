@@ -2,7 +2,7 @@ import { Checkbox, Button } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import "./style.css";
 
-function ColumnVisible({ columnDefs, setColumnDefs }) {
+function ColumnVisible({ columnDefs, setColumnDefs, onColumnChanged }) {
   const [columnVisible, setColumnVisible] = useState(false);
   const containerRef = useRef(null);
 
@@ -12,6 +12,7 @@ function ColumnVisible({ columnDefs, setColumnDefs }) {
         col.field === field ? { ...col, hide } : col
       );
       setColumnDefs(updated);
+      onColumnChanged();
     } catch (error) {
       console.log("toggleColumnError: ", error);
     }

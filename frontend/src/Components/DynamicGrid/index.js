@@ -10,6 +10,7 @@ import Update from "./Update";
 import Delete from "./Delete";
 import Searchpatterns from "./Searchpatterns";
 import useSearchpatterns from "../../Hooks/useFilters";
+import Layouts from "./Layouts";
 
 function DynamicGrid({ tableView }) {
     const { dynamicData, getDynamicData, getColumDefs } = useDynamicData();
@@ -71,15 +72,19 @@ function DynamicGrid({ tableView }) {
                     }
                 }
             }
-            const currentColumnState = gridRef.current.api.getColumnState();
-            currentColumnState.map((column) => {
+            let savedLayout = JSON.parse(localStorage.getItem("layout") || null);
+            if(savedLayout == null){
+                
+            }
+            savedLayout = gridRef.current.api.getColumnState();
+            savedLayout.map((column) => {
                 const savedSortIndex = savedSearchpattern.sorts.findIndex(item => item.colId === column.colId);
                 if (savedSortIndex !== -1) {
                     column.sort = savedSearchpattern.sorts[savedSortIndex].sort;
                 }
             })
             gridRef.current.api.applyColumnState({
-                state: currentColumnState,
+                state: savedLayout,
                 applyOrder: true, 
             });
             gridRef.current.api.setFilterModel(savedSearchpattern.filters);
@@ -88,8 +93,13 @@ function DynamicGrid({ tableView }) {
         }
     };
 
-    const onGridReady = useCallback((params) => {
+    const onColumnChanged = () => {
+        const currentGrid = gridRef.current.api.getColumnState();
+        localStorage.setItem("layout", JSON.stringify(currentGrid));
+    }
 
+    const onGridReady = useCallback((params) => {
+        
     }, []);
 
     useEffect(() => {
@@ -119,12 +129,9 @@ function DynamicGrid({ tableView }) {
                     <Delete tablename={tableView} gridRef={gridRef} />
                 </div>
                 <div className="toolbar-right">
-                    <button type="button" className="btn btn-outline">
-                        <span className="btn-icon">🗂️</span>
-                        <span className="btn-label">Layouts</span>
-                    </button>
+                    <Layouts />
                     <Searchpatterns tablename={tableView} gridRef = {gridRef} />
-                    <ColumnVisible columnDefs={columnDefs} setColumnDefs={setColumnDefs} />
+                    <ColumnVisible columnDefs={columnDefs} setColumnDefs={setColumnDefs} onColumnChanged = {onColumnChanged} />
                     <div className="total-count">
                         <span className="total-label">Total:</span>
                         <span className="total-value">{Array.isArray(dynamicData) ? dynamicData.length : 0}</span>
@@ -142,6 +149,8 @@ function DynamicGrid({ tableView }) {
                     onFilterChanged={saveFilterInfo}
                     rowSelection={rowSelection}
                     onSortChanged={onSortChanged}
+                    onColumnMoved={onColumnChanged}
+                    onColumnResized={onColumnChanged}
                 />
             </div>
             <Update tablename={tableView} isOpen={isOpenUpdate} setIsOpen={setIsOpenUpdate} updateData={updateData} />
