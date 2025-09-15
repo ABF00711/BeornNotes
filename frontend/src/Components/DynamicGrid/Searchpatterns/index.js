@@ -94,8 +94,6 @@ function Searchpatterns(props) {
                 return column;
             });
 
-            console.log("currentColumnState: ", currentColumnState);
-
             gridRef.current.api.applyColumnState({
                 state: currentColumnState,
                 applyOrder: true

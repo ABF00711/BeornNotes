@@ -1,9 +1,10 @@
 import { Checkbox, Button } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./style.css";
 
 function ColumnVisible({ columnDefs, setColumnDefs }) {
   const [columnVisible, setColumnVisible] = useState(false);
+  const containerRef = useRef(null);
 
   const toggleColumn = (field, hide) => {
     try {
@@ -16,8 +17,19 @@ function ColumnVisible({ columnDefs, setColumnDefs }) {
     }
   };
 
+  useEffect(() => {
+    const onDocClick = (e) => {
+      if (!columnVisible) return;
+      if (containerRef.current && !containerRef.current.contains(e.target)) {
+        setColumnVisible(false);
+      }
+    };
+    document.addEventListener("mousedown", onDocClick);
+    return () => document.removeEventListener("mousedown", onDocClick);
+  }, [columnVisible]);
+
   return (
-    <div>
+    <div className="columnVisible-wrapper" ref={containerRef}>
       <button type="button" className="btn btn-outline" onClick={() => setColumnVisible(!columnVisible)}>
         <span className="btn-icon">📑</span>
         <span className="btn-label">Columns</span>
@@ -27,15 +39,17 @@ function ColumnVisible({ columnDefs, setColumnDefs }) {
         <Button className="columnVisible-reset" onClick={() => setColumnDefs(columnDefs.map(col => ({ ...col, hide: false })))}>
           Reset
         </Button>
-        {columnDefs.map(col => (
-          <Checkbox
-            key={col.field}
-            checked={!col.hide}
-            onChange={(e) => toggleColumn(col.field, !e.target.checked)}
-          >
-            {col.field}
-          </Checkbox>
-        ))}
+        <div className="columnVisible-list">
+          {columnDefs.map(col => (
+            <Checkbox
+              key={col.field}
+              checked={!col.hide}
+              onChange={(e) => toggleColumn(col.field, !e.target.checked)}
+            >
+              {col.field}
+            </Checkbox>
+          ))}
+        </div>
       </div>}
     </div>
   );
