@@ -9,10 +9,12 @@ import Add from "./Add";
 import Update from "./Update";
 import Delete from "./Delete";
 import Searchpatterns from "./Searchpatterns";
+import useSearchpatterns from "../../Hooks/useFilters";
 
 function DynamicGrid({ tableView }) {
     const { dynamicData, getDynamicData, getColumDefs } = useDynamicData();
     const { searchConfig, getSearchConfigData } = useSearchConfig();
+    const {searchpatterns, getSearchpatterns} = useSearchpatterns();
     const gridRef = useRef();
     const [columnDefs, setColumnDefs] = useState([]);
     const [isOpenUpdate, setIsOpenUpdate] = useState(false);
@@ -58,20 +60,30 @@ function DynamicGrid({ tableView }) {
     const restoreSearchpatterns = () => {
         if (!gridRef.current?.api) return;
         try {
-            const savedSearchpatterns = JSON.parse(localStorage.getItem("searchpatterns") || "{}");
+            let savedSearchpattern = JSON.parse(localStorage.getItem("searchpatterns") || null);
+            if(savedSearchpattern == null){
+                const defaultPattern = searchpatterns.find(pattern => pattern.name == "Default");
+                const parsedPattern = JSON.parse(defaultPattern.data);
+                console.log("parsedPattern: ", parsedPattern);
+                if(parsedPattern){
+                    savedSearchpattern = {
+                        filters: parsedPattern.filters || {},
+                        sorts: parsedPattern.sorts || {}
+                    }
+                }
+            }
             const currentColumnState = gridRef.current.api.getColumnState();
             currentColumnState.map((column) => {
-                const savedSortIndex = savedSearchpatterns.sorts.findIndex(item => item.colId === column.colId);
+                const savedSortIndex = savedSearchpattern.sorts.findIndex(item => item.colId === column.colId);
                 if (savedSortIndex !== -1) {
-                    console.log("applySorts")
-                    column.sort = savedSearchpatterns.sorts[savedSortIndex].sort;
+                    column.sort = savedSearchpattern.sorts[savedSortIndex].sort;
                 }
             })
             gridRef.current.api.applyColumnState({
                 state: currentColumnState,
-                applyOrder: true, // optional, applies column order as well
+                applyOrder: true, 
             });
-            gridRef.current.api.setFilterModel(savedSearchpatterns.filters);
+            gridRef.current.api.setFilterModel(savedSearchpattern.filters);
         } catch (error) {
             console.log("restoreSearchpatterns error:", error);
         }
@@ -84,12 +96,7 @@ function DynamicGrid({ tableView }) {
     useEffect(() => {
         setColumnDefs(getColumDefs(tableView));
     }, [searchConfig])
-
-    useEffect(() => {
-        getSearchConfigData();
-        getDynamicData(tableView);
-    }, [])
-
+    
     useEffect(() => {
         if (dynamicData && dynamicData.length > 0 && gridRef.current?.api) {
             setTimeout(() => {
@@ -97,6 +104,13 @@ function DynamicGrid({ tableView }) {
             }, 100);
         }
     }, [dynamicData, columnDefs])
+
+    useEffect(() => {
+        getSearchConfigData();
+        getSearchpatterns(tableView)
+        getDynamicData(tableView);
+    }, [])
+
 
     return (
         <div className="dynamic-grid">

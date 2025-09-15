@@ -6,9 +6,15 @@ const filterController = {
             const {user} = req;
             const {tablename} = req.body;
 
-            const allSearchpatterns = await mysqlDA.getData("searchpatterns", {user_name: user.name});
+            const userData = await mysqlDA.getOneData("users", {name: user.name});
+            if(!userData){
+                console.log("User of this pattern is not existing");
+                res.json({message: "User of this pattern is not existing"});
+                return;
+            }
+            const allSearchpatterns = await mysqlDA.getData("searchpatterns", {user_id: userData.id});
             const searchpatterns = allSearchpatterns.filter(filter => filter.table_name == tablename);
-            res.json({message: "getSearchpatterns success", searchpatterns})
+            res.json({message: "getSearchpatterns success", searchpatterns});
         } catch (error) {
             console.log("getSearchpatternsError: ", error);
             res.json({message: "getSearchpatterns failed"});
@@ -19,7 +25,14 @@ const filterController = {
         try {
             const {searchData, searchName, tablename} = req.body;
             const {user} = req;
-            const searchpattern = {table_name: tablename, user_name: user.name, name: searchName, data: searchData};
+
+            const userData = await mysqlDA.getOneData("users", {name: user.name});
+            if(!userData){
+                console.log("User of this pattern is not existing");
+                res.json({message: "User of this pattern is not existing"});
+                return;
+            }
+            const searchpattern = {table_name: tablename, user_id: userData.id, name: searchName, data: searchData};
             await mysqlDA.create("searchpatterns", searchpattern);
             res.json({message: "createSearchpatterns success"})
         } catch (error) {
@@ -32,11 +45,19 @@ const filterController = {
         try {
             const {searchData, searchName, tablename} = req.body;
             const {user} = req;
-            const existSearchPattern = await mysqlDA.getOneData("searchpatterns", {user_name: user.name, name: searchName, table_name: tablename});
+
+            const userData = await mysqlDA.getOneData("users", {name: user.name});
+            if(!userData){
+                console.log("User of this pattern is not existing");
+                res.json({message: "User of this pattern is not existing"});
+                return;
+            }
+            const existSearchPattern = await mysqlDA.getOneData("searchpatterns", {user_id: userData.id, name: searchName, table_name: tablename});
             if(!existSearchPattern){
                 if(searchName == "Default"){
-                    await mysqlDA.create("searchpatterns", {table_name: tablename, user_name: user.name, name: "Default", data: searchData});
+                    await mysqlDA.create("searchpatterns", {table_name: tablename, user_id: userData.id, name: "Default", data: searchData});
                     res.json({message: "updateSearchpatterns success"})
+                    return;
                 }
                 console.log("searchPattern is not existing!");
                 res.json({message: "searchPattern is not existing"});
@@ -48,6 +69,18 @@ const filterController = {
         } catch (error) {
             console.log("updateSearchpatternsError: ", error);
             res.json({message: "updateSearchpatterns failed"})
+        }
+    },
+
+    deleteSearchpatterns: async (req, res) => {
+        try {
+            const {id} = req.body;
+
+            await mysqlDA.delete("searchpatterns", id);
+            res.json({message: "deleteSearchpatterns success"});
+        } catch (error) {
+            console.log("deleteSearchpatternsError: ", error);
+            res.json({message: "deleteSearchpatterns failed"})
         }
     }
 }

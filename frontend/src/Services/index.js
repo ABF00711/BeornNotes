@@ -133,10 +133,10 @@ const services = {
         }
     },
 
-    deleteSearchpatterns: async (filterId) => {
+    deleteSearchpatterns: async (id) => {
         try {
             services.setAuthToken();
-            const res = await axios.post(services.serverURL + "/searchpatterns/delete", {filterId});
+            const res = await axios.post(services.serverURL + "/searchpatterns/delete", {id});
             return res.data;
         } catch (error) {
             console.log("ServicesDeleteSearchpatternsError: ", error);

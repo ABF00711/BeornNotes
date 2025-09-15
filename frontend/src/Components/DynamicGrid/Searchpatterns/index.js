@@ -11,7 +11,6 @@ function Searchpatterns(props) {
     const [patternName, setPatternName] = useState("");
     const [searchName, setSearchName] = useState("");
     const [options, setOptions] = useState([]);
-    // const [selectedPattern, setSelectedPattern] = ({});
     const [justSelected, setJustSelected] = useState(false);
 
     const onChange = (value) => {
@@ -46,25 +45,39 @@ function Searchpatterns(props) {
         if (searchpatterns.find(pattern => pattern.name === searchName)) {
             if (window.confirm("This search name already exists, do you want to update it?") === true) {
                 updateSearchpatterns(searchData, searchName, tablename);
+                setPatternName("");
                 setIsOpen(false);
                 return;
             }
             return;
         }
         createSearchpatterns(searchData, searchName, tablename);
+        setPatternName("");
         setIsOpen(false);
     }
 
     const saveAsDefault = () => {
         const searchData = localStorage.getItem("searchpatterns");
         updateSearchpatterns(searchData, "Default", tablename);
+        setPatternName("");
         setIsOpen(false);
+    }
+
+    const onDelete = () => {
+        const selectedPatternIndex = searchpatterns.findIndex(pattern => pattern.name === patternName);
+        if (selectedPatternIndex == -1) {
+            toast.error("Please select name exactly!");
+            return;
+        }
+        console.log("selectedSearchPattern: ", searchpatterns[selectedPatternIndex])
+        if (window.confirm("Really want to delete this!")){
+            deleteSearchpatterns(tablename, searchpatterns[selectedPatternIndex].id);
+        }
     }
 
     const handleBlur = () => {
         if (patternName.trim() === "") return;
-        if(!justSelected){
-            console.log("patternName: ", patternName);
+        if (!justSelected) {
             setSearchName(patternName);
         }
     };
@@ -109,7 +122,7 @@ function Searchpatterns(props) {
                             <button onClick={saveAsDefault}>Save as Default</button>
                         </div>
                         <div>
-                            <button>Delete</button>
+                            <button disabled={patternName ? false : true} onClick={onDelete}>Delete</button>
                         </div>
                     </div> :
                     <></>

@@ -26,5 +26,6 @@ router.post('/dynamicData/delete', authMiddleware, dynamicDataController.deleteD
 router.post('/searchpatterns/get', authMiddleware, filterController.getSearchpatterns);
 router.post('/searchpatterns/create', authMiddleware, filterController.createSearchpatterns);
 router.post('/searchpatterns/update', authMiddleware, filterController.updateSearchpatterns);
+router.post('/searchpatterns/delete', authMiddleware, filterController.deleteSearchpatterns);
 
 module.exports = router;

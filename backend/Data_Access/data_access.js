@@ -126,9 +126,9 @@ class DataAccess{
         }
     }
 
-    async delete (id){
+    async delete (tablename, id){
         try {
-            await this.dbModel.findByIdAndDelete(id);
+            await this.dbModel.execute(`Delete From ${tablename} Where id = ${id}`);
         } catch (error) {
             console.log("DA_deleteError: ", error);
         }
