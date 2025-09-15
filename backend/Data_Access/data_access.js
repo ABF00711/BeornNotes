@@ -58,7 +58,6 @@ class DataAccess{
 
             const conditions = [];
             const values = [];
-    
             for (const key in filter) {
                 if (filter.hasOwnProperty(key) && filter[key] !== undefined) {
                     conditions.push(`${key} = ?`);

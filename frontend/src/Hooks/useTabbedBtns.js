@@ -35,7 +35,10 @@ function useTabbedBtns () {
     const removeTabbedBtn = (btnInfo) => {
         try {
             let _tabbedBtns = [...tabbedBtns];
-            setTabbedBtns(_tabbedBtns.filter(item => item.title !== btnInfo.title));
+            _tabbedBtns = _tabbedBtns.filter(item => item.title !== btnInfo.title);
+            console.log("_tabbedBtns: ", _tabbedBtns);
+            setTabbedBtns(_tabbedBtns);
+            localStorage.setItem("tabbedBtns", JSON.stringify(_tabbedBtns));
         } catch (error) {
             console.log("removeTabbedBtnsError: ", error);
             setTabbedBtns([]);

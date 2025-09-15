@@ -2,6 +2,7 @@ import React from "react";
 import "./style.css";
 import { MyContext } from "../../../Context";
 import useDynamicData from "../../../Hooks/useDynamicData";
+import { toast } from "react-toastify";
 
 function Delete(props) {
     const { tablename, gridRef } = props;
@@ -9,12 +10,12 @@ function Delete(props) {
 
     const onDelete = () => {
         try {
+            const selectedRows = gridRef.current.api.getSelectedRows();
+            if (!selectedRows || selectedRows.length === 0) {
+                toast.error("No rows selected!");
+                return;
+            }
             if(window.confirm("Really want to delete selected rows?") === true){
-                const selectedRows = gridRef.current.api.getSelectedRows();
-                if (!selectedRows || selectedRows.length === 0) {
-                    console.log("No rows selected!");
-                    return;
-                }
                 deleteDynamicData(tablename, selectedRows);
                 gridRef.current.api.applyTransaction(selectedRows);
             }

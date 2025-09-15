@@ -16,6 +16,7 @@ function ContextProvider({ children }) {
     const [menuItems, setMenuItems] = useState([]);
     const [tabbedBtns, setTabbedBtns] = useState([]);
     const [isCollapsed, setIsCollapsed] = useState(false);
+    const [searchpatterns, setSearchpatterns] = useState([]);
 
     return (
         <DataContext.Provider value={{
@@ -25,7 +26,8 @@ function ContextProvider({ children }) {
             menuItems, setMenuItems,
             tabbedBtns, setTabbedBtns,
             isCollapsed, setIsCollapsed,
-            dynamicData, setDynamicData
+            dynamicData, setDynamicData,
+            searchpatterns, setSearchpatterns
         }}>
             {children}
         </DataContext.Provider>

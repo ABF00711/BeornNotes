@@ -8,6 +8,7 @@ import ColumnVisible from "./ColumnVisible";
 import Add from "./Add";
 import Update from "./Update";
 import Delete from "./Delete";
+import Searchpatterns from "./Searchpatterns";
 
 function DynamicGrid({ tableView }) {
     const { dynamicData, getDynamicData, getColumDefs } = useDynamicData();
@@ -30,14 +31,50 @@ function DynamicGrid({ tableView }) {
     }
 
     const saveFilterInfo = (params) => {
-        console.log(params.api.getFilterModel())
+        try {
+            const filterInfo = params.api.getFilterModel();
+            const searchpatterns = JSON.parse(localStorage.getItem("searchpatterns") || "{}");
+            searchpatterns.filters = filterInfo;
+            localStorage.setItem("searchpatterns", JSON.stringify(searchpatterns));
+        } catch (error) {
+            console.log("saveFilterInfoError: ", error);
+        }
     }
 
+    const onSortChanged = useCallback(() => {
+        if (gridRef.current) {
+            const currentColumnState = gridRef.current.api.getColumnState();
+            const sortState = [];
+            currentColumnState.map((column) => {
+                sortState.push({ colId: column.colId, sort: column.sort });
+            })
+            const searchpatterns = JSON.parse(localStorage.getItem("searchpatterns") || "{}");
+            searchpatterns.sorts = sortState;
+            localStorage.setItem("searchpatterns", JSON.stringify(searchpatterns));
+        }
+    }, []);
 
-    const restoreFilters = () => {
-        const savedFilters = JSON.parse(localStorage.getItem("filters") || "{}");
-        gridRef.current.api.setFilterModel(savedFilters);
-        gridRef.current.api.onFilterChanged();
+
+    const restoreSearchpatterns = () => {
+        if (!gridRef.current?.api) return;
+        try {
+            const savedSearchpatterns = JSON.parse(localStorage.getItem("searchpatterns") || "{}");
+            const currentColumnState = gridRef.current.api.getColumnState();
+            currentColumnState.map((column) => {
+                const savedSortIndex = savedSearchpatterns.sorts.findIndex(item => item.colId === column.colId);
+                if (savedSortIndex !== -1) {
+                    console.log("applySorts")
+                    column.sort = savedSearchpatterns.sorts[savedSortIndex].sort;
+                }
+            })
+            gridRef.current.api.applyColumnState({
+                state: currentColumnState,
+                applyOrder: true, // optional, applies column order as well
+            });
+            gridRef.current.api.setFilterModel(savedSearchpatterns.filters);
+        } catch (error) {
+            console.log("restoreSearchpatterns error:", error);
+        }
     };
 
     const onGridReady = useCallback((params) => {
@@ -53,22 +90,27 @@ function DynamicGrid({ tableView }) {
         getDynamicData(tableView);
     }, [])
 
+    useEffect(() => {
+        if (dynamicData && dynamicData.length > 0 && gridRef.current?.api) {
+            setTimeout(() => {
+                restoreSearchpatterns();
+            }, 100);
+        }
+    }, [dynamicData, columnDefs])
+
     return (
         <div className="dynamic-grid">
             <div className="grid-toolbar">
                 <div className="toolbar-left">
                     <Add table_name={tableView} />
-                    <Delete tablename = {tableView} gridRef = {gridRef} /> 
+                    <Delete tablename={tableView} gridRef={gridRef} />
                 </div>
                 <div className="toolbar-right">
                     <button type="button" className="btn btn-outline">
                         <span className="btn-icon">🗂️</span>
                         <span className="btn-label">Layouts</span>
                     </button>
-                    <button type="button" className="btn btn-outline">
-                        <span className="btn-icon">🔍</span>
-                        <span className="btn-label">Filters</span>
-                    </button>
+                    <Searchpatterns tablename={tableView} />
                     <ColumnVisible columnDefs={columnDefs} setColumnDefs={setColumnDefs} />
                     <div className="total-count">
                         <span className="total-label">Total:</span>
@@ -86,6 +128,7 @@ function DynamicGrid({ tableView }) {
                     onRowDoubleClicked={openUpdateModal}
                     onFilterChanged={saveFilterInfo}
                     rowSelection={rowSelection}
+                    onSortChanged={onSortChanged}
                 />
             </div>
             <Update tablename={tableView} isOpen={isOpenUpdate} setIsOpen={setIsOpenUpdate} updateData={updateData} />

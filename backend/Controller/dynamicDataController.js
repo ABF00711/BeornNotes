@@ -10,7 +10,7 @@ const dynamicDataController = {
                 res.json({message: "No existing form data"});
                 return;
             }
-            const sql = `Select ${formData.Select} From ${formData.TableView} Where ${formData.WhereClause} Order By ${formData.OrderBy}`
+            const sql = `Select ${formData.Select} From ${formData.TableView} ${formData.WhereClause ? 'Where ' + formData.WhereClause : ''} ${formData.OrderBy ? 'Order By ' + formData.OrderBy : ''}`
             const dynamicData = await mysqlDA.excuteSql(sql);
             res.json({message: "getDynamicData success", dynamicData});
         } catch (error) {

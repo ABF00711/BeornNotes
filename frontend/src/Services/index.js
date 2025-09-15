@@ -101,6 +101,46 @@ const services = {
         } catch (error) {
             console.log("ServicesDeleteDynamicDataError: ", error);
         }
+    },
+
+    getSearchpatterns: async (tablename) => {
+        try {
+            services.setAuthToken();
+            const res = await axios.post(services.serverURL + "/searchpatterns/get", {tablename});
+            return res.data;
+        } catch (error) {
+            console.log("ServicesGetSearchpatternsError: ", error);
+        }
+    },
+
+    updateSearchpatterns: async (searchData, searchName, tablename) => {
+        try {
+            services.setAuthToken();
+            const res = await axios.post(services.serverURL + "/searchpatterns/update", {searchData, searchName, tablename});
+            return res.data;
+        } catch (error) {
+            console.log("ServicesUpdateSearchpatternsError: ", error);
+        }
+    },
+
+    createSearchpatterns: async (searchData, searchName, tablename) => {
+        try {
+            services.setAuthToken();
+            const res = await axios.post(services.serverURL + "/searchpatterns/create", {searchData, searchName, tablename});
+            return res.data;
+        } catch (error) {
+            console.log("ServicesCreateSearchpatternsError: ", error);
+        }
+    },
+
+    deleteSearchpatterns: async (filterId) => {
+        try {
+            services.setAuthToken();
+            const res = await axios.post(services.serverURL + "/searchpatterns/delete", {filterId});
+            return res.data;
+        } catch (error) {
+            console.log("ServicesDeleteSearchpatternsError: ", error);
+        }
     }
 }
 
