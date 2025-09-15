@@ -1,12 +1,44 @@
+.searchpatterns{
+    position: relative;
+    display: inline-block;
+    z-index: 1000;
+}
+
 .filterModal-body{
-    width: 180px;
-    height: 150px;
-    padding: 10px;
+    width: 240px;
+    padding: 12px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    gap: 10px;
     z-index: 1000;
-    border-radius: 5px;
-    background-color: aqua;
+    border-radius: 12px;
     position: absolute;
+    top: 44px;
+    left: 0;
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(30, 144, 255, 0.25);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.filter-actions{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.searchpatterns .btn{
+    height: 34px;
+}
+
+.btn.btn-primary{
+    background: linear-gradient(135deg, #5aa9ff, #3f8cff);
+    color: #fff;
+    border: 1px solid #3f8cff;
+}
+
+.btn.btn-danger{
+    background: #ff4d4f;
+    color: #fff;
+    border: 1px solid #ff4d4f;
 }

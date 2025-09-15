@@ -1,17 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./style.css";
 import { Select } from "antd";
 import { toast } from "react-toastify";
 import useSearchpatterns from "../../../Hooks/useFilters";
 
 function Searchpatterns(props) {
-    const { tablename } = props;
+    const { tablename, gridRef } = props;
     const { getSearchpatterns, updateSearchpatterns, deleteSearchpatterns, createSearchpatterns, searchpatterns } = useSearchpatterns();
     const [isOpen, setIsOpen] = useState(false);
     const [patternName, setPatternName] = useState("");
     const [searchName, setSearchName] = useState("");
     const [options, setOptions] = useState([]);
     const [justSelected, setJustSelected] = useState(false);
+    const containerRef = useRef(null);
 
     const onChange = (value) => {
         setPatternName(value);
@@ -70,8 +71,38 @@ function Searchpatterns(props) {
             return;
         }
         console.log("selectedSearchPattern: ", searchpatterns[selectedPatternIndex])
-        if (window.confirm("Really want to delete this!")){
+        if (window.confirm("Really want to delete this!")) {
             deleteSearchpatterns(tablename, searchpatterns[selectedPatternIndex].id);
+        }
+    }
+
+    const onApply = () => {
+        try {
+            const selectedPattern = searchpatterns.find(pattern => pattern.name === patternName);
+            if (!selectedPattern) {
+                toast.error("Please select name exactly!");
+                return;
+            }
+            const parsedPattern = JSON.parse(selectedPattern.data);
+            gridRef.current.api.setFilterModel(parsedPattern.filters);
+
+            const currentColumnState = gridRef.current.api.getColumnState().map(column => {
+                const idx = parsedPattern.sorts.findIndex(item => item.colId === column.colId);
+                if (idx !== undefined && idx !== -1) {
+                    return { ...column, sort: parsedPattern.sorts[idx].sort };
+                }
+                return column;
+            });
+
+            console.log("currentColumnState: ", currentColumnState);
+
+            gridRef.current.api.applyColumnState({
+                state: currentColumnState,
+                applyOrder: true
+            })
+            toast.success("Applied");
+        } catch (error) {
+            console.log("onApplyError: ", error);
         }
     }
 
@@ -83,6 +114,17 @@ function Searchpatterns(props) {
     };
 
     useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (!isOpen) return;
+            if (containerRef.current && !containerRef.current.contains(event.target)) {
+                setIsOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, [isOpen]);
+
+    useEffect(() => {
         getOptions();
     }, [searchpatterns])
 
@@ -91,7 +133,7 @@ function Searchpatterns(props) {
     }, [])
 
     return (
-        <div>
+        <div className="searchpatterns" ref={containerRef}>
             <button onClick={() => { setIsOpen(!isOpen) }} type="button" className="btn btn-outline">
                 <span className="btn-icon">🔍</span>
                 <span className="btn-label">Search</span>
@@ -107,22 +149,19 @@ function Searchpatterns(props) {
                             onSearch={onSearch}
                             options={options}
                             onBlur={handleBlur}
+                            allowClear
+                            style={{ width: "100%" }}
+                            getPopupContainer={(trigger) => trigger.parentNode}
                             filterOption={(input, option) =>
                                 option?.label?.toLowerCase().includes(input.toLowerCase())
                             }
                             notFoundContent={null}
                         />
-                        <div>
-                            <button>Apply</button>
-                        </div>
-                        <div>
-                            <button onClick={onSave}>Save</button>
-                        </div>
-                        <div>
-                            <button onClick={saveAsDefault}>Save as Default</button>
-                        </div>
-                        <div>
-                            <button disabled={patternName ? false : true} onClick={onDelete}>Delete</button>
+                        <div className="filter-actions">
+                            <button className="btn btn-primary" onClick={onApply}>Apply</button>
+                            <button className="btn btn-outline" onClick={onSave}>Save</button>
+                            <button className="btn btn-outline" onClick={saveAsDefault}>Save as Default</button>
+                            <button className="btn btn-danger" disabled={patternName ? false : true} onClick={onDelete}>Delete</button>
                         </div>
                     </div> :
                     <></>

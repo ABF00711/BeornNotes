@@ -64,7 +64,6 @@ function DynamicGrid({ tableView }) {
             if(savedSearchpattern == null){
                 const defaultPattern = searchpatterns.find(pattern => pattern.name == "Default");
                 const parsedPattern = JSON.parse(defaultPattern.data);
-                console.log("parsedPattern: ", parsedPattern);
                 if(parsedPattern){
                     savedSearchpattern = {
                         filters: parsedPattern.filters || {},
@@ -124,7 +123,7 @@ function DynamicGrid({ tableView }) {
                         <span className="btn-icon">🗂️</span>
                         <span className="btn-label">Layouts</span>
                     </button>
-                    <Searchpatterns tablename={tableView} />
+                    <Searchpatterns tablename={tableView} gridRef = {gridRef} />
                     <ColumnVisible columnDefs={columnDefs} setColumnDefs={setColumnDefs} />
                     <div className="total-count">
                         <span className="total-label">Total:</span>
