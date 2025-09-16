@@ -35,7 +35,7 @@ router.post('/layouts/create', authMiddleware, layoutsController.createLayouts);
 router.post('/layouts/update', authMiddleware, layoutsController.updateLayouts);
 router.post('/layouts/delete', authMiddleware, layoutsController.deleteLayouts);
 
-router.post('/tabInterfaces/get', authMiddleware, tabInterfaceController.getTabInterfaces);
+router.get('/tabInterfaces/get', authMiddleware, tabInterfaceController.getTabInterfaces);
 router.post('/tabInterfaces/create', authMiddleware, tabInterfaceController.createTabInterface);
 router.post('/tabInterfaces/update', authMiddleware, tabInterfaceController.updateTabInterface);
 router.post('/tabInterfaces/delete', authMiddleware, tabInterfaceController.deleteTabInterface);

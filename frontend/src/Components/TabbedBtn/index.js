@@ -1,17 +1,22 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./style.css";
 import useTabbedBtns from "../../Hooks/useTabbedInterfaces";
+import { MyContext } from "../../Context";
 
 function TabbedBtn({ btnInfo }) {
     const navigate = useNavigate();
     const { removeTabbedInterface } = useTabbedBtns();
     const location = useLocation();
     const [isHovered, setIsHovered] = useState(false);
+    const {currentInterface, setCurrentInterface} = useContext(MyContext);
 
     const isActive = btnInfo.path === location.pathname;
 
     const onNavigate = () => {
+        const tabInterface = {...currentInterface, activeUrl: btnInfo.path};
+        localStorage.setItem("tabbedInterface", JSON.stringify(tabInterface));
+        setCurrentInterface(tabInterface)
         navigate(btnInfo.path);
     };
 
