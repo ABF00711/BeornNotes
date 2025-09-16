@@ -53,7 +53,7 @@ function DynamicGrid({ tableView }) {
             currentColumnState.map((column) => {
                 sortState.push({ colId: column.colId, sort: column.sort });
             })
-            const searchpatterns = JSON.parse(localStorage.getItem("searchpatterns") || {});
+            const searchpatterns = JSON.parse(localStorage.getItem("searchpatterns") || "{}");
             searchpatterns.sorts = sortState;
             localStorage.setItem("searchpatterns", JSON.stringify(searchpatterns));
         }
@@ -66,7 +66,7 @@ function DynamicGrid({ tableView }) {
             let savedSearchpattern = JSON.parse(localStorage.getItem("searchpatterns") || null);
             if (savedSearchpattern == null) {
                 const defaultPattern = searchpatterns.find(pattern => pattern.name == "Default");
-                if (defaultPattern) {
+                if (defaultPattern && defaultPattern.data) {
                     const parsedPattern = JSON.parse(defaultPattern.data);
                     savedSearchpattern = {
                         filters: parsedPattern.filters || [],
@@ -88,14 +88,15 @@ function DynamicGrid({ tableView }) {
                     savedLayout = gridRef.current.api.getColumnState();
                 }
             }
-            savedLayout.map((column) => {
-                const savedSort = savedSearchpattern.sorts.find(item => item.colId === column.colId);
-                if (savedSort) {
-                    column.sort = savedSort.sort;
-                }
-                return column
-            })
-            console.log("layout: ", savedLayout);
+            if(savedSearchpattern.sorts){
+                savedLayout.map((column) => {
+                    const savedSort = savedSearchpattern.sorts.find(item => item.colId === column.colId);
+                    if (savedSort) {
+                        column.sort = savedSort.sort;
+                    }
+                    return column
+                })
+            }
             gridRef.current.api.applyColumnState({
                 state: savedLayout,
                 applyOrder: true,
@@ -110,7 +111,7 @@ function DynamicGrid({ tableView }) {
         setTimeout(() => {
             const currentGrid = gridRef.current.api.getColumnState();
             localStorage.setItem("layout", JSON.stringify(currentGrid));
-        }, 200);
+        }, 100);
     }
 
     const onGridReady = useCallback((params) => {

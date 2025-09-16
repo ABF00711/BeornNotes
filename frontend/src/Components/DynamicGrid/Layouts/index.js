@@ -12,6 +12,7 @@ function Layouts(props) {
 
     const [isOpen, setIsOpen] = useState(false);
     const [layoutName, setLayoutName] = useState("");
+    const [selectedName, setSlectedName] = useState("");
     const [options, setOptions] = useState([]);
     const [justSelected, setJustSelected] = useState(false);
     const containerRef = useRef(null);
@@ -45,21 +46,21 @@ function Layouts(props) {
     const saveLayout = () => {
         try {
             if (!gridRef.current?.api) return;
-            if (layoutName.trim() === "") {
+            if (selectedName.trim() === "") {
                 toast.error("Please input a layout name");
                 return;
             }
             const columnState = gridRef.current.api.getColumnState();
             const layoutJson = JSON.stringify(columnState);
-            const exists = layouts.find(l => l.layout_name === layoutName);
+            const exists = layouts.find(l => l.layout_name === selectedName);
             if (exists) {
                 if (window.confirm("This layout name already exists, update it?")) {
-                    updateLayouts(tablename, layoutName, layoutJson);
+                    updateLayouts(tablename, selectedName, layoutJson);
                     setIsOpen(false);
                 }
                 return;
             }
-            createLayouts(tablename, layoutName, layoutJson);
+            createLayouts(tablename, selectedName, layoutJson);
             setIsOpen(false);
         } catch (error) {
             console.log("saveLayoutError: ", error);
@@ -102,6 +103,13 @@ function Layouts(props) {
         }
     }
 
+    const onBlur = () => {
+        if(layoutName.trim() === "")return;
+        if(!justSelected){
+            setSlectedName(layoutName);
+        }
+    }
+
     useEffect(() => {
         buildOptions();
     }, [layouts])
@@ -135,6 +143,7 @@ function Layouts(props) {
                         value={layoutName}
                         onChange={onChange}
                         onSearch={onSearch}
+                        onBlur={onBlur}
                         options={options}
                         getPopupContainer={(trigger) => trigger.parentNode}
                         notFoundContent={null}

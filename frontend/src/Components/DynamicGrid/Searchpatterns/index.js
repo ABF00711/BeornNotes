@@ -83,13 +83,15 @@ function Searchpatterns(props) {
                 toast.error("Please select name exactly!");
                 return;
             }
-            const parsedPattern = JSON.parse(selectedPattern.data);
+            const parsedPattern = JSON.parse(selectedPattern.data || "{}");
             gridRef.current.api.setFilterModel(parsedPattern.filters);
 
             const currentColumnState = gridRef.current.api.getColumnState().map(column => {
-                const idx = parsedPattern.sorts.findIndex(item => item.colId === column.colId);
-                if (idx !== undefined && idx !== -1) {
-                    return { ...column, sort: parsedPattern.sorts[idx].sort };
+                if (parsedPattern.sorts) {
+                    const idx = parsedPattern.sorts.findIndex(item => item.colId === column.colId);
+                    if (idx !== undefined && idx !== -1) {
+                        return { ...column, sort: parsedPattern.sorts[idx].sort };
+                    }
                 }
                 return column;
             });

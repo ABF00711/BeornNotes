@@ -60,7 +60,7 @@ function useLayouts () {
     }
 
     return {
-        getLayouts, createLayouts, updateLayouts, deleteLayouts
+        layouts, getLayouts, createLayouts, updateLayouts, deleteLayouts
     }
 }
 

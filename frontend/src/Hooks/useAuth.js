@@ -74,6 +74,7 @@ function useAuth() {
         if (jwtToken !== "") {
             const res = await services.isAuth({ token: jwtToken });
             if (res.message == "isAuth success") return true;
+            toast.error(res.message);
             return false;
         }
         return false;
