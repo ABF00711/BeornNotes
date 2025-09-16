@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import "./style.css";
 import { AgGridReact } from 'ag-grid-react';
 import { themeAlpine } from "ag-grid-community";
@@ -11,11 +11,13 @@ import Delete from "./Delete";
 import Searchpatterns from "./Searchpatterns";
 import useSearchpatterns from "../../Hooks/useFilters";
 import Layouts from "./Layouts";
+import useLayouts from "../../Hooks/useLayouts";
 
 function DynamicGrid({ tableView }) {
     const { dynamicData, getDynamicData, getColumDefs } = useDynamicData();
     const { searchConfig, getSearchConfigData } = useSearchConfig();
-    const {searchpatterns, getSearchpatterns} = useSearchpatterns();
+    const { searchpatterns, getSearchpatterns } = useSearchpatterns();
+    const { layouts, getLayouts } = useLayouts();
     const gridRef = useRef();
     const [columnDefs, setColumnDefs] = useState([]);
     const [isOpenUpdate, setIsOpenUpdate] = useState(false);
@@ -51,7 +53,7 @@ function DynamicGrid({ tableView }) {
             currentColumnState.map((column) => {
                 sortState.push({ colId: column.colId, sort: column.sort });
             })
-            const searchpatterns = JSON.parse(localStorage.getItem("searchpatterns") || "{}");
+            const searchpatterns = JSON.parse(localStorage.getItem("searchpatterns") || {});
             searchpatterns.sorts = sortState;
             localStorage.setItem("searchpatterns", JSON.stringify(searchpatterns));
         }
@@ -62,30 +64,41 @@ function DynamicGrid({ tableView }) {
         if (!gridRef.current?.api) return;
         try {
             let savedSearchpattern = JSON.parse(localStorage.getItem("searchpatterns") || null);
-            if(savedSearchpattern == null){
+            if (savedSearchpattern == null) {
                 const defaultPattern = searchpatterns.find(pattern => pattern.name == "Default");
-                const parsedPattern = JSON.parse(defaultPattern.data);
-                if(parsedPattern){
+                if (defaultPattern) {
+                    const parsedPattern = JSON.parse(defaultPattern.data);
                     savedSearchpattern = {
-                        filters: parsedPattern.filters || {},
-                        sorts: parsedPattern.sorts || {}
+                        filters: parsedPattern.filters || [],
+                        sorts: parsedPattern.sorts || []
+                    }
+                } else {
+                    savedSearchpattern = {
+                        filters: [],
+                        sorts: []
                     }
                 }
             }
             let savedLayout = JSON.parse(localStorage.getItem("layout") || null);
-            if(savedLayout == null){
-                
-            }
-            savedLayout = gridRef.current.api.getColumnState();
-            savedLayout.map((column) => {
-                const savedSortIndex = savedSearchpattern.sorts.findIndex(item => item.colId === column.colId);
-                if (savedSortIndex !== -1) {
-                    column.sort = savedSearchpattern.sorts[savedSortIndex].sort;
+            if (savedLayout == null) {
+                const defaultLayout = layouts.find(layout => layout.layout_name === "Default");
+                if (defaultLayout) {
+                    savedLayout = JSON.parse(defaultLayout.layout_json);
+                } else {
+                    savedLayout = gridRef.current.api.getColumnState();
                 }
+            }
+            savedLayout.map((column) => {
+                const savedSort = savedSearchpattern.sorts.find(item => item.colId === column.colId);
+                if (savedSort) {
+                    column.sort = savedSort.sort;
+                }
+                return column
             })
+            console.log("layout: ", savedLayout);
             gridRef.current.api.applyColumnState({
                 state: savedLayout,
-                applyOrder: true, 
+                applyOrder: true,
             });
             gridRef.current.api.setFilterModel(savedSearchpattern.filters);
         } catch (error) {
@@ -94,18 +107,20 @@ function DynamicGrid({ tableView }) {
     };
 
     const onColumnChanged = () => {
-        const currentGrid = gridRef.current.api.getColumnState();
-        localStorage.setItem("layout", JSON.stringify(currentGrid));
+        setTimeout(() => {
+            const currentGrid = gridRef.current.api.getColumnState();
+            localStorage.setItem("layout", JSON.stringify(currentGrid));
+        }, 200);
     }
 
     const onGridReady = useCallback((params) => {
-        
+
     }, []);
 
     useEffect(() => {
         setColumnDefs(getColumDefs(tableView));
     }, [searchConfig])
-    
+
     useEffect(() => {
         if (dynamicData && dynamicData.length > 0 && gridRef.current?.api) {
             setTimeout(() => {
@@ -116,6 +131,7 @@ function DynamicGrid({ tableView }) {
 
     useEffect(() => {
         getSearchConfigData();
+        getLayouts(tableView);
         getSearchpatterns(tableView)
         getDynamicData(tableView);
     }, [])
@@ -129,9 +145,9 @@ function DynamicGrid({ tableView }) {
                     <Delete tablename={tableView} gridRef={gridRef} />
                 </div>
                 <div className="toolbar-right">
-                    <Layouts />
-                    <Searchpatterns tablename={tableView} gridRef = {gridRef} />
-                    <ColumnVisible columnDefs={columnDefs} setColumnDefs={setColumnDefs} onColumnChanged = {onColumnChanged} />
+                    <Layouts tablename = {tableView} gridRef = {gridRef} />
+                    <Searchpatterns tablename={tableView} gridRef={gridRef} />
+                    <ColumnVisible columnDefs={columnDefs} setColumnDefs={setColumnDefs} onColumnChanged={onColumnChanged} />
                     <div className="total-count">
                         <span className="total-label">Total:</span>
                         <span className="total-value">{Array.isArray(dynamicData) ? dynamicData.length : 0}</span>

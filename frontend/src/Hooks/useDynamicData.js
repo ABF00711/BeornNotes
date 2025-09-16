@@ -24,7 +24,6 @@ function useDynamicData () {
             if(res.message === "createDynamicData success"){
                 toast.success(`Created a new ${tablename} data successfully`);
                 newData.id = res.newDataId;
-                // setDynamicData(prevData => ([...prevData, newData]));
                 getDynamicData(tablename);
                 return;
             }
