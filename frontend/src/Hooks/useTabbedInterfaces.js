@@ -2,7 +2,7 @@ import { useContext, useEffect } from "react";
 import { MyContext } from "../Context";
 
 function useTabbedInterfaces () {
-    const {tabbedInterfaces, setTabbedInterfaces} = useContext(MyContext);
+    const {tabbedInterfaces, setTabbedInterfaces, currentInterface, setCurrentInterface} = useContext(MyContext);
 
     const getTabbedInterface = () => {
         try {
@@ -12,7 +12,7 @@ function useTabbedInterfaces () {
                 return {tabbedBtns: [], activeUrl: {}}
             }
             const parsedInterface = JSON.parse(tabbedInterface);
-            return parsedInterface;
+            setCurrentInterface(parsedInterface);
         } catch (error) {
             console.log("getTabbedInterfaceError: ", error);
             return {tabbedBtns: [], activeUrl: {}};
@@ -27,6 +27,7 @@ function useTabbedInterfaces () {
             }
             tabbedInterface.activeUrl = newItem.path;
             localStorage.setItem("tabbedInterface", JSON.stringify(tabbedInterface));
+            setCurrentInterface(tabbedInterface);
         } catch (error) {
             console.log("addTabbedInterfaceError: ", error);
         }
@@ -39,29 +40,13 @@ function useTabbedInterfaces () {
             tabbedInterface.tabbedBtns = _tabbedBtns;
             tabbedInterface.activeUrl = "/";
             localStorage.setItem("tabbedInterface", JSON.stringify(tabbedInterface));
+            setCurrentInterface(tabbedInterface);
         } catch (error) {
             console.log("removeTabbedInterfacesError: ", error);
         }
     }
-
-    const goToActiveUrl = (onNavigate) => {
-        try {
-            const tabbedInterface = localStorage.getItem("tabbedInterface");
-            if(tabbedInterface){
-                const activeUrl = JSON.parse(tabbedInterface).activeUrl;
-                if(activeUrl){
-                    onNavigate(activeUrl);
-                    return;
-                }
-            }
-            onNavigate("/");
-        } catch (error) {
-            console.log("goToActiveUrlError: ", error);
-        }
-    }
-
     return (
-        {addTabbedInterface, getTabbedInterface, removeTabbedInterface, goToActiveUrl}
+        {addTabbedInterface, getTabbedInterface, removeTabbedInterface, currentInterface}
     );
 }
 

@@ -14,7 +14,7 @@ function Login() {
         password: ""
     })
     const { login } = useAuth();
-    const {goToActiveUrl} = useTabbedInterfaces();
+    const {currentInterface} = useTabbedInterfaces();
     const handleChange = (e) => {
         setFormData({
             ...formData,
@@ -27,8 +27,7 @@ function Login() {
         e.preventDefault();
 
         if (await login(formData)) {
-            const tabbedInterface = localStorage.getItem("tabbedInterface");
-            goToActiveUrl(navigate);
+            navigate(currentInterface.activeUrl)
         }
     }
 
