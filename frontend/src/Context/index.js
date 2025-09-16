@@ -14,7 +14,7 @@ function ContextProvider({ children }) {
     const [searchConfig, setSearchConfig] = useState([]);
     const [dynamicData, setDynamicData] = useState([]);
     const [menuItems, setMenuItems] = useState([]);
-    const [tabbedBtns, setTabbedBtns] = useState([]);
+    const [tabbedInterfaces, setTabbedInterfaces] = useState([]);
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [searchpatterns, setSearchpatterns] = useState([]);
     const [layouts, setLayouts] = useState([]);
@@ -25,7 +25,7 @@ function ContextProvider({ children }) {
             token, setToken,
             searchConfig, setSearchConfig,
             menuItems, setMenuItems,
-            tabbedBtns, setTabbedBtns,
+            tabbedInterfaces, setTabbedInterfaces,
             isCollapsed, setIsCollapsed,
             dynamicData, setDynamicData,
             searchpatterns, setSearchpatterns,

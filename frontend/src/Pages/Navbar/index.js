@@ -1,16 +1,17 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./style.css";
-import useTabbedBtns from "../../Hooks/useTabbedBtns";
 import TabbedBtn from "../../Components/TabbedBtn";
 import { MyContext } from "../../Context";
+import useTabbedInterfaces from "../../Hooks/useTabbedInterfaces";
 
 function Navbar() {
-    const {tabbedBtns, getTabbedBtns} = useTabbedBtns();
+    const [tabbedBtns, setTabbedBtns] = useState([]);
+    const {getTabbedInterface} = useTabbedInterfaces();
     const {isCollapsed} = useContext(MyContext);
 
     useEffect(() => {
-        getTabbedBtns();
+        setTabbedBtns(getTabbedInterface().tabbedBtns);
     }, [])
 
     return (

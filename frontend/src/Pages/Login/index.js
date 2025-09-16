@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import PasswordField from "../../Components/PasswordField";
 import TextField from "../../Components/TextField";
 import useMenuItems from "../../Hooks/useMenuItems";
+import useTabbedInterfaces from "../../Hooks/useTabbedInterfaces";
 
 function Login() {
     const navigate = useNavigate();
@@ -13,6 +14,7 @@ function Login() {
         password: ""
     })
     const { login } = useAuth();
+    const {goToActiveUrl} = useTabbedInterfaces();
     const handleChange = (e) => {
         setFormData({
             ...formData,
@@ -25,7 +27,8 @@ function Login() {
         e.preventDefault();
 
         if (await login(formData)) {
-            navigate("/");
+            const tabbedInterface = localStorage.getItem("tabbedInterface");
+            goToActiveUrl(navigate);
         }
     }
 

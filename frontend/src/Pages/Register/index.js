@@ -61,7 +61,7 @@ function Register() {
         if(!validateFields()) return;
 
         if (await register(formData)) {
-            navigate("/")
+            navigate("/");
         }
     };
 

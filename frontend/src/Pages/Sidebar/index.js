@@ -3,8 +3,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import "./style.css";
 import useMenuItems from "../../Hooks/useMenuItems";
 import MenuItem from "../../Components/MenuItem";
-import useTabbedBtns from "../../Hooks/useTabbedBtns";
 import { MyContext } from "../../Context";
+import useTabbedInterfaces from "../../Hooks/useTabbedInterfaces";
 
 function Sidebar() {
     const navigate = useNavigate();
@@ -12,7 +12,7 @@ function Sidebar() {
     const {menuItems, getMenuItems} = useMenuItems();
     const {isCollapsed, setIsCollapsed} = useContext(MyContext);
     const [expandedMenus, setExpandedMenus] = useState(new Set());
-    const {addTabbedBtns} = useTabbedBtns();
+    const {addTabbedInterface} = useTabbedInterfaces();
 
     // Auto-expand parent menus when child is active
     useEffect(() => {
@@ -23,7 +23,7 @@ function Sidebar() {
     }, [location.pathname]);
 
     const handleNavigation = (item) => {
-        addTabbedBtns(item);
+        addTabbedInterface(item);
         navigate(item.path);
     };
 

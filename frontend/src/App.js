@@ -8,7 +8,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import Dashboard from './Pages/Dashboard';
 import Customers from './Pages/Customers';
 import { AllCommunityModule, ModuleRegistry, SideBarModule } from 'ag-grid-community'; 
-// import 'ag-grid-community/styles/ag-grid.css';
+import Orders from './Pages/Orders';
+import InventoryReport from './Pages/Reports/InventoryReport';
+import SummaryReport from './Pages/Reports/SummaryReport';
+import Customers2 from './Pages/Customers2';
 
 // Register all Community features
 ModuleRegistry.registerModules([AllCommunityModule ]);
@@ -24,6 +27,10 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/customers" element={<Customers />} />
+            <Route path="/customers2" element={<Customers2 />} />
+            <Route path="/orders" element={<Orders />} />
+            <Route path="/summary_report" element={<SummaryReport />} />
+            <Route path="/inventory_report" element={<InventoryReport />} />
           </Routes>
           <ToastContainer />
         </BrowserRouter>

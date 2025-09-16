@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./style.css";
-import useTabbedBtns from "../../Hooks/useTabbedBtns";
+import useTabbedBtns from "../../Hooks/useTabbedInterfaces";
 
 function TabbedBtn({ btnInfo }) {
     const navigate = useNavigate();
-    const { removeTabbedBtn } = useTabbedBtns();
+    const { removeTabbedInterface } = useTabbedBtns();
     const location = useLocation();
     const [isHovered, setIsHovered] = useState(false);
 
@@ -17,7 +17,7 @@ function TabbedBtn({ btnInfo }) {
 
     const removeBtn = (e) => {
         e.stopPropagation(); // Prevent navigation when clicking close
-        removeTabbedBtn(btnInfo);
+        removeTabbedInterface(btnInfo);
     };
 
     return (
