@@ -181,6 +181,46 @@ const services = {
         } catch (error) {
             console.log("ServicesDeleteLayoutsError: ", error);
         }
+    },
+
+    getTabInterfaces: async () => {
+        try {
+            services.setAuthToken();
+            const res = await axios.get(services.serverURL + "/tabInterfaces/get");
+            return res.data;
+        } catch (error) {
+            console.log("getTabInterfacesError: ", error);
+        }
+    },
+
+    createTabInterface: async (tabInterfaceName, tabInterfaceJson) => {
+        try {
+            services.setAuthToken();
+            const res = await axios.post(services.serverURL + "/tabInterfaces/create", {tabInterfaceJson, tabInterfaceName});
+            return res.data;
+        } catch (error) {
+            console.log("createTabInterfaceError: ", error);
+        }
+    },
+
+    updateTabInterface: async (tabInterfaceName, tabInterfaceJson) => {
+        try {
+            services.setAuthToken();
+            const res = await axios.post(services.serverURL + "/tabInterfaces/update", {tabInterfaceJson, tabInterfaceName});
+            return res.data;
+        } catch (error) {
+            console.log("updateTabInterfaceError: ", error);
+        }
+    },
+
+    deleteTabInterface: async (id) => {
+        try {
+            services.setAuthToken();
+            const res = await axios.post(services.serverURL + "/tabInterfaces/delete", {id});
+            return res.data;
+        } catch (error) {
+            console.log("deleteTabInterfaceError: ", error);
+        }
     }
 }
 

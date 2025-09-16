@@ -7,6 +7,7 @@ const menuController = require("../Controller/menuController.js");
 const dynamicDataController = require("../Controller/dynamicDataController.js");
 const filterController = require("../Controller/filterController.js");
 const layoutsController = require("../Controller/layoutsController.js");
+const tabInterfaceController = require("../Controller/tabInterfaceController.js");
 const router = express.Router();
 
 router.get('/searchConfigData', searchConfigController.getAll);
@@ -34,4 +35,8 @@ router.post('/layouts/create', authMiddleware, layoutsController.createLayouts);
 router.post('/layouts/update', authMiddleware, layoutsController.updateLayouts);
 router.post('/layouts/delete', authMiddleware, layoutsController.deleteLayouts);
 
+router.post('/tabInterfaces/get', authMiddleware, tabInterfaceController.getTabInterfaces);
+router.post('/tabInterfaces/create', authMiddleware, tabInterfaceController.createTabInterface);
+router.post('/tabInterfaces/update', authMiddleware, tabInterfaceController.updateTabInterface);
+router.post('/tabInterfaces/delete', authMiddleware, tabInterfaceController.deleteTabInterface);
 module.exports = router;

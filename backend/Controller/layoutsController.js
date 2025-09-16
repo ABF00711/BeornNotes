@@ -28,8 +28,8 @@ const layoutsController = {
 
             const userData = await mysqlDA.getOneData("users", {name: user.name});
             if(!userData){
-                console.log("User of this pattern is not existing");
-                res.json({message: "User of this pattern is not existing"});
+                console.log("User of this layout is not existing");
+                res.json({message: "User of this layout is not existing"});
                 return;
             }
             const layout = {table_name: tablename, user_id: userData.id, layout_name: layoutName, layout_json: layoutJson};

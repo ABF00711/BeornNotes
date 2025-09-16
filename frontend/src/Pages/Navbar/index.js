@@ -6,11 +6,11 @@ import { MyContext } from "../../Context";
 import useTabbedInterfaces from "../../Hooks/useTabbedInterfaces";
 
 function Navbar() {
-    const { currentInterface, getTabbedInterface } = useTabbedInterfaces();
+    const { currentInterface, getCurrentTabInterface } = useTabbedInterfaces();
     const { isCollapsed } = useContext(MyContext);
 
     useEffect(() => {
-        getTabbedInterface();
+        getCurrentTabInterface();
     }, [])
 
     return (
