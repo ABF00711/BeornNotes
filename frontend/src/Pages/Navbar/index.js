@@ -6,8 +6,8 @@ import { MyContext } from "../../Context";
 import useTabbedInterfaces from "../../Hooks/useTabbedInterfaces";
 
 function Navbar() {
-    const {currentInterface, getTabbedInterface} = useTabbedInterfaces();
-    const {isCollapsed} = useContext(MyContext);
+    const { currentInterface, getTabbedInterface } = useTabbedInterfaces();
+    const { isCollapsed } = useContext(MyContext);
 
     useEffect(() => {
         getTabbedInterface();
@@ -18,8 +18,8 @@ function Navbar() {
             <div className="navbar-container">
                 <div className={`breadcrumb ${!isCollapsed ? 'M_L_280' : 'M_L_50'}`}>
                     {currentInterface.tabbedBtns.map((btnInfo) => {
-                        if(!btnInfo)return;
-                        return <TabbedBtn btnInfo = {btnInfo} />;
+                        if (!btnInfo) return;
+                        return <TabbedBtn btnInfo={btnInfo} />;
                     })}
                 </div>
             </div>

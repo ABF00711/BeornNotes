@@ -3,8 +3,7 @@ import "./style.css";
 import useAuth from "../../Hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import PasswordField from "../../Components/PasswordField";
-import TextField from "../../Components/TextField";
-import useMenuItems from "../../Hooks/useMenuItems";
+import TextField from "../../Components/TextField"
 import useTabbedInterfaces from "../../Hooks/useTabbedInterfaces";
 
 function Login() {

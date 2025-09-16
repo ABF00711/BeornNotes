@@ -21,11 +21,10 @@ function useTabbedInterfaces () {
 
     const addTabbedInterface = (newItem) => {
         try {
-            const tabbedInterface = getTabbedInterface();
+            const tabbedInterface = {...currentInterface, activeUrl: newItem.path};
             if (!tabbedInterface.tabbedBtns.some((btn) => btn.title == newItem.title)){
                 tabbedInterface.tabbedBtns.push(newItem);
             }
-            tabbedInterface.activeUrl = newItem.path;
             localStorage.setItem("tabbedInterface", JSON.stringify(tabbedInterface));
             setCurrentInterface(tabbedInterface);
         } catch (error) {
@@ -35,10 +34,11 @@ function useTabbedInterfaces () {
 
     const removeTabbedInterface = (btnInfo) => {
         try {
-            const tabbedInterface = getTabbedInterface();
-            const _tabbedBtns = tabbedInterface.tabbedBtns.filter(btn => btn.title !== btnInfo.title);
-            tabbedInterface.tabbedBtns = _tabbedBtns;
-            tabbedInterface.activeUrl = "/";
+            const tabbedInterface = {
+                ...currentInterface,
+                tabbedBtns: currentInterface.tabbedBtns.filter((btn) => btn.title !== btnInfo.title),
+                activeUrl: "/"
+            };
             localStorage.setItem("tabbedInterface", JSON.stringify(tabbedInterface));
             setCurrentInterface(tabbedInterface);
         } catch (error) {
