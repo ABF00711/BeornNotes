@@ -11,13 +11,15 @@ import InputGroup from "../../Components/InputGroup";
 import TextField from "../../Components/TextField";
 import EmailField from "../../Components/EmailField";
 import PasswordField from "../../Components/PasswordField";
+import { Switch } from "antd";
+import GAuthenticator from "./GAthenticator";
 
 function Profile() {
     const navigate = useNavigate();
     const { isAuthenticated, userData, getProfileData, updateProfile, changePassword } = useAuth();
     const { isCollapsed, searchConfig } = useContext(MyContext);
-    const {getSearchConfigData} = useSearchConfig();
-    
+    const { getSearchConfigData } = useSearchConfig();
+
     const [formData, setFormData] = useState({
         name: userData.name,
         email: userData.email,
@@ -29,6 +31,7 @@ function Profile() {
     const [profileSubmitted, setProfileSubmitted] = useState(false);
     const [submitted, setSubmitted] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [isMFA, setIsMFA] = useState(userData.mfa);
 
     const isAuth = async () => {
         const res = await isAuthenticated();
@@ -53,7 +56,7 @@ function Profile() {
             updateProfile(formData, profileData);
         } catch (error) {
             console.log("handleError: ", error);
-        }finally{
+        } finally {
             setIsLoading(false);
         }
     }
@@ -66,21 +69,21 @@ function Profile() {
             changePassword(formData, setFormData);
         } catch (error) {
             console.log("handleError: ", error);
-        }finally{
+        } finally {
             setIsLoading(false);
         }
     }
-
-    useEffect(() => {
-        isAuth();
-        getSearchConfigData();
-    }, []);
 
     useEffect(() => {
         if (userData && searchConfig.length > 0) {
             getProfileData(setProfileData, setFormData);
         }
     }, [userData, searchConfig]);
+
+    useEffect(() => {
+        isAuth();
+        getSearchConfigData();
+    }, []);
 
     return (
         <div className="dashboard">
@@ -114,19 +117,19 @@ function Profile() {
                                         required={true}
                                         submitted={profileSubmitted}
                                     />
-                    
+
                                     {profileData.map((item) => (
-                                        <InputGroup 
+                                        <InputGroup
                                             key={item.field_name}
-                                            props={{ 
-                                                fieldFormat: item, 
-                                                value: formData[item.field_name] || "", 
-                                                handleChange, 
-                                                submitted: profileSubmitted 
-                                            }} 
+                                            props={{
+                                                fieldFormat: item,
+                                                value: formData[item.field_name] || "",
+                                                handleChange,
+                                                submitted: profileSubmitted
+                                            }}
                                         />
                                     ))}
-                                    
+
                                     <button type="submit" className="profile-button" disabled={isLoading}>
                                         {isLoading ? "Updating..." : "Update Profile"}
                                     </button>
@@ -161,6 +164,7 @@ function Profile() {
                                         {isLoading ? "Changing..." : "Change Password"}
                                     </button>
                                 </form>
+                                <GAuthenticator />
                             </div>
                         </div>
                     </div>

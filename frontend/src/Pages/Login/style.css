@@ -226,3 +226,38 @@
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+/* MFA Section Styles */
+.mfa-section {
+    background: rgba(116, 185, 255, 0.05);
+    border: 2px solid rgba(116, 185, 255, 0.2);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 10px 0;
+    text-align: center;
+}
+
+.mfa-help {
+    color: #718096;
+    font-size: 14px;
+    margin: 10px 0 0 0;
+    font-style: italic;
+}
+
+.mfa-section .field-container input {
+    text-align: center;
+    font-size: 18px;
+    letter-spacing: 2px;
+    font-family: 'Courier New', monospace;
+    font-weight: 600;
+}
+
+.auth-button.secondary {
+    background: linear-gradient(135deg, #a29bfe, #6c5ce7);
+    box-shadow: 0 4px 15px rgba(162, 155, 254, 0.3);
+    margin-top: 10px;
+}
+
+.auth-button.secondary:hover:not(:disabled) {
+    box-shadow: 0 8px 25px rgba(162, 155, 254, 0.4);
+}

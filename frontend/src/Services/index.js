@@ -54,6 +54,36 @@ const services = {
         }
     },
 
+    getQRCode: async () => {
+        try {
+            services.setAuthToken();
+            const res = await axios.get(services.serverURL + "/auth/qrcode");
+            return res.data;
+        } catch (error) {
+            console.log("getQRCodeError: ", error);
+        }
+    },
+
+    enableMFA: async (verificationCode) => {
+        try {
+            services.setAuthToken();
+            const res = await axios.post(services.serverURL + "/auth/enableMFA", { verificationCode });
+            return res.data;
+        } catch (error) {
+            console.log("enableMFAError: ", error);
+        }
+    },
+
+    disableMFA: async () => {
+        try {
+            services.setAuthToken();
+            const res = await axios.post(services.serverURL + "/auth/disableMFA");
+            return res.data;
+        } catch (error) {
+            console.log("disableMFAError: ", error);
+        }
+    },
+
     getSearchConfig: async () => {
         try {
             const res = await axios.get(services.serverURL + "/searchConfigData");

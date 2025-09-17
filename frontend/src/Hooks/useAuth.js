@@ -48,7 +48,13 @@ function useAuth() {
                 newUser.password = user.password;
             }
 
+            // Add MFA code if provided
+            if (user.mfaCode) {
+                newUser.mfaCode = user.mfaCode;
+            }
+
             const res = await services.login({newUser});
+            
             if (res.message == "login success") {
                 setUserData(res.user);
                 setToken(res.token);
@@ -56,11 +62,16 @@ function useAuth() {
                 localStorage.setItem("userData", JSON.stringify(res.user));
                 toast.success(res.message, { position: "top-right" });
                 return true;
+            } else if (res.message == "MFA required") {
+                return "mfa_required";
             }
+            
             toast.error(res.message, { position: "top-right" });
             return false;
         } catch (error) {
             console.log("loginError: ", error);
+            toast.error("Login failed. Please try again.", { position: "top-right" });
+            return false;
         }
     }
     
@@ -157,8 +168,49 @@ function useAuth() {
         }
     }
 
+    const getQRCode = async () => {
+        try {
+            const res = await services.getQRCode();
+            if(res.message == "getQRCode success"){
+                return res.QRCode;
+            }
+            return {url: "", secret: ""};
+        } catch (error) {
+            console.log("getQRCodeError: ", error);
+            return {url: "", secret: ""};
+        }
+    }
+
+    const enableMFA = async (verificationCode) => {
+        try {
+            const res = await services.enableMFA(verificationCode);
+            if (res.message === "enableMFA success") {
+                setUserData({ ...userData, mfa: 1 });
+                return true;
+            }
+            throw new Error(res.message);
+        } catch (error) {
+            console.log("enableMFAError: ", error);
+            throw error;
+        }
+    }
+
+    const disableMFA = async () => {
+        try {
+            const res = await services.disableMFA();
+            if (res.message === "disableMFA success") {
+                setUserData({ ...userData, mfa: 0 });
+                return true;
+            }
+            throw new Error(res.message);
+        } catch (error) {
+            console.log("disableMFAError: ", error);
+            throw error;
+        }
+    }
+
     return (
-        { register, login, logout, isAuthenticated, userData, setUserData, getProfileData, updateProfile, changePassword }
+        { register, login, logout, isAuthenticated, userData, setUserData, getProfileData, updateProfile, changePassword, getQRCode, enableMFA, disableMFA }
     )
 }
 
