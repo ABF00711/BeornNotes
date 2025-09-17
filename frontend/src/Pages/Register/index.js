@@ -9,7 +9,6 @@ import InputGroup from "../../Components/InputGroup";
 import TextField from "../../Components/TextField";
 import EmailField from "../../Components/EmailField";
 import PasswordField from "../../Components/PasswordField";
-import useMenuItems from "../../Hooks/useMenuItems";
 
 function Register() {
     const navigate = useNavigate();

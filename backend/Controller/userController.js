@@ -104,6 +104,45 @@ const userController = {
             console.log("logout failed", error);
             res.json({ message: "logout failed" });
         }
+    },
+
+    updateProfile: async (req, res) => {
+        try {
+            const {newData, id} = req.body;
+
+            const userData = await mysqlDA.getOneData("users", {id});
+            if(!userData) throw new Error("User is not existing!");
+            for (const key in newData) {
+                userData[key] = newData[key] || null;
+            }
+            await mysqlDA.update("users", userData);
+            res.json({message: "updateProfile success", userData});
+        } catch (error) {
+            console.log("updateProfileError: ", error);
+            res.json({message: error.message});
+        }
+    },
+
+    changePassword: async (req, res) => {
+        try {
+            const {currentPassword, newPassword} = req.body;
+            const {user} = req;
+
+            const userData = await mysqlDA.getOneData("users", {name: user.name});
+
+            const isPasswordValid = await bcrypt.compare(currentPassword, userData.hashedpassword);
+            if (!isPasswordValid) {
+                return res.json({ message: "Invalid current password" });
+            }
+
+            userData.hashedpassword = await bcrypt.hash(newPassword, 10);
+
+            await mysqlDA.update("users", userData);
+            res.json({message: "changePassword success"});
+        } catch (error) {
+            console.log("changePasswordError: ", error);
+            res.json({message: error.message});
+        }
     }
 };
 

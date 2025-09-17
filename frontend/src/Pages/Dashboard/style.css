@@ -4,6 +4,7 @@
 }
 
 .dashboard-container {
+    padding-top: 130px;
     flex: 1;
     flex-direction: column;
     transition: margin-left 0.3s ease;
@@ -13,9 +14,12 @@
 }
 
 .main {
+    position: relative;
+    padding-top: 130px;
     flex: 1;
     padding: 30px;
     background-color: #f8f9fa;
+    overflow-y: scroll;
 }
 
 .main h1 {

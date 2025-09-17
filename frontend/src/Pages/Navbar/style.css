@@ -2,9 +2,10 @@
 .navbar {
     width: 100%;
     height: 60px;
+    top: 70px;
     background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    position: relative;
+    position: fixed;
     z-index: 999;
     box-sizing: border-box;
     overflow: visible;
@@ -32,9 +33,7 @@
     min-width: 0;
 }
 
-.M_L_50{
-    margin-left: 50px;
-}
+M_L_50M_L_50
 
 .breadcrumb::-webkit-scrollbar {
     display: none;
@@ -194,8 +193,13 @@
 @media (max-width: 768px) {
     .navbar {
         height: 50px;
+        top: 60px;
     }
     
+    .M_L_280{
+        margin-left: 50px;
+    }
+
     .navbar-container {
         padding: 0 20px;
     }

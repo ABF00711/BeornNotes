@@ -1,12 +1,11 @@
-import React, { useState, useContext, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./style.css";
 import { useNavigate } from "react-router-dom";
-import { MyContext } from "../../Context";
 import useAuth from "../../Hooks/useAuth";
 
 function Header() {
     const navigate = useNavigate();
-    const { logout, userData } = useAuth();
+    const { logout, userData, setUserData } = useAuth();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [dropdownPosition, setDropdownPosition] = useState({ top: 0, right: 0 });
     const dropdownRef = useRef(null);
@@ -15,7 +14,6 @@ function Header() {
     const handleLogout = () => {
         logout();
         setIsDropdownOpen(false);
-        navigate("/login");
     };
 
     const handleProfile = () => {
@@ -51,6 +49,14 @@ function Header() {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, [isDropdownOpen]);
+
+    const getUserDataFromLocalStorage = () => {
+        setUserData(JSON.parse(localStorage.getItem("userData")));
+    }
+
+    useEffect(() => {
+        getUserDataFromLocalStorage();
+    }, [])
 
     return (
         <div className="header">

@@ -2,9 +2,11 @@ import React, { useContext } from "react";
 import { MyContext } from "../Context";
 import services from "../Services";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 function useAuth() {
-    const { userData, setUserData, token, setToken } = useContext(MyContext);
+    const { userData, setUserData, token, setToken, searchConfig } = useContext(MyContext);
+    const navigate = useNavigate();
 
     const register = async (formData) => {
         try {
@@ -29,14 +31,16 @@ function useAuth() {
         }
     }
 
+    const isValidateEmail = (email) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(String(email).trim());
+    }
+
     const login = async (user) => {
         try {
             const newUser = {};
 
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            const isFormatInvalid = emailRegex.test(String(user.email).trim());
-
-            if (!isFormatInvalid) {
+            if (!isValidateEmail(user.email)) {
                 newUser.name = user.email;
                 newUser.password = user.password;
             }else{
@@ -49,6 +53,7 @@ function useAuth() {
                 setUserData(res.user);
                 setToken(res.token);
                 localStorage.setItem("jwtToken", res.token);
+                localStorage.setItem("userData", JSON.stringify(res.user));
                 toast.success(res.message, { position: "top-right" });
                 return true;
             }
@@ -58,12 +63,13 @@ function useAuth() {
             console.log("loginError: ", error);
         }
     }
-
+    
     const logout = () => {
         try {
             setUserData({ name: "", email: "" });
             setToken("");
             localStorage.setItem("jwtToken", "");
+            navigate("/login");
         } catch (error) {
             console.log("logoutError: ", error);
         }
@@ -80,8 +86,79 @@ function useAuth() {
         return false;
     }
 
+    const getProfileData = (setProfileData, setFormData) => {
+        const _profileData = searchConfig.filter((item) => { 
+            return item.table_name === "registeration" 
+        });
+        
+        _profileData.forEach((item) => {
+            setFormData((prevFormData) => ({ 
+                ...prevFormData, 
+                [item.field_name]: userData[item.field_name] || "" 
+            }));
+        });
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            name: userData.name,
+            email: userData.email
+        }))
+        setProfileData(_profileData);
+    }
+    
+    const updateProfile = async (formData, profileData) => {
+        try {
+            if(formData.name.trim() == "") throw new Error("Please input Username exactly!");
+            if(formData.email.trim() == "") throw new Error("Please input Email exactly!");
+            profileData.map((data) => {
+                if(data.mandatory && (formData[data.field_name] == ""))throw new Error(`Please input required field exactly!`);
+            })
+            const updatedUserData = {};
+            updatedUserData.name = formData.name;
+            updatedUserData.email = formData.email;
+            profileData.map((data) => {
+                updatedUserData[data.field_name] = formData[data.field_name];
+            })
+            if(!window.confirm("Really want update profile?")) return;
+            const res = await services.updateProfile(updatedUserData, userData.id);
+            if(res.message == "updateProfile success"){
+                toast.success("Profile updated successfully");
+                setUserData(res.userData);
+                return;
+            }
+            toast.error(res.message);
+        } catch (error) {
+            toast.error(error.message);
+            console.log("updateProfileError: ", error);
+        }
+    }
+    
+    const changePassword = async (formData, setFormData) => {
+        try {
+            if(formData.currentPassword.trim() == "" || formData.newPassword.trim() == "") throw new Error("Please input password exactly!");
+            if(formData.newPassword.trim() !== formData.confirmPassword.trim()) {
+                setFormData((prevFormData) => ({...prevFormData,confirmPassword: ""})); 
+                throw new Error("Confirm passwod is wrong!");
+            };
+            if(!window.confirm("Really want to change password?")) return;
+            const res = await services.changePassword(formData.currentPassword, formData.newPassword);
+            if(res.message === "changePassword success"){
+                toast.success("Password changed successfully");
+                toast.info("Please log in again.");
+                logout();
+                return;
+            }
+            if(res.message == "Invalid current password"){
+                setFormData((prevFormData) => ({...prevFormData, currentPassword: ""})); 
+            }
+            throw new Error(res.message);
+        } catch (error) {
+            console.log("changePassword: ", error);
+            toast.error(error.message);
+        }
+    }
+
     return (
-        { register, login, logout, isAuthenticated, userData }
+        { register, login, logout, isAuthenticated, userData, setUserData, getProfileData, updateProfile, changePassword }
     )
 }
 

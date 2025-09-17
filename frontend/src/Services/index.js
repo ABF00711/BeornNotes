@@ -10,7 +10,7 @@ const services = {
 
     register: async (userData) => {
         try {
-            const res = await axios.post(services.serverURL + "/register", userData);
+            const res = await axios.post(services.serverURL + "/auth/register", userData);
             return res.data;
         } catch (error) {
             console.log("ServicesRegisterError: ", error);
@@ -19,7 +19,7 @@ const services = {
 
     login: async (userData) => {
         try {
-            const res = await axios.post(services.serverURL + "/login", userData);
+            const res = await axios.post(services.serverURL + "/auth/login", userData);
             return res.data;
         } catch (error) {
             console.log("ServicesLoginError: ", error);
@@ -28,13 +28,32 @@ const services = {
 
     isAuth: async (token) => {
         try {
-            const res = await axios.post(services.serverURL + "/isAuth", token);
+            const res = await axios.post(services.serverURL + "/auth/isAuth", token);
             return res.data;
         } catch (error) {
             console.log("ServicesIsAuthError: ", error);
         }
     },
+
+    updateProfile: async (newData, id) => {
+        try {
+            services.setAuthToken();
+            const res = await axios.post(services.serverURL + "/auth/updateProfile", {newData, id});
+            return res.data;
+        } catch (error) {
+            console.log("updateProfileError: ", error.message);
+        }
+    },
     
+    changePassword: async (currentPassword, newPassword) => {
+        try {
+            const res = await axios.post(services.serverURL + "/auth/changePassword", {currentPassword, newPassword});
+            return res.data;
+        } catch (error) {
+            console.log("changePasswordError: ", error);
+        }
+    },
+
     getSearchConfig: async () => {
         try {
             const res = await axios.get(services.serverURL + "/searchConfigData");

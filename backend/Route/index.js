@@ -13,10 +13,12 @@ const router = express.Router();
 router.get('/searchConfigData', searchConfigController.getAll);
 router.post('/optionData', optionDataController.getAll);
 
-router.post('/register', userController.register);
-router.post('/login', userController.login);
-router.post('/isAuth', userController.isAuth);
-router.post('/logout', userController.logout);
+router.post('/auth/register', userController.register);
+router.post('/auth/login', userController.login);
+router.post('/auth/isAuth', userController.isAuth);
+router.post('/auth/logout', userController.logout);
+router.post('/auth/updateProfile', authMiddleware, userController.updateProfile);
+router.post('/auth/changePassword', authMiddleware, userController.changePassword);
 
 router.get('/menuItems', authMiddleware, menuController.getMenuItems);
 
