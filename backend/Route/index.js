@@ -19,6 +19,9 @@ router.post('/auth/isAuth', userController.isAuth);
 router.post('/auth/logout', userController.logout);
 router.post('/auth/updateProfile', authMiddleware, userController.updateProfile);
 router.post('/auth/changePassword', authMiddleware, userController.changePassword);
+router.get('/auth/qrcode', authMiddleware, userController.getQRCode);
+router.post('/auth/enableMFA', authMiddleware, userController.enableMFA);
+router.post('/auth/disableMFA', authMiddleware, userController.disableMFA);
 
 router.get('/menuItems', authMiddleware, menuController.getMenuItems);
 

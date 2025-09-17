@@ -2,6 +2,8 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const configs = require("../Config/index.js");
 const mysqlDA = require("../Data_Access/index.js");
+const speakeasy = require("speakeasy");
+const qrcode = require("qrcode");
 
 const userController = {
     register: async (req, res) => {
@@ -61,6 +63,31 @@ const userController = {
             if (!isPasswordValid) {
                 return res.json({ message: "Invalid password" });
             }
+
+            // Check if MFA is enabled
+            if (user.mfa === 1) {
+                // If MFA is enabled, require verification code
+                if (!newUser.mfaCode) {
+                    return res.json({ 
+                        message: "MFA required", 
+                        mfaRequired: true,
+                        user: { name: user.name, email: user.email }
+                    });
+                }
+
+                // Verify MFA code
+                const verified = speakeasy.totp.verify({
+                    secret: user.secret,
+                    encoding: 'base32',
+                    token: newUser.mfaCode,
+                    window: 2
+                });
+
+                if (!verified) {
+                    return res.json({ message: "Invalid MFA code" });
+                }
+            }
+
             jwt.sign({ name: user.name, email: user.email, hashedpassword: user.hashedpassword }, configs.JWT_SECRET, { expiresIn: "2h" }, (err, token) => {
                 if (err) {
                     console.log("jwt sign failed", err);
@@ -142,6 +169,87 @@ const userController = {
         } catch (error) {
             console.log("changePasswordError: ", error);
             res.json({message: error.message});
+        }
+    },
+
+    getQRCode: async (req, res) => {
+        try {
+            const {user} = req;
+            const userData = await mysqlDA.getOneData("users", {name: user.name});
+            
+            const secret = speakeasy.generateSecret({
+                name: `BeornNotes (${userData.email})`,
+                issuer: "BeornNotes",
+                length: 32
+            });
+
+            const url = await qrcode.toDataURL(secret.otpauth_url);
+            
+            // Store secret temporarily (don't enable MFA yet)
+            userData.secret = secret.base32;
+            await mysqlDA.update("users", userData);
+            
+            res.json({
+                message: "getQRCode success", 
+                QRCode: {
+                    url, 
+                    secret: secret.base32
+                }
+            });
+        } catch (error) {
+            console.log("getQRCodeError :", error);
+            res.json({message: "getQRCode failed!"});
+        }
+    },
+
+    enableMFA: async (req, res) => {
+        try {
+            const {verificationCode} = req.body;
+            const {user} = req;
+            
+            const userData = await mysqlDA.getOneData("users", {name: user.name});
+            
+            if (!userData.secret) {
+                return res.json({message: "No MFA secret found. Please generate QR code first."});
+            }
+            
+            // Verify the code
+            const verified = speakeasy.totp.verify({
+                secret: userData.secret,
+                encoding: 'base32',
+                token: verificationCode,
+                window: 2 // Allow 2 time steps (60 seconds) tolerance
+            });
+            
+            if (!verified) {
+                return res.json({message: "Invalid verification code"});
+            }
+
+            // Enable MFA
+            userData.mfa = 1;
+            await mysqlDA.update("users", userData);
+            
+            res.json({message: "enableMFA success"});
+        } catch (error) {
+            console.log("enableMFAError :", error);
+            res.json({message: "enableMFA failed!"});
+        }
+    },
+
+    disableMFA: async (req, res) => {
+        try {
+            const {user} = req;
+            const userData = await mysqlDA.getOneData("users", {name: user.name});
+            
+            // Disable MFA and clear secret
+            userData.mfa = 0;
+            userData.secret = null;
+            await mysqlDA.update("users", userData);
+            
+            res.json({message: "disableMFA success"});
+        } catch (error) {
+            console.log("disableMFAError :", error);
+            res.json({message: "disableMFA failed!"});
         }
     }
 };
