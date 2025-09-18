@@ -54,9 +54,9 @@ function Header() {
         setUserData(JSON.parse(localStorage.getItem("userData")));
     }
 
-    useEffect(() => {
-        getUserDataFromLocalStorage();
-    }, [])
+    // useEffect(() => {
+    //     getUserDataFromLocalStorage();
+    // }, [])
 
     return (
         <div className="header">
