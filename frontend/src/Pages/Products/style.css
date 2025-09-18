@@ -1,0 +1,57 @@
+.dashboard {
+    min-height: 100vh;
+    background-color: #f8f9fa;
+}
+
+.dashboard-container {
+    padding-top: 130px;
+    flex: 1;
+    flex-direction: column;
+    transition: margin-left 0.3s ease;
+}
+.M_L_280{
+    margin-left: 280px;
+}
+
+.main {
+    position: relative;
+    padding-top: 130px;
+    flex: 1;
+    padding: 30px;
+    background-color: #f8f9fa;
+    overflow-y: scroll;
+}
+
+.main h1 {
+    color: #333;
+    margin-bottom: 10px;
+    font-size: 28px;
+    font-weight: 600;
+}
+
+.main p {
+    color: #666;
+    font-size: 16px;
+    margin: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .dashboard-container {
+        margin-left: 70px;
+    }
+}
+
+@media (max-width: 480px) {
+    .dashboard-container {
+        margin-left: 60px;
+    }
+    
+    .main {
+        padding: 20px;
+    }
+    
+    .main h1 {
+        font-size: 24px;
+    }
+}
