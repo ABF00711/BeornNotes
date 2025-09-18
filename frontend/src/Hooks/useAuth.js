@@ -87,33 +87,41 @@ function useAuth() {
     }
 
     const isAuthenticated = async () => {
-        const jwtToken = localStorage.getItem("jwtToken");
-        if (jwtToken !== "") {
-            const res = await services.isAuth({ token: jwtToken });
-            if (res.message == "isAuth success") return true;
-            toast.error(res.message);
+        try {
+            const jwtToken = localStorage.getItem("jwtToken");
+            if (jwtToken !== "") {
+                const res = await services.isAuth({ token: jwtToken });
+                if (res.message == "isAuth success") return true;
+                toast.error(res.message);
+                return false;
+            }
             return false;
+        } catch (error) {
+            console.log("isAuthenticatedError: ", error);
         }
-        return false;
     }
 
     const getProfileData = (setProfileData, setFormData) => {
-        const _profileData = searchConfig.filter((item) => { 
-            return item.table_name === "registeration" 
-        });
-        
-        _profileData.forEach((item) => {
-            setFormData((prevFormData) => ({ 
-                ...prevFormData, 
-                [item.field_name]: userData[item.field_name] || "" 
-            }));
-        });
-        setFormData((prevFormData) => ({
-            ...prevFormData,
-            name: userData.name,
-            email: userData.email
-        }))
-        setProfileData(_profileData);
+        try {
+            const _profileData = searchConfig.filter((item) => { 
+                return item.table_name === "registeration" 
+            });
+            
+            _profileData.forEach((item) => {
+                setFormData((prevFormData) => ({ 
+                    ...prevFormData, 
+                    [item.field_name]: userData[item.field_name] || "" 
+                }));
+            });
+            setFormData((prevFormData) => ({
+                ...prevFormData,
+                name: userData.name,
+                email: userData.email
+            }))
+            setProfileData(_profileData);
+        } catch (error) {
+            console.log("getProfileDataError: ", error);
+        }
     }
     
     const updateProfile = async (formData, profileData) => {
