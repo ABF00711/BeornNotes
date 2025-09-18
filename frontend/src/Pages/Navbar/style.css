@@ -33,7 +33,9 @@
     min-width: 0;
 }
 
-M_L_50M_L_50
+.M_L_50{
+    margin-left: 50px;
+}
 
 .breadcrumb::-webkit-scrollbar {
     display: none;
@@ -194,10 +196,6 @@ M_L_50M_L_50
     .navbar {
         height: 50px;
         top: 60px;
-    }
-    
-    .M_L_280{
-        margin-left: 50px;
     }
 
     .navbar-container {

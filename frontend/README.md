@@ -1,70 +1,102 @@
-# Getting Started with Create React App
+## BeornNotes — Developer Setup Guide
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This repo contains a MERN app with a Node/Express backend and a React (Create React App) frontend.
 
-## Available Scripts
+### Prerequisites
 
-In the project directory, you can run:
+- Node.js 18+ and npm 9+ (or Yarn)
+- MongoDB (local or a hosted cluster)
+- Git
 
-### `npm start`
+### Project Structure
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+```
+BeornNotes/
+  backend/
+    Controller/
+    models/
+    routes/
+    .env               # backend environment variables (create this)
+    package.json
+  frontend/
+    src/
+    public/
+    .env               # frontend environment variables (create this, optional)
+    package.json
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### 1) Clone and install
 
-### `npm test`
+Open Windows PowerShell and run:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```powershell
+git clone <your-repo-url> BeornNotes
+cd BeornNotes
 
-### `npm run build`
+# Install backend deps
+cd backend
+npm install
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+# Install frontend deps
+cd ..\frontend
+npm install
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### 2) Configure environment variables
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Create `backend/.env` with values that match your environment. Example:
 
-### `npm run eject`
+```
+PORT=5000
+MONGO_URI=mongodb://127.0.0.1:27017/beornnotes
+JWT_SECRET=replace_with_a_long_random_string
+NODE_ENV=development
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Optional: create `frontend/.env` for CRA runtime vars (they must start with `REACT_APP_`). Example:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```
+REACT_APP_API_BASE_URL=http://localhost:5000
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+After creating or changing `.env` files, restart the corresponding app.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### 3) Run the apps (two terminals)
 
-## Learn More
+Terminal A — backend:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```powershell
+cd backend
+npm start
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Terminal B — frontend:
 
-### Code Splitting
+```powershell
+cd frontend
+npm start
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+By default, the frontend runs at `http://localhost:3000` and the backend at `http://localhost:5000`.
 
-### Analyzing the Bundle Size
+### Common scripts
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- Frontend
+  - `npm start` — start React dev server
+  - `npm run build` — production build to `build/`
 
-### Making a Progressive Web App
+- Backend
+  - `npm start` — start server (optionally via nodemon if configured)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### Troubleshooting
 
-### Advanced Configuration
+- If the frontend cannot reach the backend, verify `REACT_APP_API_BASE_URL` and backend `PORT`.
+- Ensure MongoDB is running and `MONGO_URI` is correct.
+- After changing `.env`, stop and restart the affected process.
+- If port 3000/5000 is in use, set different ports in `.env` or accept the alternative when CRA prompts.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+### Notes for contributors
 
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- Follow existing code style and naming conventions.
+- Use feature branches and open PRs for review.
+- Keep secrets out of the repo; use `.env` files locally.
