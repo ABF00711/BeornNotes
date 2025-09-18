@@ -56,6 +56,11 @@
     transform: translateY(-1px);
     background: #ff7b7b;
 }
+.btn-warning{
+    background: linear-gradient(135deg, #ffc774 0%, #e3b009 100%);
+    border-color: #e39e09;
+    color: #ffffff;
+}
 .btn-outline{
     background: #ffffff;
     border: 1px solid #cfe6ff;

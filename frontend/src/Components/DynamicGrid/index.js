@@ -88,7 +88,7 @@ function DynamicGrid({ tableView }) {
                     savedLayout = gridRef.current.api.getColumnState();
                 }
             }
-            if(savedSearchpattern.sorts){
+            if (savedSearchpattern.sorts) {
                 savedLayout.map((column) => {
                     const savedSort = savedSearchpattern.sorts.find(item => item.colId === column.colId);
                     if (savedSort) {
@@ -114,8 +114,14 @@ function DynamicGrid({ tableView }) {
         }, 100);
     }
 
-    const onGridReady = useCallback((params) => {
+    const onReset = useCallback(() => {
+        console.log("resetColumnState")
+        localStorage.setItem("searchpatterns", "{}");
+        restoreSearchpatterns();
+    }, [])
 
+    const onGridReady = useCallback((params) => {
+        gridRef.current.gridApi = params.columnApi;
     }, []);
 
     useEffect(() => {
@@ -144,9 +150,13 @@ function DynamicGrid({ tableView }) {
                 <div className="toolbar-left">
                     <Add table_name={tableView} />
                     <Delete tablename={tableView} gridRef={gridRef} />
+                    <button onClick={onReset} type="button" className="btn btn-warning">
+                        <span className="btn-icon">⟲</span>
+                        <span className="btn-label">Reset</span>
+                    </button>
                 </div>
                 <div className="toolbar-right">
-                    <Layouts tablename = {tableView} gridRef = {gridRef} />
+                    <Layouts tablename={tableView} gridRef={gridRef} />
                     <Searchpatterns tablename={tableView} gridRef={gridRef} />
                     <ColumnVisible columnDefs={columnDefs} setColumnDefs={setColumnDefs} onColumnChanged={onColumnChanged} />
                     <div className="total-count">
