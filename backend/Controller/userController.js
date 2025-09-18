@@ -143,7 +143,14 @@ const userController = {
                 userData[key] = newData[key] || null;
             }
             await mysqlDA.update("users", userData);
-            res.json({message: "updateProfile success", userData});
+            jwt.sign({ name: userData.name, email: userData.email, hashedpassword: userData.hashedpassword }, configs.JWT_SECRET, { expiresIn: "2h" }, (err, token) => {
+                if (err) {
+                    console.log("jwt sign failed", err);
+                    res.json({ message: "jwt sign failed" });
+                }
+                console.log("updated user : ", userData.email, ":", userData.name);
+                res.json({message: "updateProfile success", userData, token});
+            });
         } catch (error) {
             console.log("updateProfileError: ", error);
             res.json({message: error.message});

@@ -134,6 +134,8 @@ function useAuth() {
             if(res.message == "updateProfile success"){
                 toast.success("Profile updated successfully");
                 setUserData(res.userData);
+                setToken(res.token);
+                localStorage.setItem("jwtToken", token);
                 return;
             }
             toast.error(res.message);
