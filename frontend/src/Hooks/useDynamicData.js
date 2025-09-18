@@ -83,7 +83,7 @@ function useDynamicData () {
     }
 
     return (
-        {dynamicData, getDynamicData, getColumDefs, createDynamicData, updateDynamicData, deleteDynamicData}
+        {dynamicData, setDynamicData, getDynamicData, getColumDefs, createDynamicData, updateDynamicData, deleteDynamicData}
     );
 }
 
