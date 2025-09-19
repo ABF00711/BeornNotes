@@ -9,9 +9,7 @@ function Combobox({ fieldFormat, value, handleChange, options = [], submitted = 
 
     // Keep input in sync with external value
     useEffect(() => {
-        if (!searchTerm && value) {
-            setSearchTerm(value);
-        }
+        setSearchTerm(value);
     }, [value]);
 
     // Filter options based on search term

@@ -6,7 +6,7 @@ import useDynamicData from "../../Hooks/useDynamicData";
 
 function DynamicModal({ table_name, isOpen, setIsOpen, title, role, fieldsData, initData = {} }) {
     const [submitted, setSubmitted] = useState(false);
-    const [formData, setFormData] = useState(initData);
+    const [formData, setFormData] = useState({});
     const { createDynamicData, updateDynamicData } = useDynamicData();
 
     const validateFields = () => {
@@ -29,11 +29,25 @@ function DynamicModal({ table_name, isOpen, setIsOpen, title, role, fieldsData, 
             if (role === "create") createDynamicData(table_name, formData);
             if (role === "update") updateDynamicData(table_name, formData);
 
-            setFormData({});
-            setIsOpen(!isOpen);
+            onInit();
+            setIsOpen(false);
         } catch (error) {
             console.log("hanleSubmitError: ", error);
         }
+    }
+
+    const onInit = () => {
+        let _formData = {};
+        for (const key in formData) {
+            _formData[key] = "";
+        }
+        setFormData(_formData);
+        setSubmitted(false);
+    }
+
+    const onCancel = () => {
+        onInit();
+        setIsOpen(false);
     }
 
     const handleChange = (e) => {
@@ -44,12 +58,16 @@ function DynamicModal({ table_name, isOpen, setIsOpen, title, role, fieldsData, 
     };
 
     useEffect(() => {
+        console.log("formData: ", formData);
+    }, [formData])
+
+    useEffect(() => {
         setFormData(initData);
     }, [initData])
 
     return (
         <>
-            <Modal open={isOpen} onCancel={() => setIsOpen(false)} onOk={handleSubmit}>
+            <Modal open={isOpen} onCancel={onCancel} onOk={handleSubmit}>
                 <h1>{title}</h1>
                 {
                     fieldsData.map((item) => {

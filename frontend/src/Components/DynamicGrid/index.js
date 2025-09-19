@@ -178,6 +178,7 @@ function DynamicGrid({ tableView }) {
                     onSortChanged={onSortChanged}
                     onColumnMoved={onColumnChanged}
                     onColumnResized={onColumnChanged}
+                    onBodyScroll={true}
                 />
             </div>
             <Update tablename={tableView} isOpen={isOpenUpdate} setIsOpen={setIsOpenUpdate} updateData={updateData} />
