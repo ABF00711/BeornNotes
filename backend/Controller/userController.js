@@ -113,7 +113,7 @@ const userController = {
             res.json({message: "isAuth failed"});
         } catch (error) {
             console.log("isAuth failed: ", error);
-            res.json({message: "isAuth failded"});
+            res.json({message: "isAuth failed"});
         }
     },
 

@@ -9,24 +9,7 @@ import Navbar from "../Navbar";
 import { MyContext } from "../../Context";
 
 function Dashboard() {
-    const navigate = useNavigate();
-    const { isAuthenticated } = useAuth();
     const {isCollapsed} = useContext(MyContext);
-
-    const isAuth = async () => {
-        const res = await isAuthenticated();
-        if (!res) {
-            navigate("/login");
-            return;
-        }
-    }
-
-    console.log();
-    
-
-    useEffect(() => {
-        isAuth();
-    }, [])
 
     return (
         <div className="dashboard">

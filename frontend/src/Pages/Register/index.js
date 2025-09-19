@@ -128,7 +128,7 @@ function Register() {
                     </button>
                 </form>
                 <div className="auth-footer">
-                    <p>Already have an account? <a href="/" className="auth-link">Sign in</a></p>
+                    <p>Already have an account? <a href="/login" className="auth-link">Sign in</a></p>
                 </div>
             </div>
         </div>

@@ -5,7 +5,7 @@ import useAuth from "../../Hooks/useAuth";
 
 function Header() {
     const navigate = useNavigate();
-    const { logout, userData, setUserData } = useAuth();
+    const { logout, userData, setUserData, isAuthenticated } = useAuth();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [dropdownPosition, setDropdownPosition] = useState({ top: 0, right: 0 });
     const dropdownRef = useRef(null);
@@ -54,9 +54,9 @@ function Header() {
         setUserData(JSON.parse(localStorage.getItem("userData")));
     }
 
-    // useEffect(() => {
-    //     getUserDataFromLocalStorage();
-    // }, [])
+    useEffect(() => {
+        isAuthenticated()
+    }, [])
 
     return (
         <div className="header">
