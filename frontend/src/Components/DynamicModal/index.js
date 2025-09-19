@@ -58,10 +58,6 @@ function DynamicModal({ table_name, isOpen, setIsOpen, title, role, fieldsData, 
     };
 
     useEffect(() => {
-        console.log("formData: ", formData);
-    }, [formData])
-
-    useEffect(() => {
         setFormData(initData);
     }, [initData])
 

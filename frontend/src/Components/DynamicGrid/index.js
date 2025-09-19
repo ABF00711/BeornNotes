@@ -115,7 +115,6 @@ function DynamicGrid({ tableView }) {
     }
 
     const onReset = useCallback(() => {
-        console.log("resetColumnState")
         localStorage.setItem("searchpatterns", "{}");
         restoreSearchpatterns();
     }, [])

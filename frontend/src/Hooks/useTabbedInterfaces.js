@@ -2,10 +2,11 @@ import { useContext, useEffect } from "react";
 import { MyContext } from "../Context";
 import services from "../Services";
 import { toast } from "react-toastify";
-import { message } from "antd";
+import { useNavigate } from "react-router-dom";
 
 function useTabbedInterfaces() {
     const { tabbedInterfaces, setTabbedInterfaces, currentInterface, setCurrentInterface } = useContext(MyContext);
+    const navigate = useNavigate();
 
     const getCurrentTabInterface = () => {
         try {
@@ -37,13 +38,20 @@ function useTabbedInterfaces() {
 
     const removeTabbedInterface = (btnInfo) => {
         try {
+            const currentTabIndex = currentInterface.tabbedBtns.findIndex(btns => btns.title == btnInfo.title);
+            const nextTabBtn = currentInterface.tabbedBtns[currentTabIndex - 1];
+            let nextActiveUrl = "/";
+            if(nextTabBtn){
+                nextActiveUrl = nextTabBtn.path;
+            }
             const tabbedInterface = {
                 ...currentInterface,
                 tabbedBtns: currentInterface.tabbedBtns.filter((btn) => btn.title !== btnInfo.title),
-                activeUrl: "/"
+                activeUrl: nextActiveUrl
             };
             localStorage.setItem("tabbedInterface", JSON.stringify(tabbedInterface));
             setCurrentInterface(tabbedInterface);
+            navigate(nextActiveUrl);
         } catch (error) {
             console.log("removeTabbedInterfacesError: ", error);
         }
