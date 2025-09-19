@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 function useTabbedInterfaces() {
-    const { tabbedInterfaces, setTabbedInterfaces, currentInterface, setCurrentInterface } = useContext(MyContext);
+    const { tabbedInterfaces, setTabbedInterfaces, currentInterface, setCurrentInterface, token } = useContext(MyContext);
     const navigate = useNavigate();
 
     const getCurrentTabInterface = () => {
@@ -59,7 +59,7 @@ function useTabbedInterfaces() {
 
     const getTabInterfaces = async () => {
         try {
-            const res = await services.getTabInterfaces();
+            const res = await services.getTabInterfaces(token);
             if (res.message == "getLayouts success") {
                 setTabbedInterfaces(res.tabInterfaces);
                 return;
@@ -72,7 +72,7 @@ function useTabbedInterfaces() {
 
     const createTabInterfaces = async (tabInterfaceName, tabInterfaceJson) => {
         try {
-            const res = await services.createTabInterface(tabInterfaceName, tabInterfaceJson);
+            const res = await services.createTabInterface(tabInterfaceName, tabInterfaceJson, token);
             if (res.message == "createTabInterface success") {
                 getTabInterfaces();
                 toast.success("Created a new tab interface successfully");
@@ -87,7 +87,7 @@ function useTabbedInterfaces() {
 
     const updateTabInterfaces = async (tabInterfaceName, tabInterfaceJson) => {
         try {
-            const res = await services.updateTabInterface(tabInterfaceName, tabInterfaceJson);
+            const res = await services.updateTabInterface(tabInterfaceName, tabInterfaceJson, token);
             if (res.message == "updateTabInterface success") {
                 getTabInterfaces();
                 toast.success("Updated the tab interface successfully");
@@ -101,7 +101,7 @@ function useTabbedInterfaces() {
 
     const deleteTabInterfaces = async (tabInterfaceId) => {
         try {
-            const res = await services.deleteTabInterface(tabInterfaceId);
+            const res = await services.deleteTabInterface(tabInterfaceId, token);
             if (res.message == "deleteTabInterface success") {
                 getTabInterfaces();
                 toast.success("Deleted the tab interface successfully");

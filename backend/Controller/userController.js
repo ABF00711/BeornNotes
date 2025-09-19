@@ -88,7 +88,7 @@ const userController = {
                 }
             }
 
-            jwt.sign({ name: user.name, email: user.email, hashedpassword: user.hashedpassword }, configs.JWT_SECRET, { expiresIn: "2h" }, (err, token) => {
+            jwt.sign({ name: user.name, email: user.email, hashedpassword: user.hashedpassword }, configs.JWT_SECRET, { expiresIn: newUser.rememberMe ? "7d" : "1h" }, (err, token) => {
                 if (err) {
                     console.log("jwt sign failed", err);
                     res.json({ message: "jwt sign failed" });

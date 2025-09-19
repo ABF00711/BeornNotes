@@ -4,11 +4,11 @@ import {useContext} from "react";
 import { MyContext } from "../Context";
 
 function useSearchpatterns () {
-    const {searchpatterns, setSearchpatterns} = useContext(MyContext);
+    const {searchpatterns, setSearchpatterns, token} = useContext(MyContext);
 
     const getSearchpatterns = async(tablename) => {
         try {
-            const res = await services.getSearchpatterns(tablename);
+            const res = await services.getSearchpatterns(tablename, token);
             if(res.message == "getSearchpatterns success"){
                 setSearchpatterns(res.searchpatterns);
             }
@@ -19,7 +19,7 @@ function useSearchpatterns () {
 
     const updateSearchpatterns = async(searchData, searchName, tablename) => {
         try {
-            const res = await services.updateSearchpatterns(searchData, searchName, tablename);
+            const res = await services.updateSearchpatterns(searchData, searchName, tablename, token);
             if(res.message == "updateSearchpatterns success"){
                 toast.success("Update searchpatterns success");
                 getSearchpatterns(tablename);
@@ -31,7 +31,7 @@ function useSearchpatterns () {
 
     const createSearchpatterns = async(searchData, searchName, tablename) => {
         try {
-            const res = await services.createSearchpatterns(searchData, searchName, tablename);
+            const res = await services.createSearchpatterns(searchData, searchName, tablename, token);
             if(res.message == "createSearchpatterns success"){
                 toast.success("Create searchpatterns success");
                 getSearchpatterns(tablename);
@@ -43,7 +43,7 @@ function useSearchpatterns () {
 
     const deleteSearchpatterns = async(tablename, patternId) => {
         try {
-            const res = await services.deleteSearchpatterns(patternId);
+            const res = await services.deleteSearchpatterns(patternId, token);
             if(res.message == "deleteSearchpatterns success"){
                 getSearchpatterns(tablename);
                 toast.success("Delete searchpatterns success");

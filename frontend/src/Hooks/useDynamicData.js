@@ -4,11 +4,11 @@ import services from "../Services";
 import { toast } from "react-toastify";
 
 function useDynamicData () {
-    const {dynamicData, setDynamicData, searchConfig} = useContext(MyContext);
+    const {dynamicData, setDynamicData, searchConfig, token} = useContext(MyContext);
 
     const getDynamicData = async (tableView) => {
         try {
-            const res = await services.getDynamicData(tableView);
+            const res = await services.getDynamicData(tableView, token);
             if(res.message === "getDynamicData success"){
                 setDynamicData(res.dynamicData);
             }
@@ -19,7 +19,7 @@ function useDynamicData () {
 
     const createDynamicData = async (tablename, newData) => {
         try {
-            const res = await services.createDynamicData(tablename, newData);
+            const res = await services.createDynamicData(tablename, newData, token);
 
             if(res.message === "createDynamicData success"){
                 toast.success(`Created a new ${tablename} data successfully`);
@@ -35,7 +35,7 @@ function useDynamicData () {
 
     const updateDynamicData = async (tablename, newData) => {
         try {
-            const res = await services.updateDynamicData(tablename, newData);
+            const res = await services.updateDynamicData(tablename, newData, token);
             if(res.message == "updateDynamicData success"){
                 toast.success(`Updated ${tablename} data successfully.`);
                 // setDynamicData(dynamicData.map((item) => item.id === newData.id ? newData : item))
@@ -50,7 +50,7 @@ function useDynamicData () {
 
     const deleteDynamicData = async (tablename, selectedRows) => {
         try {
-            const res = await services.deleteDynamicData(tablename, selectedRows);
+            const res = await services.deleteDynamicData(tablename, selectedRows, token);
             if(res.message === "deleteDynamicData success"){
                 toast.success("Deleted rows selected successfully");
                 getDynamicData(tablename);

@@ -3,9 +3,9 @@ import axios from "axios";
 const services = {
     serverURL: "http://localhost:5000/api",
 
-    setAuthToken: () => {
-        const token = localStorage.getItem("jwtToken");
-        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    setAuthToken: (token) => {
+        const jwtToken = localStorage.getItem("jwtToken");
+        axios.defaults.headers.common['Authorization'] = `Bearer ${jwtToken ? jwtToken : token}`;
     },
 
     register: async (userData) => {
@@ -35,9 +35,9 @@ const services = {
         }
     },
 
-    updateProfile: async (newData, id) => {
+    updateProfile: async (newData, id, token) => {
         try {
-            services.setAuthToken();
+            services.setAuthToken(token);
             const res = await axios.post(services.serverURL + "/auth/updateProfile", {newData, id});
             return res.data;
         } catch (error) {
@@ -45,8 +45,9 @@ const services = {
         }
     },
     
-    changePassword: async (currentPassword, newPassword) => {
+    changePassword: async (currentPassword, newPassword, token) => {
         try {
+            services.setAuthToken(token);
             const res = await axios.post(services.serverURL + "/auth/changePassword", {currentPassword, newPassword});
             return res.data;
         } catch (error) {
@@ -54,9 +55,9 @@ const services = {
         }
     },
 
-    getQRCode: async () => {
+    getQRCode: async (token) => {
         try {
-            services.setAuthToken();
+            services.setAuthToken(token);
             const res = await axios.get(services.serverURL + "/auth/qrcode");
             return res.data;
         } catch (error) {
@@ -64,9 +65,9 @@ const services = {
         }
     },
 
-    enableMFA: async (verificationCode) => {
+    enableMFA: async (verificationCode, token) => {
         try {
-            services.setAuthToken();
+            services.setAuthToken(token);
             const res = await axios.post(services.serverURL + "/auth/enableMFA", { verificationCode });
             return res.data;
         } catch (error) {
@@ -74,9 +75,9 @@ const services = {
         }
     },
 
-    disableMFA: async () => {
+    disableMFA: async (token) => {
         try {
-            services.setAuthToken();
+            services.setAuthToken(token);
             const res = await axios.post(services.serverURL + "/auth/disableMFA");
             return res.data;
         } catch (error) {
@@ -102,9 +103,9 @@ const services = {
         }
     },
 
-    getMenuItems: async () => {
+    getMenuItems: async (token) => {
         try {
-            services.setAuthToken();
+            services.setAuthToken(token);
             const res = await axios.get(services.serverURL + "/menuItems");
             return res.data;
         } catch (error) {
@@ -112,9 +113,9 @@ const services = {
         }
     },
     
-    getDynamicData: async (tableView) => {
+    getDynamicData: async (tableView, token) => {
         try {
-            services.setAuthToken();
+            services.setAuthToken(token);
             const res = await axios.post(services.serverURL + "/dynamicData/get", {tableView});
             return res.data;
         } catch (error) {
@@ -122,9 +123,9 @@ const services = {
         }
     },
 
-    createDynamicData: async (tablename, newData) => {
+    createDynamicData: async (tablename, newData, token) => {
         try {
-            services.setAuthToken();
+            services.setAuthToken(token);
             const res = await axios.post(services.serverURL + "/dynamicData/create", {tablename, newData});
             return res.data;
         } catch (error) {
@@ -132,9 +133,9 @@ const services = {
         }
     },
 
-    updateDynamicData: async (tablename, newData) => {
+    updateDynamicData: async (tablename, newData, token) => {
         try {
-            services.setAuthToken();
+            services.setAuthToken(token);
             const res = await axios.post(services.serverURL + "/dynamicData/update", {tablename, newData});
             return res.data;
         } catch (error) {
@@ -142,9 +143,9 @@ const services = {
         }
     },
 
-    deleteDynamicData: async (tablename, selectedRows) => {
+    deleteDynamicData: async (tablename, selectedRows, token) => {
         try {
-            services.setAuthToken();
+            services.setAuthToken(token);
             const res = await axios.post(services.serverURL + "/dynamicData/delete", {tablename, selectedRows});
             return res.data;
         } catch (error) {
@@ -152,9 +153,9 @@ const services = {
         }
     },
 
-    getSearchpatterns: async (tablename) => {
+    getSearchpatterns: async (tablename, token) => {
         try {
-            services.setAuthToken();
+            services.setAuthToken(token);
             const res = await axios.post(services.serverURL + "/searchpatterns/get", {tablename});
             return res.data;
         } catch (error) {
@@ -162,9 +163,9 @@ const services = {
         }
     },
 
-    updateSearchpatterns: async (searchData, searchName, tablename) => {
+    updateSearchpatterns: async (searchData, searchName, tablename, token) => {
         try {
-            services.setAuthToken();
+            services.setAuthToken(token);
             const res = await axios.post(services.serverURL + "/searchpatterns/update", {searchData, searchName, tablename});
             return res.data;
         } catch (error) {
@@ -172,9 +173,9 @@ const services = {
         }
     },
 
-    createSearchpatterns: async (searchData, searchName, tablename) => {
+    createSearchpatterns: async (searchData, searchName, tablename, token) => {
         try {
-            services.setAuthToken();
+            services.setAuthToken(token);
             const res = await axios.post(services.serverURL + "/searchpatterns/create", {searchData, searchName, tablename});
             return res.data;
         } catch (error) {
@@ -182,9 +183,9 @@ const services = {
         }
     },
 
-    deleteSearchpatterns: async (id) => {
+    deleteSearchpatterns: async (id, token) => {
         try {
-            services.setAuthToken();
+            services.setAuthToken(token);
             const res = await axios.post(services.serverURL + "/searchpatterns/delete", {id});
             return res.data;
         } catch (error) {
@@ -192,9 +193,9 @@ const services = {
         }
     },
 
-    getLayouts: async (tablename) => {
+    getLayouts: async (tablename, token) => {
         try {
-            services.setAuthToken();
+            services.setAuthToken(token);
             const res = await axios.post(services.serverURL + "/layouts/get", {tablename});
             return res.data;
         } catch (error) {
@@ -202,9 +203,9 @@ const services = {
         }
     },
 
-    createLayouts: async (tablename, layoutName, layoutJson) => {
+    createLayouts: async (tablename, layoutName, layoutJson, token) => {
         try {
-            services.setAuthToken();
+            services.setAuthToken(token);
             const res = await axios.post(services.serverURL + "/layouts/create", {tablename, layoutName, layoutJson});
             return res.data;
         } catch (error) {
@@ -212,9 +213,9 @@ const services = {
         }
     },
 
-    updateLayouts: async (tablename, layoutName, layoutJson) => {
+    updateLayouts: async (tablename, layoutName, layoutJson, token) => {
         try {
-            services.setAuthToken();
+            services.setAuthToken(token);
             const res = await axios.post(services.serverURL + "/layouts/update", {tablename, layoutName, layoutJson});
             return res.data;
         } catch (error) {
@@ -222,9 +223,9 @@ const services = {
         }
     },
 
-    deleteLayouts: async(layoutId) => {
+    deleteLayouts: async(layoutId, token) => {
         try {
-            services.setAuthToken();
+            services.setAuthToken(token);
             const res = await axios.post(services.serverURL + "/layouts/delete", {layoutId});
             return res.data;
         } catch (error) {
@@ -232,9 +233,9 @@ const services = {
         }
     },
 
-    getTabInterfaces: async () => {
+    getTabInterfaces: async (token) => {
         try {
-            services.setAuthToken();
+            services.setAuthToken(token);
             const res = await axios.get(services.serverURL + "/tabInterfaces/get");
             return res.data;
         } catch (error) {
@@ -242,9 +243,9 @@ const services = {
         }
     },
 
-    createTabInterface: async (tabInterfaceName, tabInterfaceJson) => {
+    createTabInterface: async (tabInterfaceName, tabInterfaceJson, token) => {
         try {
-            services.setAuthToken();
+            services.setAuthToken(token);
             const res = await axios.post(services.serverURL + "/tabInterfaces/create", {tabInterfaceJson, tabInterfaceName});
             return res.data;
         } catch (error) {
@@ -252,9 +253,9 @@ const services = {
         }
     },
 
-    updateTabInterface: async (tabInterfaceName, tabInterfaceJson) => {
+    updateTabInterface: async (tabInterfaceName, tabInterfaceJson, token) => {
         try {
-            services.setAuthToken();
+            services.setAuthToken(token);
             const res = await axios.post(services.serverURL + "/tabInterfaces/update", {tabInterfaceJson, tabInterfaceName});
             return res.data;
         } catch (error) {
@@ -262,9 +263,9 @@ const services = {
         }
     },
 
-    deleteTabInterface: async (id) => {
+    deleteTabInterface: async (id, token) => {
         try {
-            services.setAuthToken();
+            services.setAuthToken(token);
             const res = await axios.post(services.serverURL + "/tabInterfaces/delete", {id});
             return res.data;
         } catch (error) {

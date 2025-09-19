@@ -39,11 +39,11 @@ function useAuth() {
     const login = async (user) => {
         try {
             const newUser = {};
-
+            newUser.rememberMe = user.rememberMe;
             if (!isValidateEmail(user.email)) {
                 newUser.name = user.email;
                 newUser.password = user.password;
-            }else{
+            } else {
                 newUser.email = user.email;
                 newUser.password = user.password;
             }
@@ -53,19 +53,21 @@ function useAuth() {
                 newUser.mfaCode = user.mfaCode;
             }
 
-            const res = await services.login({newUser});
-            
+            const res = await services.login({ newUser });
+
             if (res.message == "login success") {
                 setUserData(res.user);
                 setToken(res.token);
-                localStorage.setItem("jwtToken", res.token);
-                localStorage.setItem("userData", JSON.stringify(res.user));
+                if(newUser.rememberMe){
+                    localStorage.setItem("jwtToken", res.token);
+                    localStorage.setItem("userData", JSON.stringify(res.user));
+                }
                 toast.success(res.message, { position: "top-right" });
                 return true;
             } else if (res.message == "MFA required") {
                 return "mfa_required";
             }
-            
+
             toast.error(res.message, { position: "top-right" });
             return false;
         } catch (error) {
@@ -74,7 +76,7 @@ function useAuth() {
             return false;
         }
     }
-    
+
     const logout = () => {
         try {
             setUserData({ name: "", email: "" });
@@ -89,11 +91,9 @@ function useAuth() {
     const isAuthenticated = async () => {
         try {
             const jwtToken = localStorage.getItem("jwtToken");
-            if (jwtToken !== "") {
-                const res = await services.isAuth({ token: jwtToken });
-                if (res.message == "isAuth success") return
-                toast.error(res.message);
-            }
+            const res = await services.isAuth({ token: jwtToken ? jwtToken : token });
+            if (res.message == "isAuth success") return
+            toast.error(res.message);
             navigate("/login");
             return false;
         } catch (error) {
@@ -103,14 +103,14 @@ function useAuth() {
 
     const getProfileData = (setProfileData, setFormData) => {
         try {
-            const _profileData = searchConfig.filter((item) => { 
-                return item.table_name === "registeration" 
+            const _profileData = searchConfig.filter((item) => {
+                return item.table_name === "registeration"
             });
-            
+
             _profileData.forEach((item) => {
-                setFormData((prevFormData) => ({ 
-                    ...prevFormData, 
-                    [item.field_name]: userData[item.field_name] || "" 
+                setFormData((prevFormData) => ({
+                    ...prevFormData,
+                    [item.field_name]: userData[item.field_name] || ""
                 }));
             });
             setFormData((prevFormData) => ({
@@ -123,13 +123,13 @@ function useAuth() {
             console.log("getProfileDataError: ", error);
         }
     }
-    
+
     const updateProfile = async (formData, profileData) => {
         try {
-            if(formData.name.trim() == "") throw new Error("Please input Username exactly!");
-            if(formData.email.trim() == "") throw new Error("Please input Email exactly!");
+            if (formData.name.trim() == "") throw new Error("Please input Username exactly!");
+            if (formData.email.trim() == "") throw new Error("Please input Email exactly!");
             profileData.map((data) => {
-                if(data.mandatory && (formData[data.field_name] == ""))throw new Error(`Please input required field exactly!`);
+                if (data.mandatory && (formData[data.field_name] == "")) throw new Error(`Please input required field exactly!`);
             })
             const updatedUserData = {};
             updatedUserData.name = formData.name;
@@ -137,9 +137,9 @@ function useAuth() {
             profileData.map((data) => {
                 updatedUserData[data.field_name] = formData[data.field_name];
             })
-            if(!window.confirm("Really want update profile?")) return;
-            const res = await services.updateProfile(updatedUserData, userData.id);
-            if(res.message == "updateProfile success"){
+            if (!window.confirm("Really want update profile?")) return;
+            const res = await services.updateProfile(updatedUserData, userData.id, token);
+            if (res.message == "updateProfile success") {
                 toast.success("Profile updated successfully");
                 setUserData(res.userData);
                 setToken(res.token);
@@ -152,24 +152,24 @@ function useAuth() {
             console.log("updateProfileError: ", error);
         }
     }
-    
+
     const changePassword = async (formData, setFormData) => {
         try {
-            if(formData.currentPassword.trim() == "" || formData.newPassword.trim() == "") throw new Error("Please input password exactly!");
-            if(formData.newPassword.trim() !== formData.confirmPassword.trim()) {
-                setFormData((prevFormData) => ({...prevFormData,confirmPassword: ""})); 
+            if (formData.currentPassword.trim() == "" || formData.newPassword.trim() == "") throw new Error("Please input password exactly!");
+            if (formData.newPassword.trim() !== formData.confirmPassword.trim()) {
+                setFormData((prevFormData) => ({ ...prevFormData, confirmPassword: "" }));
                 throw new Error("Confirm passwod is wrong!");
             };
-            if(!window.confirm("Really want to change password?")) return;
-            const res = await services.changePassword(formData.currentPassword, formData.newPassword);
-            if(res.message === "changePassword success"){
+            if (!window.confirm("Really want to change password?")) return;
+            const res = await services.changePassword(formData.currentPassword, formData.newPassword, token);
+            if (res.message === "changePassword success") {
                 toast.success("Password changed successfully");
                 toast.info("Please log in again.");
                 logout();
                 return;
             }
-            if(res.message == "Invalid current password"){
-                setFormData((prevFormData) => ({...prevFormData, currentPassword: ""})); 
+            if (res.message == "Invalid current password") {
+                setFormData((prevFormData) => ({ ...prevFormData, currentPassword: "" }));
             }
             throw new Error(res.message);
         } catch (error) {
@@ -180,20 +180,20 @@ function useAuth() {
 
     const getQRCode = async () => {
         try {
-            const res = await services.getQRCode();
-            if(res.message == "getQRCode success"){
+            const res = await services.getQRCode(token);
+            if (res.message == "getQRCode success") {
                 return res.QRCode;
             }
-            return {url: "", secret: ""};
+            return { url: "", secret: "" };
         } catch (error) {
             console.log("getQRCodeError: ", error);
-            return {url: "", secret: ""};
+            return { url: "", secret: "" };
         }
     }
 
     const enableMFA = async (verificationCode) => {
         try {
-            const res = await services.enableMFA(verificationCode);
+            const res = await services.enableMFA(verificationCode, token);
             if (res.message === "enableMFA success") {
                 setUserData({ ...userData, mfa: 1 });
                 return true;
@@ -207,7 +207,7 @@ function useAuth() {
 
     const disableMFA = async () => {
         try {
-            const res = await services.disableMFA();
+            const res = await services.disableMFA(token);
             if (res.message === "disableMFA success") {
                 setUserData({ ...userData, mfa: 0 });
                 return true;

@@ -4,11 +4,11 @@ import services from "../Services";
 
 
 function useMenuItems() {
-    const { menuItems, setMenuItems } = useContext(MyContext);
+    const { menuItems, setMenuItems, token } = useContext(MyContext);
 
     const getMenuItems = async () => {
         try {
-            const res = await services.getMenuItems();
+            const res = await services.getMenuItems(token);
             if (res.message == "getMenuItems success") {
                 let _menuItems = [{
                     id: 0,

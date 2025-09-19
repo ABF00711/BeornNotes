@@ -12,7 +12,8 @@ function Login() {
     const [formData, setFormData] = useState({
         email: "",
         password: "",
-        mfaCode: ""
+        mfaCode: "",
+        rememberMe: false
     })
     const [mfaRequired, setMfaRequired] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -31,7 +32,6 @@ function Login() {
         e.preventDefault();
         setSubmitted(true);
         setIsLoading(true);
-
         try {
             const result = await login(formData);
             
@@ -104,7 +104,7 @@ function Login() {
                     {!mfaRequired && (
                         <div className="form-options">
                             <label className="remember-me">
-                                <input type="checkbox" />
+                                <input name="rememberMe" type="checkbox" value={formData.rememberMe} onChange={handleChange} />
                                 <span>Remember me</span>
                             </label>
                             <a href="#" className="forgot-password">Forgot password?</a>
