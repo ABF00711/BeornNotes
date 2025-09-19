@@ -1,5 +1,5 @@
 import { createContext, useState, useContext, useMemo, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { json, useLocation } from "react-router-dom";
 
 const DataContext = createContext([]);
 
@@ -22,6 +22,13 @@ function ContextProvider({ children }) {
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [searchpatterns, setSearchpatterns] = useState([]);
     const [layouts, setLayouts] = useState([]);
+
+    useEffect(() => {
+        const savedUserData = JSON.parse(localStorage.getItem("userData") || "{}");
+        if(!!savedUserData){
+            setUserData(savedUserData);
+        }
+    }, [])
 
     return (
         <DataContext.Provider value={{

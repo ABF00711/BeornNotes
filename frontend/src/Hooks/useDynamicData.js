@@ -64,7 +64,7 @@ function useDynamicData () {
         try {
             const columnData = searchConfig
                 .filter(item => item.table_name === tableView)
-                .map((item, index) => {
+                .map((item) => {
                     if (item.field_type === "date") {
                         return {
                             field: item.field_name, headerName: item.field_label, sortable: true, filter: true,  flex: 1, cellDataType: 'text',

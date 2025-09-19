@@ -16,7 +16,7 @@ import GAuthenticator from "./GAthenticator";
 
 function Profile() {
     const navigate = useNavigate();
-    const { isAuthenticated, userData, getProfileData, updateProfile, changePassword } = useAuth();
+    const { userData, getProfileData, updateProfile, changePassword } = useAuth();
     const { isCollapsed, searchConfig } = useContext(MyContext);
     const { getSearchConfigData } = useSearchConfig();
 
@@ -32,14 +32,6 @@ function Profile() {
     const [submitted, setSubmitted] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [isMFA, setIsMFA] = useState(userData.mfa);
-
-    const isAuth = async () => {
-        const res = await isAuthenticated();
-        if (!res) {
-            navigate("/login");
-            return;
-        }
-    }
 
     const handleChange = (e) => {
         setFormData({
@@ -81,7 +73,6 @@ function Profile() {
     }, [userData, searchConfig]);
 
     useEffect(() => {
-        isAuth();
         getSearchConfigData();
     }, []);
 
