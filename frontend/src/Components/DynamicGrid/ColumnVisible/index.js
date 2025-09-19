@@ -47,7 +47,7 @@ function ColumnVisible({ columnDefs, setColumnDefs, onColumnChanged }) {
               checked={!col.hide}
               onChange={(e) => toggleColumn(col.field, !e.target.checked)}
             >
-              {col.field}
+              {col.headerName}
             </Checkbox>
           ))}
         </div>
