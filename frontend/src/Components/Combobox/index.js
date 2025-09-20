@@ -12,13 +12,43 @@ function Combobox({ fieldFormat, value, handleChange, options = [], submitted = 
         setSearchTerm(value);
     }, [value]);
 
-    // Filter options based on search term
+    // Sort and filter options based on search term
     useEffect(() => {
         if (searchTerm) {
-            const filtered = options.filter(item => 
-                item.name.toLowerCase().includes(searchTerm.toLowerCase())
-            );
-            setFilteredData(filtered);
+            const searchLower = searchTerm.toLowerCase();
+            
+            // Create a scoring function for better match ranking
+            const getMatchScore = (item) => {
+                const nameLower = item.name.toLowerCase();
+                const searchIndex = nameLower.indexOf(searchLower);
+                
+                // Exact match gets highest score
+                if (nameLower === searchLower) return 1000;
+                
+                // Starts with search term gets high score
+                if (nameLower.startsWith(searchLower)) return 900;
+                
+                // Contains search term gets medium score
+                if (searchIndex !== -1) {
+                    // Earlier position gets higher score
+                    return 800 - searchIndex;
+                }
+                
+                // No match gets 0
+                return 0;
+            };
+            
+            // Filter and sort by match score
+            const filteredAndSorted = options
+                .map(item => ({
+                    ...item,
+                    score: getMatchScore(item)
+                }))
+                .filter(item => item.score > 0)
+                .sort((a, b) => b.score - a.score)
+                .map(({ score, ...item }) => item); // Remove score from final result
+            
+            setFilteredData(filteredAndSorted);
         } else {
             setFilteredData(options);
         }
