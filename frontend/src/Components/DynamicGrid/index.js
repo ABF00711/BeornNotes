@@ -116,6 +116,7 @@ function DynamicGrid({ tableView }) {
 
     const onReset = useCallback(() => {
         localStorage.setItem("searchpatterns", "{}");
+        localStorage.setItem("layout", "{}");
         restoreSearchpatterns();
     }, [])
 
@@ -178,6 +179,7 @@ function DynamicGrid({ tableView }) {
                     onColumnMoved={onColumnChanged}
                     onColumnResized={onColumnChanged}
                     onBodyScroll={true}
+                    accentedSort
                 />
             </div>
             <Update tablename={tableView} isOpen={isOpenUpdate} setIsOpen={setIsOpenUpdate} updateData={updateData} />

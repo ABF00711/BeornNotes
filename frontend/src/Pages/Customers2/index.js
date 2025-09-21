@@ -1,15 +1,15 @@
-import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import "./style.css";
 import Header from "../../Components/Header";
 import Sidebar from "../Sidebar";
 import Navbar from "../Navbar";
 import { MyContext } from "../../Context";
 import useDynamicData from "../../Hooks/useDynamicData";
-import Search from "antd/es/input/Search";
 import { AgGridReact } from "ag-grid-react";
 import { themeAlpine } from "ag-grid-community";
 import useSearchConfig from "../../Hooks/useSearchConfig";
 import { toast } from "react-toastify";
+import InputGroup from "../../Components/InputGroup";
 
 function Customers2() {
     const { isCollapsed } = useContext(MyContext);
@@ -63,12 +63,8 @@ function Customers2() {
                     <div className="customers2">
                         <div className="customers2-search">
                             <div className="search-fields">
-                                <div>
-                                    <input type="number" value={ageKey} onChange={(e) => setAgeKey(e.target.value)} /><label>Age</label>
-                                </div>
-                                <div>
-                                    <input type="text" value={jobKey} onChange={(e) => setJobKey(e.target.value)} /><label>Job</label>
-                                </div>
+                                <InputGroup />
+                                <InputGroup />
                             </div>
                             <div className="search-btns">
                                 <button className="search" onClick={onSearch}>Search</button>

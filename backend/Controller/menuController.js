@@ -13,7 +13,7 @@ const menuController = {
                 role_id = user_role.role_id;
             }
             const menu_role = await mysqlDA.getData("menu_roles", {role_id});
-            const menu = await mysqlDA.getAllData("menu");
+            const menu = await mysqlDA.getAllData("menu", "sort");
             const user_menu = menu.filter((item) => {
                 if(menu_role.find((value) => value.menu_id == item.id)){
                     return true;

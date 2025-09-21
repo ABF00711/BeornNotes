@@ -18,6 +18,11 @@ function ColumnVisible({ columnDefs, setColumnDefs, onColumnChanged }) {
     }
   };
 
+  const onReset = () => {
+    setColumnDefs(columnDefs.map(col => ({ ...col, hide: false })));
+    onColumnChanged();
+  }
+
   useEffect(() => {
     const onDocClick = (e) => {
       if (!columnVisible) return;
@@ -37,7 +42,7 @@ function ColumnVisible({ columnDefs, setColumnDefs, onColumnChanged }) {
       </button>
       {columnVisible &&
       <div className="columnVisible">
-        <Button className="columnVisible-reset" onClick={() => setColumnDefs(columnDefs.map(col => ({ ...col, hide: false })))}>
+        <Button className="columnVisible-reset" onClick={onReset}>
           Reset
         </Button>
         <div className="columnVisible-list">

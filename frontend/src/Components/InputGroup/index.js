@@ -11,11 +11,12 @@ function InputGroup({ props }) {
 
     const getOptionData = async () => {
         try {
-            const res = await services.getOptionData(fieldFormat.lookup_sql);
             if(fieldFormat.field_type == "combobox"){
+                const res = await services.getOptionData(fieldFormat.lookup_sql);
                 setComboboxData(res.optionData);
             }
             if(fieldFormat.field_type == "popup"){
+                const res = await services.getOptionData(fieldFormat.lookup_sql);
                 setPopupData(res.optionData);
             }
         } catch (error) {

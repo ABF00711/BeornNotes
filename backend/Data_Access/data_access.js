@@ -35,13 +35,13 @@ class DataAccess{
         }
     }
 
-    async getAllData (tableName) {
+    async getAllData (tableName, orderBy = "id") {
         try {
             if (!tableName) {
                 throw new Error('Table name is required');
             }
             
-            const sql = `SELECT * FROM ${tableName}`;
+            const sql = `SELECT * FROM ${tableName} order by ${orderBy}`;            
             const [rows] = await this.dbModel.execute(sql);
             return rows;
         } catch (error) {
@@ -101,6 +101,7 @@ class DataAccess{
             }
 
             const whereClause = conditions.join(' AND ');
+
             const sql = `SELECT * FROM ${tableName} WHERE ${whereClause}`;
             
             const [rows] = await this.dbModel.execute(sql, values);
