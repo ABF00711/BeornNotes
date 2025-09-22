@@ -68,7 +68,6 @@ function Customers2({ tableView = "customers2" }) {
                 return oneData.job == trimmedJob;
             }
             if(!trimmedJob){
-                console.log(trimmedJob);
                 return oneData.age == trimmedAge;
             }
             return (oneData.age == trimmedAge) && (oneData.job == trimmedJob);
