@@ -1,62 +1,101 @@
-.customers2{
+.dynamic-grid{
     width: 100%;
     height: 100%;
-    padding: 0px 50px;
-}
-.customers2-search{
-    width: 50%;
-    padding: 20px 30px;
-    display: flex;
-    justify-content: space-between;
-}
-.customers2-table{
-    width: 100%;
-    height: 700px;
-}
-.search-fields input {
-    width: 80%;
-    height: 40px;
-    outline: none;
-    border-color: rgb(202, 202, 202);
-    border-radius: 5px;
-    border-width: 1px;
-    font-size: 20px;
-    margin-right: 10px;
-    margin-bottom: 10px;
-    transition: 0.5s;
-}
-.search-fields input:hover{
-    border-color: rgb(0, 162, 255);
-}
-.search-fields label {
-    font-weight: 600;
-}
-.search-btns{
+    padding: 50px;
+    justify-content: center;
     display: flex;
     flex-direction: column;
+    align-items: center;
 }
-.search-btns button{
-    width: 100px;
-    height: 40px;
-    border-radius: 5px;
-    border-width: 1px;
-    font-size: 15px;
-    font-weight: 600;
-    color: aliceblue;
-    cursor: pointer;
+.grid-toolbar{
+    width: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     margin-bottom: 10px;
 }
-.search-btns .search{
-    background: linear-gradient(135deg, #5aa9ff, #3f8cff);
-    border-color: #3f8cff;
+.toolbar-left,
+.toolbar-right{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
 }
-.search-btns .search:hover{
-    background: linear-gradient(135deg, #74b5fc, #79aeff);
+.toolbar-right{ margin-left: auto; }
+.btn{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 36px;
+    padding: 0 14px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    background: #f4f9ff;
+    color: #0984e3;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
 }
-.search-btns .reset{
-    background: linear-gradient(135deg, #3ddb7a, #05b950);
-    border-color: #05b950;
+.btn:hover{
+    transform: translateY(-1px);
+    background: #c2d9f1;
 }
-.search-btns .reset:hover{
-    background: linear-gradient(135deg, #71ffa8, #22c466);
+.btn-primary{
+    background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+    border-color: #0984e3;
+    color: #ffffff;
+}
+.btn-dangerous{
+    background: linear-gradient(135deg, #ff7674 0%, #e36b09 100%);
+    border-color: #e30909;
+    color: #ffffff;
+}
+.btn-dangerous-active{
+    background: linear-gradient(135deg, #ff7674 0%, #e30909 100%);
+}
+.btn-dangerous:hover{
+    transform: translateY(-1px);
+    background: #ff7b7b;
+}
+.btn-warning{
+    background: linear-gradient(135deg, #ffc774 0%, #e3b009 100%);
+    border-color: #e39e09;
+    color: #ffffff;
+}
+.btn-outline{
+    background: #ffffff;
+    border: 1px solid #cfe6ff;
+    color: #0984e3;
+}
+.btn-icon{
+    font-size: 16px;
+    line-height: 1;
+}
+.btn-label{
+    font-size: 14px;
+    font-weight: 600;
+}
+.total-count{
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: 8px;
+    padding: 0 10px;
+    height: 30px;
+    border-radius: 6px;
+    background: #e8f3ff;
+    color: #0984e3;
+    border: 1px solid #cfe6ff;
+}
+.total-label{
+    opacity: 0.9;
+    font-size: 13px;
+}
+.total-value{
+    font-weight: 700;
+}
+.table{
+    width: 90%;
+    height: 650px;
+    padding: 10px;
 }

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./style.css";
-import DynamicModal from "../../DynamicModal";
-import useSearchConfig from "../../../Hooks/useSearchConfig";
-import useDynamicData from "../../../Hooks/useDynamicData";
+import DynamicModal from "../DynamicModal";
+import useSearchConfig from "../../Hooks/useSearchConfig";
+import useDynamicData from "../../Hooks/useDynamicData";
 
 function Update({tablename, isOpen, setIsOpen, updateData}) {
     const { searchConfig } = useSearchConfig();

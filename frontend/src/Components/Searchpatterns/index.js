@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import "./style.css";
 import { Select } from "antd";
 import { toast } from "react-toastify";
-import useSearchpatterns from "../../../Hooks/useFilters";
+import useSearchpatterns from "../../Hooks/useFilters";
 
 function Searchpatterns(props) {
     const { tablename, gridRef } = props;

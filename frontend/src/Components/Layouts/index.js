@@ -2,8 +2,8 @@ import React, { useEffect, useRef, useState, useContext } from "react";
 import "./style.css";
 import { Select, Button } from "antd";
 import { toast } from "react-toastify";
-import useLayouts from "../../../Hooks/useLayouts";
-import { MyContext } from "../../../Context";
+import useLayouts from "../../Hooks/useLayouts";
+import { MyContext } from "../../Context";
 
 function Layouts(props) {
     const { tablename, gridRef } = props;

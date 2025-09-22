@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./style.css";
-import useSearchConfig from "../../../Hooks/useSearchConfig";
-import DynamicModal from "../../DynamicModal";
+import useSearchConfig from "../../Hooks/useSearchConfig";
+import DynamicModal from "../DynamicModal";
 
 function Add({ table_name }) {
     const { searchConfig } = useSearchConfig();

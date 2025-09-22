@@ -2,7 +2,7 @@ import { Checkbox, Button } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import "./style.css";
 
-function ColumnVisible({ gridRef, columnDefs, setColumnDefs, onColumnChanged }) {
+function ColumnVisible({ gridRef, columnDefs, onColumnChanged }) {
   const [columnVisible, setColumnVisible] = useState(false);
   const [currentColumn, setCurrentColumn] = useState([]);
   const containerRef = useRef(null);

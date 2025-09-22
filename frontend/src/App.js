@@ -7,13 +7,13 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Dashboard from './Pages/Dashboard';
 import Customers from './Pages/Customers';
-import { AllCommunityModule, ModuleRegistry, SideBarModule } from 'ag-grid-community'; 
+import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community'; 
 import Orders from './Pages/Orders';
 import InventoryReport from './Pages/Reports/InventoryReport';
 import SummaryReport from './Pages/Reports/SummaryReport';
-import Customers2 from './Pages/Customers2';
 import Profile from './Pages/Profile';
 import Products from './Pages/Products';
+import Customers2 from './Pages/Customers2';
 
 // Register all Community features
 ModuleRegistry.registerModules([AllCommunityModule ]);

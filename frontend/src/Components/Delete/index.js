@@ -1,7 +1,7 @@
 import React from "react";
 import "./style.css";
-import { MyContext } from "../../../Context";
-import useDynamicData from "../../../Hooks/useDynamicData";
+import { MyContext } from "../../Context";
+import useDynamicData from "../../Hooks/useDynamicData";
 import { toast } from "react-toastify";
 
 function Delete(props) {

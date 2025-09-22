@@ -4,13 +4,13 @@ import { AgGridReact } from 'ag-grid-react';
 import { themeAlpine } from "ag-grid-community";
 import useDynamicData from "../../Hooks/useDynamicData";
 import useSearchConfig from "../../Hooks/useSearchConfig";
-import ColumnVisible from "./ColumnVisible";
-import Add from "./Add";
-import Update from "./Update";
-import Delete from "./Delete";
-import Searchpatterns from "./Searchpatterns";
+import ColumnVisible from "../ColumnVisible";
+import Add from "../Add";
+import Update from "../Update";
+import Delete from "../Delete";
+import Searchpatterns from "../Searchpatterns";
 import useSearchpatterns from "../../Hooks/useFilters";
-import Layouts from "./Layouts";
+import Layouts from "../Layouts";
 import useLayouts from "../../Hooks/useLayouts";
 
 function DynamicGrid({ tableView }) {
