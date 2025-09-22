@@ -38,7 +38,6 @@ function DynamicGrid({ tableView }) {
     const onColumnChanged = () => {
         setTimeout(() => {
             const currentGrid = gridRef.current.api.getColumnState();
-            // setColumnDefs(currentGrid);
             localStorage.setItem("layout", JSON.stringify(currentGrid));
         }, 100);
     }
@@ -48,10 +47,6 @@ function DynamicGrid({ tableView }) {
         localStorage.setItem("layout", "");
         restoreSearchpatterns(gridRef);
     }, [])
-
-    const onGridReady = useCallback((params) => {
-        gridRef.current.gridApi = params.columnApi;
-    }, []);
 
     useEffect(() => {
         setColumnDefs(getColumDefs(tableView));
@@ -99,7 +94,6 @@ function DynamicGrid({ tableView }) {
                     ref={gridRef}
                     rowData={dynamicData}
                     columnDefs={columnDefs}
-                    onGridReady={onGridReady}
                     theme={themeAlpine}
                     onRowDoubleClicked={openUpdateModal}
                     onFilterChanged={saveFilterInfo}

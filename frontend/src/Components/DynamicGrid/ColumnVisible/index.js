@@ -10,12 +10,12 @@ function ColumnVisible({ gridRef, columnDefs, setColumnDefs, onColumnChanged }) 
   const toggleColumn = (colId, hide) => {
     try {
       const updated = currentColumn.map(col =>
-        col.colId === colId ? {...col, hide} : col
+        col.colId === colId ? { ...col, hide } : col
       );
       gridRef.current.api.applyColumnState({
-                state: updated,
-                applyOrder: true
-            });
+        state: updated,
+        applyOrder: true
+      });
       setCurrentColumn(updated);
       onColumnChanged();
     } catch (error) {
@@ -24,9 +24,12 @@ function ColumnVisible({ gridRef, columnDefs, setColumnDefs, onColumnChanged }) 
   };
 
   const onReset = () => {
-    const columnState = columnDefs.map(col => ({ ...col, hide: false }));
+    const columnState = currentColumn.map(col => ({ ...col, hide: false }));
+    gridRef.current.api.applyColumnState({
+      state: columnState,
+      applyOrder: true
+    })
     setCurrentColumn(columnState);
-    setColumnDefs(columnState);
     onColumnChanged()
   }
 
@@ -35,7 +38,7 @@ function ColumnVisible({ gridRef, columnDefs, setColumnDefs, onColumnChanged }) 
       let _columnState = gridRef.current.api.getColumnState();
       _columnState = _columnState.filter((column) => {
         const existingColumn = columnDefs.find(col => col.field == column.colId);
-        if(existingColumn){
+        if (existingColumn) {
           column.headerName = existingColumn.headerName;
           return column;
         }
