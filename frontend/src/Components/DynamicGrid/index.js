@@ -14,9 +14,9 @@ import Layouts from "./Layouts";
 import useLayouts from "../../Hooks/useLayouts";
 
 function DynamicGrid({ tableView }) {
-    const { dynamicData, getDynamicData, getColumDefs } = useDynamicData();
+    const { dynamicData, getDynamicData, getColumDefs, } = useDynamicData();
     const { searchConfig, getSearchConfigData } = useSearchConfig();
-    const { searchpatterns, getSearchpatterns } = useSearchpatterns();
+    const { getSearchpatterns, restoreSearchpatterns, onSortChanged, saveFilterInfo } = useSearchpatterns();
     const { layouts, getLayouts } = useLayouts();
     const gridRef = useRef();
     const [columnDefs, setColumnDefs] = useState([]);
@@ -35,89 +35,18 @@ function DynamicGrid({ tableView }) {
         setIsOpenUpdate(!isOpenUpdate);
     }
 
-    const saveFilterInfo = (params) => {
-        try {
-            const filterInfo = params.api.getFilterModel();
-            const searchpatterns = JSON.parse(localStorage.getItem("searchpatterns") || "{}");
-            searchpatterns.filters = filterInfo;
-            localStorage.setItem("searchpatterns", JSON.stringify(searchpatterns));
-        } catch (error) {
-            console.log("saveFilterInfoError: ", error);
-        }
-    }
-
-    const onSortChanged = useCallback(() => {
-        if (gridRef.current) {
-            const currentColumnState = gridRef.current.api.getColumnState();
-            const sortState = [];
-            currentColumnState.map((column) => {
-                sortState.push({ colId: column.colId, sort: column.sort });
-            })
-            const searchpatterns = JSON.parse(localStorage.getItem("searchpatterns") || "{}");
-            searchpatterns.sorts = sortState;
-            localStorage.setItem("searchpatterns", JSON.stringify(searchpatterns));
-        }
-    }, []);
-
-
-    const restoreSearchpatterns = () => {
-        if (!gridRef.current?.api) return;
-        try {
-            let savedSearchpattern = JSON.parse(localStorage.getItem("searchpatterns") || null);
-            if (savedSearchpattern == null) {
-                const defaultPattern = searchpatterns.find(pattern => pattern.name == "Default");
-                if (defaultPattern && defaultPattern.data) {
-                    const parsedPattern = JSON.parse(defaultPattern.data);
-                    savedSearchpattern = {
-                        filters: parsedPattern.filters || [],
-                        sorts: parsedPattern.sorts || []
-                    }
-                } else {
-                    savedSearchpattern = {
-                        filters: [],
-                        sorts: []
-                    }
-                }
-            }
-            let savedLayout = JSON.parse(localStorage.getItem("layout") || null);
-            if (savedLayout == null) {
-                const defaultLayout = layouts.find(layout => layout.layout_name === "Default");
-                if (defaultLayout) {
-                    savedLayout = JSON.parse(defaultLayout.layout_json);
-                } else {
-                    savedLayout = gridRef.current.api.getColumnState();
-                }
-            }
-            if (savedSearchpattern.sorts) {
-                savedLayout.map((column) => {
-                    const savedSort = savedSearchpattern.sorts.find(item => item.colId === column.colId);
-                    if (savedSort) {
-                        column.sort = savedSort.sort;
-                    }
-                    return column
-                })
-            }
-            gridRef.current.api.applyColumnState({
-                state: savedLayout,
-                applyOrder: true,
-            });
-            gridRef.current.api.setFilterModel(savedSearchpattern.filters);
-        } catch (error) {
-            console.log("restoreSearchpatterns error:", error);
-        }
-    };
-
     const onColumnChanged = () => {
         setTimeout(() => {
             const currentGrid = gridRef.current.api.getColumnState();
+            // setColumnDefs(currentGrid);
             localStorage.setItem("layout", JSON.stringify(currentGrid));
         }, 100);
     }
 
     const onReset = useCallback(() => {
-        localStorage.setItem("searchpatterns", "{}");
-        localStorage.setItem("layout", "{}");
-        restoreSearchpatterns();
+        localStorage.setItem("searchpatterns", "");
+        localStorage.setItem("layout", "");
+        restoreSearchpatterns(gridRef);
     }, [])
 
     const onGridReady = useCallback((params) => {
@@ -131,7 +60,7 @@ function DynamicGrid({ tableView }) {
     useEffect(() => {
         if (dynamicData && dynamicData.length > 0 && gridRef.current?.api) {
             setTimeout(() => {
-                restoreSearchpatterns();
+                restoreSearchpatterns(gridRef);
             }, 100);
         }
     }, [dynamicData, columnDefs])
@@ -158,7 +87,7 @@ function DynamicGrid({ tableView }) {
                 <div className="toolbar-right">
                     <Layouts tablename={tableView} gridRef={gridRef} />
                     <Searchpatterns tablename={tableView} gridRef={gridRef} />
-                    <ColumnVisible columnDefs={columnDefs} setColumnDefs={setColumnDefs} onColumnChanged={onColumnChanged} />
+                    <ColumnVisible gridRef={gridRef} columnDefs={columnDefs} setColumnDefs={setColumnDefs} onColumnChanged={onColumnChanged} />
                     <div className="total-count">
                         <span className="total-label">Total:</span>
                         <span className="total-value">{Array.isArray(dynamicData) ? dynamicData.length : 0}</span>
@@ -175,7 +104,7 @@ function DynamicGrid({ tableView }) {
                     onRowDoubleClicked={openUpdateModal}
                     onFilterChanged={saveFilterInfo}
                     rowSelection={rowSelection}
-                    onSortChanged={onSortChanged}
+                    onSortChanged={() => {onSortChanged(gridRef)}}
                     onColumnMoved={onColumnChanged}
                     onColumnResized={onColumnChanged}
                     onBodyScroll={true}

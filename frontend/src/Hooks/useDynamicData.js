@@ -67,14 +67,14 @@ function useDynamicData () {
                 .map((item) => {
                     if (item.field_type === "date") {
                         return {
-                            field: item.field_name, headerName: item.field_label, sortable: true, filter: true,  flex: 1, cellDataType: 'text',
+                            field: item.field_name, headerName: item.field_label, sortable: true, filter: true,  flex: 1, hide: false, cellDataType: 'text',
                             valueFormatter: (params) => {
                                 if (!params.value) return "";
                                 return new Date(params.value).toLocaleDateString().split("T")[0];
                             }
                         }
                     }
-                    return { field: item.field_name, headerName: item.field_label, sortable: true, filter: true,  flex: 1 };
+                    return { field: item.field_name, headerName: item.field_label, sortable: true, filter: true,  flex: 1, hide: false };
                 })
             return columnData;
         } catch (error) {

@@ -5,7 +5,7 @@ import Combobox from "../Combobox";
 import Popup from "../Popup";
 
 function InputGroup({ props }) {
-    const { fieldFormat, value, handleChange, submitted } = props;
+    const { fieldFormat, value, handleChange, submitted = false } = props;
     const [popupData, setPopupData] = useState([]);
     const [comboboxData, setComboboxData] = useState([]);
 
