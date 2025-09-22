@@ -8,28 +8,13 @@ function useTabbedInterfaces() {
     const { tabbedInterfaces, setTabbedInterfaces, currentInterface, setCurrentInterface, token } = useContext(MyContext);
     const navigate = useNavigate();
 
-    const getCurrentTabInterface = () => {
-        try {
-            const tabbedInterface = localStorage.getItem("tabbedInterface");
-
-            if (!tabbedInterface) {
-                return { tabbedBtns: [], activeUrl: {} }
-            }
-            const parsedInterface = JSON.parse(tabbedInterface);
-            setCurrentInterface(parsedInterface);
-        } catch (error) {
-            console.log("getCurrentTabInterfaceError: ", error);
-            return { tabbedBtns: [], activeUrl: {} };
-        }
-    }
-
     const addTabbedInterface = (newItem) => {
         try {
             const tabbedInterface = { ...currentInterface, activeUrl: newItem.path };
             if (!tabbedInterface.tabbedBtns.some((btn) => btn.title == newItem.title)) {
                 tabbedInterface.tabbedBtns.push(newItem);
             }
-            localStorage.setItem("tabbedInterface", JSON.stringify(tabbedInterface));
+            localStorage.setItem("currentInterface", JSON.stringify(tabbedInterface));
             setCurrentInterface(tabbedInterface);
         } catch (error) {
             console.log("addTabbedInterfaceError: ", error);
@@ -115,7 +100,7 @@ function useTabbedInterfaces() {
 
     return (
         {
-            addTabbedInterface, getCurrentTabInterface,
+            addTabbedInterface, 
             removeTabbedInterface, currentInterface,
             getTabInterfaces, createTabInterfaces,
             updateTabInterfaces, deleteTabInterfaces

@@ -24,7 +24,11 @@ function ContextProvider({ children }) {
     const [layouts, setLayouts] = useState([]);
 
     useEffect(() => {
-        const savedUserData = JSON.parse(localStorage.getItem("userData") || "{}");
+        const savedUserData = JSON.parse(localStorage.getItem("userData") || null);
+        const savedCurrentInterface = JSON.parse(localStorage.getItem("currentInterface") || null);
+        if(!!savedCurrentInterface){
+            setCurrentInterface(savedCurrentInterface);
+        }
         if(!!savedUserData){
             setUserData(savedUserData);
         }

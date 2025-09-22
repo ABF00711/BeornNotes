@@ -15,7 +15,7 @@ function TabbedBtn({ btnInfo }) {
 
     const onNavigate = () => {
         const tabInterface = {...currentInterface, activeUrl: btnInfo.path};
-        localStorage.setItem("tabbedInterface", JSON.stringify(tabInterface));
+        localStorage.setItem("currentInterface", JSON.stringify(tabInterface));
         setCurrentInterface(tabInterface)
         navigate(btnInfo.path);
     };
