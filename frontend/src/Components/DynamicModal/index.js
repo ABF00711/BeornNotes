@@ -53,7 +53,7 @@ function DynamicModal({ table_name, isOpen, setIsOpen, title, role, fieldsData, 
     const handleChange = (e) => {
         setFormData({
             ...formData,
-            [e.target.name]: e.target.value
+            [e.target.name]: e.taret.value
         });
     };
 

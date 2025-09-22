@@ -13,14 +13,18 @@ import Header from "../../Components/Header";
 import Navbar from "../Navbar";
 import Sidebar from "../Sidebar";
 import { MyContext } from "../../Context";
+import InputGroup from "../../Components/InputGroup";
+import { toast } from "react-toastify";
 
 function Customers2({ tableView = "customers2" }) {
     const {isCollapsed} = useContext(MyContext);
     const { dynamicData, getDynamicData, getColumDefs, } = useDynamicData();
+    const [gridData, setGridData] = useState([]);
     const { searchConfig, getSearchConfigData } = useSearchConfig();
     const {layouts, getLayouts } = useLayouts();
     const gridRef = useRef();
     const [columnDefs, setColumnDefs] = useState([]);
+    const [searchKey, setSearchKey] = useState({age: "", job: ""});
 
     const onColumnChanged = () => {
         setTimeout(() => {
@@ -33,7 +37,6 @@ function Customers2({ tableView = "customers2" }) {
         if (!gridRef.current?.api) return;
         try {
             let savedLayout = JSON.parse(localStorage.getItem("customers2Layout") || null);
-            console.log("savedLayout: ", savedLayout);
             if (savedLayout == null) {
                 const defaultLayout = layouts.find(layout => layout.layout_name === "Default");
                 if (defaultLayout) {
@@ -51,16 +54,45 @@ function Customers2({ tableView = "customers2" }) {
         }
     };
 
+    const onSearch = () => {
+        const trimmedAge = searchKey.age.trim();
+        const trimmedJob = searchKey.job.trim();
+
+        if(!trimmedAge && !trimmedJob){
+            setGridData(dynamicData);
+            return;
+        }
+
+        setGridData(gridData.filter((oneData) => {
+            if(!trimmedAge){
+                return oneData.job == trimmedJob;
+            }
+            if(!trimmedJob){
+                console.log(trimmedJob);
+                return oneData.age == trimmedAge;
+            }
+            return (oneData.age == trimmedAge) && (oneData.job == trimmedJob);
+        }))
+    }
+
     const onReset = useCallback(() => {
         localStorage.setItem("customers2Layout", "");
         restoreSearchpatterns(gridRef);
     }, [])
+
+    const updateSearchKey = (e) => {
+        setSearchKey({
+            ...searchKey, 
+            [e.target.name]: e.target.value
+        })
+    }
 
     useEffect(() => {
         setColumnDefs(getColumDefs("customers"));
     }, [searchConfig])
 
     useEffect(() => {
+        setGridData(dynamicData);
         if (dynamicData && dynamicData.length > 0 && gridRef.current?.api) {
             setTimeout(() => {
                 restoreSearchpatterns(gridRef);
@@ -83,24 +115,40 @@ function Customers2({ tableView = "customers2" }) {
                 <div className="dynamic-grid">
                     <div className="grid-toolbar">
                         <div className="toolbar-left">
-                            <button onClick={onReset} type="button" className="btn btn-warning">
-                                <span className="btn-icon">⟲</span>
-                                <span className="btn-label">Reset</span>
+                            <div>
+                                <InputGroup props={{
+                                    fieldFormat: {id: "age", field_type: "number", field_label: "Age", field_name: "age"},
+                                    handleChange: updateSearchKey,
+                                    value: searchKey.age
+                                }} />
+                                <InputGroup props={{
+                                    fieldFormat: {id: "job", field_type: "combobox", field_label: "Job", field_name: "job", lookup_sql: "Select name from job Order By name"},
+                                    handleChange: updateSearchKey,
+                                    value: searchKey.job
+                                }} />
+                            </div>
+                            <button onClick={onSearch} type="button" className="btn btn-primary">
+                                <span className="btn-icon">⌕</span>
+                                <span className="btn-label">Search</span>
                             </button>
                         </div>
                         <div className="toolbar-right">
                             <Layouts tablename={tableView} gridRef={gridRef} />
                             <ColumnVisible gridRef={gridRef} columnDefs={columnDefs} onColumnChanged={onColumnChanged} />
+                            <button onClick={onReset} type="button" className="btn btn-warning">
+                                <span className="btn-icon">⟲</span>
+                                <span className="btn-label">Reset</span>
+                            </button>
                             <div className="total-count">
                                 <span className="total-label">Total:</span>
-                                <span className="total-value">{Array.isArray(dynamicData) ? dynamicData.length : 0}</span>
+                                <span className="total-value">{Array.isArray(gridData) ? gridData.length : 0}</span>
                             </div>
                         </div>
                     </div>
                     <div className="table">
                         <AgGridReact
                             ref={gridRef}
-                            rowData={dynamicData}
+                            rowData={gridData}
                             columnDefs={columnDefs}
                             theme={themeAlpine}
                             onSortChanged={onColumnChanged}
