@@ -17,14 +17,14 @@ import InputGroup from "../../Components/InputGroup";
 import { toast } from "react-toastify";
 
 function Customers2({ tableView = "customers2" }) {
-    const {isCollapsed} = useContext(MyContext);
+    const { isCollapsed } = useContext(MyContext);
     const { dynamicData, getDynamicData, getColumDefs, } = useDynamicData();
     const [gridData, setGridData] = useState([]);
     const { searchConfig, getSearchConfigData } = useSearchConfig();
-    const {layouts, getLayouts } = useLayouts();
+    const { layouts, getLayouts } = useLayouts();
     const gridRef = useRef();
     const [columnDefs, setColumnDefs] = useState([]);
-    const [searchKey, setSearchKey] = useState({age: "", job: ""});
+    const [searchKey, setSearchKey] = useState({ age: "", job: "" });
 
     const onColumnChanged = () => {
         setTimeout(() => {
@@ -58,16 +58,16 @@ function Customers2({ tableView = "customers2" }) {
         const trimmedAge = searchKey.age.trim();
         const trimmedJob = searchKey.job.trim();
 
-        if(!trimmedAge && !trimmedJob){
+        if (!trimmedAge && !trimmedJob) {
             setGridData(dynamicData);
             return;
         }
 
         setGridData(gridData.filter((oneData) => {
-            if(!trimmedAge){
+            if (!trimmedAge) {
                 return oneData.job == trimmedJob;
             }
-            if(!trimmedJob){
+            if (!trimmedJob) {
                 return oneData.age == trimmedAge;
             }
             return (oneData.age == trimmedAge) && (oneData.job == trimmedJob);
@@ -81,7 +81,7 @@ function Customers2({ tableView = "customers2" }) {
 
     const updateSearchKey = (e) => {
         setSearchKey({
-            ...searchKey, 
+            ...searchKey,
             [e.target.name]: e.target.value
         })
     }
@@ -116,12 +116,12 @@ function Customers2({ tableView = "customers2" }) {
                         <div className="toolbar-left">
                             <div>
                                 <InputGroup props={{
-                                    fieldFormat: {id: "age", field_type: "number", field_label: "Age", field_name: "age"},
+                                    fieldFormat: { id: "age", field_type: "number", field_label: "Age", field_name: "age" },
                                     handleChange: updateSearchKey,
                                     value: searchKey.age
                                 }} />
                                 <InputGroup props={{
-                                    fieldFormat: {id: "job", field_type: "combobox", field_label: "Job", field_name: "job", lookup_sql: "Select name from job Order By name"},
+                                    fieldFormat: { id: "job", field_type: "combobox", field_label: "Job", field_name: "job", lookup_sql: "Select name from job Order By name" },
                                     handleChange: updateSearchKey,
                                     value: searchKey.job
                                 }} />
@@ -132,12 +132,12 @@ function Customers2({ tableView = "customers2" }) {
                             </button>
                         </div>
                         <div className="toolbar-right">
-                            <Layouts tablename={tableView} gridRef={gridRef} />
+                            {/* <Layouts tablename={tableView} gridRef={gridRef} />
                             <ColumnVisible gridRef={gridRef} columnDefs={columnDefs} onColumnChanged={onColumnChanged} />
                             <button onClick={onReset} type="button" className="btn btn-warning">
                                 <span className="btn-icon">⟲</span>
                                 <span className="btn-label">Reset</span>
-                            </button>
+                            </button> */}
                             <div className="total-count">
                                 <span className="total-label">Total:</span>
                                 <span className="total-value">{Array.isArray(gridData) ? gridData.length : 0}</span>
@@ -155,6 +155,11 @@ function Customers2({ tableView = "customers2" }) {
                             onColumnResized={onColumnChanged}
                             onBodyScroll={true}
                             accentedSort
+                            defaultColDef={{
+                                filter: true,
+                                floatingFilter: true,
+                                sortable: true,
+                            }}
                         />
                     </div>
                 </div>

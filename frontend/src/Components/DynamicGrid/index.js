@@ -12,6 +12,7 @@ import Searchpatterns from "../Searchpatterns";
 import useSearchpatterns from "../../Hooks/useFilters";
 import Layouts from "../Layouts";
 import useLayouts from "../../Hooks/useLayouts";
+import "ag-grid-enterprise";
 
 function DynamicGrid({ tableView }) {
     const { dynamicData, getDynamicData, getColumDefs, } = useDynamicData();
@@ -98,11 +99,16 @@ function DynamicGrid({ tableView }) {
                     onRowDoubleClicked={openUpdateModal}
                     onFilterChanged={saveFilterInfo}
                     rowSelection={rowSelection}
-                    onSortChanged={() => {onSortChanged(gridRef)}}
+                    onSortChanged={() => { onSortChanged(gridRef) }}
                     onColumnMoved={onColumnChanged}
                     onColumnResized={onColumnChanged}
                     onBodyScroll={true}
                     accentedSort
+                    defaultColDef={{
+                        filter: true,          
+                        floatingFilter: true,  
+                        sortable: true,
+                    }}
                 />
             </div>
             <Update tablename={tableView} isOpen={isOpenUpdate} setIsOpen={setIsOpenUpdate} updateData={updateData} />
