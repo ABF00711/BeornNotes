@@ -60,7 +60,7 @@ function useDynamicData () {
         }
     }
 
-    const getColumDefs = (tableView) => {
+    const getColumnDefs = (tableView) => {
         try {
             const columnData = searchConfig
                 .filter(item => item.table_name === tableView)
@@ -78,14 +78,14 @@ function useDynamicData () {
                     }
                     if (item.field_type === "date") {
                         return {
-                            field: item.field_name, headerName: item.field_label, filter: "agMultiColumnFilter", filterParams: [{filter: "agSetColumnFilter"}, {filter: columnFiltername}],  flex: 1, hide: false, cellDataType: 'text',
+                            field: item.field_name, headerName: item.field_label, filter: "agMultiColumnFilter", filterParams: [{filter: "agSetColumnFilter", caseSensitive: false}, {filter: columnFiltername}],  flex: 1, hide: false, cellDataType: 'text',
                             valueFormatter: (params) => {
                                 if (!params.value) return "";
                                 return new Date(params.value).toLocaleDateString().split("T")[0];
                             }
                         }
                     }
-                    return { field: item.field_name, headerName: item.field_label, filter: "agMultiColumnFilter", filterParams: [{filter: "agSetColumnFilter"}, {filter: columnFiltername}],  flex: 1, hide: false };
+                    return { field: item.field_name, headerName: item.field_label, filter: "agMultiColumnFilter", filterParams: [{filter: "agSetColumnFilter", caseSensitive: false}, {filter: columnFiltername}],  flex: 1, hide: false };
                 })
             return columnData;
         } catch (error) {
@@ -94,7 +94,7 @@ function useDynamicData () {
     }
 
     return (
-        {dynamicData, setDynamicData, getDynamicData, getColumDefs, createDynamicData, updateDynamicData, deleteDynamicData}
+        {dynamicData, setDynamicData, getDynamicData, getColumnDefs, createDynamicData, updateDynamicData, deleteDynamicData}
     );
 }
 

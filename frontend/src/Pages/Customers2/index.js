@@ -18,7 +18,7 @@ import { toast } from "react-toastify";
 
 function Customers2({ tableView = "customers2" }) {
     const { isCollapsed } = useContext(MyContext);
-    const { dynamicData, getDynamicData, getColumDefs, } = useDynamicData();
+    const { dynamicData, getDynamicData, getColumnDefs, } = useDynamicData();
     const [gridData, setGridData] = useState([]);
     const { searchConfig, getSearchConfigData } = useSearchConfig();
     const { layouts, getLayouts } = useLayouts();
@@ -29,6 +29,7 @@ function Customers2({ tableView = "customers2" }) {
     const onColumnChanged = () => {
         setTimeout(() => {
             const currentGrid = gridRef.current.api.getColumnState();
+            console.log("currentGrid: ", currentGrid);
             localStorage.setItem("customers2Layout", JSON.stringify(currentGrid));
         }, 100);
     }
@@ -87,7 +88,7 @@ function Customers2({ tableView = "customers2" }) {
     }
 
     useEffect(() => {
-        setColumnDefs(getColumDefs("customers"));
+        setColumnDefs(getColumnDefs("customers"));
     }, [searchConfig])
 
     useEffect(() => {

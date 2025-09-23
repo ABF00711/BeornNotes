@@ -15,10 +15,10 @@ import useLayouts from "../../Hooks/useLayouts";
 import "ag-grid-enterprise";
 
 function DynamicGrid({ tableView }) {
-    const { dynamicData, getDynamicData, getColumDefs, } = useDynamicData();
+    const { dynamicData, getDynamicData, getColumnDefs, } = useDynamicData();
     const { searchConfig, getSearchConfigData } = useSearchConfig();
     const { getSearchpatterns, restoreSearchpatterns, onSortChanged, saveFilterInfo } = useSearchpatterns();
-    const { layouts, getLayouts } = useLayouts();
+    const { getLayouts } = useLayouts();
     const gridRef = useRef();
     const [columnDefs, setColumnDefs] = useState([]);
     const [isOpenUpdate, setIsOpenUpdate] = useState(false);
@@ -39,8 +39,9 @@ function DynamicGrid({ tableView }) {
     const onColumnChanged = () => {
         setTimeout(() => {
             const currentGrid = gridRef.current.api.getColumnState();
+            console.log("currentGrid: ", currentGrid);
             localStorage.setItem("layout", JSON.stringify(currentGrid));
-        }, 100);
+        }, 300);
     }
 
     const onReset = useCallback(() => {
@@ -50,11 +51,11 @@ function DynamicGrid({ tableView }) {
     }, [])
 
     useEffect(() => {
-        setColumnDefs(getColumDefs(tableView));
+        setColumnDefs(getColumnDefs(tableView));
     }, [searchConfig])
 
     useEffect(() => {
-        if (dynamicData && dynamicData.length > 0 && gridRef.current?.api) {
+        if (dynamicData.length && columnDefs.length > 0 && gridRef.current?.api) {
             setTimeout(() => {
                 restoreSearchpatterns(gridRef);
             }, 100);

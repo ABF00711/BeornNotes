@@ -70,7 +70,6 @@ function Searchpatterns(props) {
             toast.error("Please select name exactly!");
             return;
         }
-        console.log("selectedSearchPattern: ", searchpatterns[selectedPatternIndex])
         if (window.confirm("Really want to delete this!")) {
             deleteSearchpatterns(tablename, searchpatterns[selectedPatternIndex].id);
         }
