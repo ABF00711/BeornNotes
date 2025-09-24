@@ -23,6 +23,7 @@ function DynamicGrid({ tableView }) {
     const [columnDefs, setColumnDefs] = useState([]);
     const [isOpenUpdate, setIsOpenUpdate] = useState(false);
     const [updateData, setUpdateData] = useState(null);
+    const [dataCount, setDataCount] = useState(0);
     const rowSelection = useMemo(() => {
         return {
             mode: "multiRow",
@@ -39,15 +40,23 @@ function DynamicGrid({ tableView }) {
     const onColumnChanged = () => {
         setTimeout(() => {
             const currentGrid = gridRef.current.api.getColumnState();
-            console.log("currentGrid: ", currentGrid);
             localStorage.setItem("layout", JSON.stringify(currentGrid));
         }, 300);
     }
+
+    const onFilterChanged = useCallback((params) => {
+        saveFilterInfo(params);
+        setDataCount(gridRef.current.api.getDisplayedRowCount());
+    }, []);
 
     const onReset = useCallback(() => {
         localStorage.setItem("searchpatterns", "");
         localStorage.setItem("layout", "");
         restoreSearchpatterns(gridRef);
+    }, [])
+
+    const onGridReady = useCallback(() => {
+        setDataCount(gridRef.current.api.getDisplayedRowCount());
     }, [])
 
     useEffect(() => {
@@ -87,18 +96,19 @@ function DynamicGrid({ tableView }) {
                     <ColumnVisible gridRef={gridRef} columnDefs={columnDefs} setColumnDefs={setColumnDefs} onColumnChanged={onColumnChanged} />
                     <div className="total-count">
                         <span className="total-label">Total:</span>
-                        <span className="total-value">{Array.isArray(dynamicData) ? dynamicData.length : 0}</span>
+                        <span className="total-value">{dataCount}</span>
                     </div>
                 </div>
             </div>
             <div className="table">
                 <AgGridReact
                     ref={gridRef}
+                    onGridReady={onGridReady}
                     rowData={dynamicData}
                     columnDefs={columnDefs}
                     theme={themeAlpine}
                     onRowDoubleClicked={openUpdateModal}
-                    onFilterChanged={saveFilterInfo}
+                    onFilterChanged={onFilterChanged}
                     rowSelection={rowSelection}
                     onSortChanged={() => { onSortChanged(gridRef) }}
                     onColumnMoved={onColumnChanged}
@@ -106,8 +116,8 @@ function DynamicGrid({ tableView }) {
                     onBodyScroll={true}
                     accentedSort
                     defaultColDef={{
-                        filter: true,          
-                        floatingFilter: true,  
+                        filter: true,
+                        floatingFilter: true,
                         sortable: true,
                     }}
                 />

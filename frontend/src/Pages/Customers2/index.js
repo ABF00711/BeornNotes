@@ -6,15 +6,11 @@ import useDynamicData from "../../Hooks/useDynamicData";
 import useSearchConfig from "../../Hooks/useSearchConfig";
 
 import useLayouts from "../../Hooks/useLayouts";
-import Layouts from "../../Components/Layouts";
-import ColumnVisible from "../../Components/ColumnVisible";
-import useSearchpatterns from "../../Hooks/useFilters";
 import Header from "../../Components/Header";
 import Navbar from "../Navbar";
 import Sidebar from "../Sidebar";
 import { MyContext } from "../../Context";
 import InputGroup from "../../Components/InputGroup";
-import { toast } from "react-toastify";
 
 function Customers2({ tableView = "customers2" }) {
     const { isCollapsed } = useContext(MyContext);
@@ -25,6 +21,7 @@ function Customers2({ tableView = "customers2" }) {
     const gridRef = useRef();
     const [columnDefs, setColumnDefs] = useState([]);
     const [searchKey, setSearchKey] = useState({ age: "", job: "" });
+    const [dataCount, setDataCount] = useState(0);
 
     const onColumnChanged = () => {
         setTimeout(() => {
@@ -75,17 +72,20 @@ function Customers2({ tableView = "customers2" }) {
         }))
     }
 
-    const onReset = useCallback(() => {
-        localStorage.setItem("customers2Layout", "");
-        restoreSearchpatterns(gridRef);
-    }, [])
-
     const updateSearchKey = (e) => {
         setSearchKey({
             ...searchKey,
             [e.target.name]: e.target.value
         })
     }
+
+    const onFilterChanged = useCallback(() => {
+        setDataCount(gridRef.current.api.getDisplayedRowCount());
+    }, [])
+
+    const onGridReady = useCallback(() => {
+        setDataCount(gridRef.current.api.getDisplayedRowCount());
+    }, [])
 
     useEffect(() => {
         setColumnDefs(getColumnDefs("customers"));
@@ -133,24 +133,20 @@ function Customers2({ tableView = "customers2" }) {
                             </button>
                         </div>
                         <div className="toolbar-right">
-                            {/* <Layouts tablename={tableView} gridRef={gridRef} />
-                            <ColumnVisible gridRef={gridRef} columnDefs={columnDefs} onColumnChanged={onColumnChanged} />
-                            <button onClick={onReset} type="button" className="btn btn-warning">
-                                <span className="btn-icon">⟲</span>
-                                <span className="btn-label">Reset</span>
-                            </button> */}
                             <div className="total-count">
                                 <span className="total-label">Total:</span>
-                                <span className="total-value">{Array.isArray(gridData) ? gridData.length : 0}</span>
+                                <span className="total-value">{dataCount}</span>
                             </div>
                         </div>
                     </div>
                     <div className="table">
                         <AgGridReact
                             ref={gridRef}
+                            onGridReady={onGridReady}
                             rowData={gridData}
                             columnDefs={columnDefs}
                             theme={themeAlpine}
+                            onFilterChanged={onFilterChanged}
                             onSortChanged={onColumnChanged}
                             onColumnMoved={onColumnChanged}
                             onColumnResized={onColumnChanged}

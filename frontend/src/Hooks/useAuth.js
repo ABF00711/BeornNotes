@@ -93,7 +93,7 @@ function useAuth() {
             const jwtToken = localStorage.getItem("jwtToken");
             const res = await services.isAuth({ token: jwtToken ? jwtToken : token });
             if (res.message == "isAuth success") return
-            toast.error(res.message);
+            // toast.error(res.message);
             navigate("/login");
             return false;
         } catch (error) {
