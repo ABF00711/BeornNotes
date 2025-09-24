@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import useSearchpatterns from "../../../Hooks/useFilters";
 
 function Reset({ gridRef }) {

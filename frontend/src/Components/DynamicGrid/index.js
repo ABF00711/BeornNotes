@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import "./style.css";
 import { AgGridReact } from 'ag-grid-react';
 import { themeAlpine } from "ag-grid-community";
@@ -24,7 +24,6 @@ function DynamicGrid({ tableView }) {
     const [columnDefs, setColumnDefs] = useState([]);
     const [isOpenUpdate, setIsOpenUpdate] = useState(false);
     const [updateData, setUpdateData] = useState(null);
-    const [dataCount, setDataCount] = useState(0);
     const rowSelection = useMemo(() => {
         return {
             mode: "multiRow",
@@ -45,21 +44,25 @@ function DynamicGrid({ tableView }) {
         }, 300);
     }
 
+    const statusBar = useMemo(() => ({
+        statusPanels: [
+            {
+                statusPanel: 'agTotalAndFilteredRowCountComponent',
+                align: 'left',
+            },
+        ],
+    }), []);
+
     const onFilterChanged = useCallback((params) => {
         saveFilterInfo(params);
-        setDataCount(gridRef.current.api.getDisplayedRowCount());
     }, []);
-
-    const onGridReady = useCallback(() => {
-        setDataCount(gridRef.current.api.getDisplayedRowCount());
-    }, [])
 
     useEffect(() => {
         setColumnDefs(getColumnDefs(tableView));
     }, [searchConfig])
 
     useEffect(() => {
-        if (dynamicData.length && columnDefs?.length > 0 && gridRef.current?.api) {
+        if (dynamicData?.length && columnDefs?.length > 0 && gridRef.current?.api) {
             setTimeout(() => {
                 restoreSearchpatterns(gridRef);
             }, 100);
@@ -68,11 +71,13 @@ function DynamicGrid({ tableView }) {
 
     useEffect(() => {
         getSearchConfigData();
-        getLayouts(tableView);
-        getSearchpatterns(tableView)
         getDynamicData(tableView);
+        getLayouts(tableView);
+        getSearchpatterns(tableView);
     }, [])
-
+    
+    useEffect(() => {
+    }, [tableView])
 
     return (
         <div className="dynamic-grid">
@@ -86,16 +91,12 @@ function DynamicGrid({ tableView }) {
                     <Layouts tablename={tableView} gridRef={gridRef} />
                     <Searchpatterns tablename={tableView} gridRef={gridRef} />
                     <ColumnVisible gridRef={gridRef} columnDefs={columnDefs} onColumnChanged={onColumnChanged} />
-                    <div className="total-count">
-                        <span className="total-label">Total:</span>
-                        <span className="total-value">{dataCount}</span>
-                    </div>
                 </div>
             </div>
             <div className="table">
                 <AgGridReact
                     ref={gridRef}
-                    onGridReady={onGridReady}
+                    // onGridReady={onGridReady}
                     rowData={dynamicData}
                     columnDefs={columnDefs}
                     theme={themeAlpine}
@@ -107,6 +108,7 @@ function DynamicGrid({ tableView }) {
                     onColumnResized={onColumnChanged}
                     onBodyScroll={true}
                     accentedSort
+                    statusBar={statusBar}
                     defaultColDef={{
                         filter: true,
                         floatingFilter: true,
