@@ -140,6 +140,10 @@ function Searchpatterns(props) {
             {
                 isOpen ?
                     <div className="filterModal-body">
+                        <div className="modal-header">
+                            <div className="modal-title">Search</div>
+                            <button type="button" className="modal-close" onClick={() => setIsOpen(false)}>✕</button>
+                        </div>
                         <Select
                             showSearch
                             placeholder="Select a filer name"

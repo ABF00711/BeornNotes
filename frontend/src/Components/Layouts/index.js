@@ -145,6 +145,10 @@ function Layouts(props) {
             </button>
             {isOpen && (
                 <div className="layouts-modal">
+                    <div className="modal-header">
+                        <div className="modal-title">Layouts</div>
+                        <button type="button" className="modal-close" onClick={() => setIsOpen(false)}>✕</button>
+                    </div>
                     <Select
                         showSearch
                         placeholder="Select a layout name"

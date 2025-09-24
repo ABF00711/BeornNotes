@@ -4,7 +4,6 @@ import { AgGridReact } from 'ag-grid-react';
 import { themeAlpine } from "ag-grid-community";
 import useDynamicData from "../../Hooks/useDynamicData";
 import useSearchConfig from "../../Hooks/useSearchConfig";
-import ColumnVisible from "../ColumnVisible";
 import Add from "../Add";
 import Update from "../Update";
 import Delete from "../Delete";
@@ -90,7 +89,6 @@ function DynamicGrid({ tableView }) {
                 <div className="toolbar-right">
                     <Layouts tablename={tableView} gridRef={gridRef} />
                     <Searchpatterns tablename={tableView} gridRef={gridRef} />
-                    <ColumnVisible gridRef={gridRef} columnDefs={columnDefs} onColumnChanged={onColumnChanged} />
                 </div>
             </div>
             <div className="table">
