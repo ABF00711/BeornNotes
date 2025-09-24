@@ -96,6 +96,11 @@
 }
 .table{
     width: 90%;
-    height: 650px;
+    height: calc(100vh - 260px);
+    max-height: 650px;
+    min-height: 220px;
     padding: 10px;
+}
+.table .ag-root-wrapper{
+    height: 100% !important;
 }

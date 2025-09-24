@@ -1,7 +1,6 @@
 .searchpatterns{
     position: relative;
     display: inline-block;
-    z-index: 1000;
 }
 
 .filterModal-body{

@@ -1,7 +1,6 @@
 .layouts{
     position: relative;
     display: inline-block;
-    z-index: 1000;
 }
 
 .layouts-modal{
@@ -10,7 +9,7 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
-    z-index: 1000;
+    z-index: 999;
     border-radius: 12px;
     position: absolute;
     top: 44px;
