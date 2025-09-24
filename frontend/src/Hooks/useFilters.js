@@ -22,6 +22,7 @@ function useSearchpatterns () {
             const res = await services.updateSearchpatterns(searchData, searchName, tablename, token);
             if(res.message == "updateSearchpatterns success"){
                 toast.success("Update searchpatterns success");
+                getSearchpatterns(tablename);
             }
         } catch (error) {
             console.log("updateSearchpatternsError: ", error);
@@ -33,6 +34,7 @@ function useSearchpatterns () {
             const res = await services.createSearchpatterns(searchData, searchName, tablename, token);
             if(res.message == "createSearchpatterns success"){
                 toast.success("Create searchpatterns success");
+                getSearchpatterns(tablename);
             }
         } catch (error) {
             console.log("createSearchpatternsError: ", error);
@@ -44,6 +46,7 @@ function useSearchpatterns () {
             const res = await services.deleteSearchpatterns(patternId, token);
             if(res.message == "deleteSearchpatterns success"){
                 toast.success("Delete searchpatterns success");
+                getSearchpatterns(tablename);
             }
         } catch (error) {
             console.log("deleteSearchpatternsError: ", error);

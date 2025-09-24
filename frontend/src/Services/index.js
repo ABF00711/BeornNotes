@@ -226,7 +226,7 @@ const services = {
     deleteLayouts: async(layoutId, token) => {
         try {
             services.setAuthToken(token);
-            const res = await axios.post(services.serverURL + "/layouts/delete", {layoutId});
+            const res = await axios.post(services.serverURL + "/layouts/delete", {id: layoutId});
             return res.data;
         } catch (error) {
             console.log("ServicesDeleteLayoutsError: ", error);

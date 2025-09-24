@@ -53,7 +53,9 @@ function useLayouts () {
             if(res.message == "deleteLayouts success"){
                 getLayouts(tablename);
                 toast.success("Delete layout success");
+                return;
             }
+            toast.error(res.message);
         } catch (error) {
             console.log("deleteLayoutsError: ", error);
         }

@@ -18,8 +18,8 @@ import Reset from "./Reset";
 function DynamicGrid({ tableView }) {
     const { dynamicData, getDynamicData, getColumnDefs, } = useDynamicData();
     const { searchConfig, getSearchConfigData } = useSearchConfig();
-    const { getSearchpatterns, restoreSearchpatterns, onSortChanged, saveFilterInfo } = useSearchpatterns();
-    const { getLayouts } = useLayouts();
+    const { searchpatterns, getSearchpatterns, restoreSearchpatterns, onSortChanged, saveFilterInfo } = useSearchpatterns();
+    const { layouts, getLayouts } = useLayouts();
     const gridRef = useRef();
     const [columnDefs, setColumnDefs] = useState([]);
     const [isOpenUpdate, setIsOpenUpdate] = useState(false);
@@ -67,7 +67,7 @@ function DynamicGrid({ tableView }) {
                 restoreSearchpatterns(gridRef);
             }, 100);
         }
-    }, [dynamicData, columnDefs])
+    }, [dynamicData, columnDefs, layouts, searchpatterns])
 
     useEffect(() => {
         getSearchConfigData();
