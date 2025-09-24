@@ -36,6 +36,14 @@ function Layouts(props) {
                 return;
             }
             const layoutState = JSON.parse(selected.layout_json);
+            const savedSearchpattern = JSON.parse(localStorage.getItem("searchpatterns") || null);
+            if((savedSearchpattern !== null) && savedSearchpattern.sorts){
+                layoutState.map((layout) => {
+                    const sortState = savedSearchpattern.sorts.find((sort) => sort.colId == layout.colId);
+                    if(sortState) layout.sort = sortState.sort;
+                    return layout;
+                })
+            }
             gridRef.current.api.applyColumnState({ state: layoutState, applyOrder: true });
             toast.success("Applied");
         } catch (error) {
