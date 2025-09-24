@@ -13,6 +13,7 @@ import useSearchpatterns from "../../Hooks/useFilters";
 import Layouts from "../Layouts";
 import useLayouts from "../../Hooks/useLayouts";
 import "ag-grid-enterprise";
+import Reset from "./Reset";
 
 function DynamicGrid({ tableView }) {
     const { dynamicData, getDynamicData, getColumnDefs, } = useDynamicData();
@@ -49,12 +50,6 @@ function DynamicGrid({ tableView }) {
         setDataCount(gridRef.current.api.getDisplayedRowCount());
     }, []);
 
-    const onReset = useCallback(() => {
-        localStorage.setItem("searchpatterns", "");
-        localStorage.setItem("layout", "");
-        restoreSearchpatterns(gridRef);
-    }, [])
-
     const onGridReady = useCallback(() => {
         setDataCount(gridRef.current.api.getDisplayedRowCount());
     }, [])
@@ -64,7 +59,7 @@ function DynamicGrid({ tableView }) {
     }, [searchConfig])
 
     useEffect(() => {
-        if (dynamicData.length && columnDefs.length > 0 && gridRef.current?.api) {
+        if (dynamicData.length && columnDefs?.length > 0 && gridRef.current?.api) {
             setTimeout(() => {
                 restoreSearchpatterns(gridRef);
             }, 100);
@@ -85,15 +80,12 @@ function DynamicGrid({ tableView }) {
                 <div className="toolbar-left">
                     <Add table_name={tableView} />
                     <Delete tablename={tableView} gridRef={gridRef} />
-                    <button onClick={onReset} type="button" className="btn btn-warning">
-                        <span className="btn-icon">⟲</span>
-                        <span className="btn-label">Reset</span>
-                    </button>
+                    <Reset gridRef={gridRef} />
                 </div>
                 <div className="toolbar-right">
                     <Layouts tablename={tableView} gridRef={gridRef} />
                     <Searchpatterns tablename={tableView} gridRef={gridRef} />
-                    <ColumnVisible gridRef={gridRef} columnDefs={columnDefs} setColumnDefs={setColumnDefs} onColumnChanged={onColumnChanged} />
+                    <ColumnVisible gridRef={gridRef} columnDefs={columnDefs} onColumnChanged={onColumnChanged} />
                     <div className="total-count">
                         <span className="total-label">Total:</span>
                         <span className="total-value">{dataCount}</span>
