@@ -58,7 +58,7 @@ function useSearchpatterns () {
         try {
             let savedSearchpattern = JSON.parse(localStorage.getItem("searchpatterns") || null);
             if (savedSearchpattern == null) {
-                const defaultPattern = searchpatterns.find(pattern => pattern.name == "Default");
+                const defaultPattern = searchpatterns.find((pattern) => pattern.name == "Default");
                 if (defaultPattern && defaultPattern.data) {
                     const parsedPattern = JSON.parse(defaultPattern.data);
                     savedSearchpattern = {
@@ -74,7 +74,7 @@ function useSearchpatterns () {
             }
             let savedLayout = JSON.parse(localStorage.getItem("layout") || null);
             if (savedLayout == null) {
-                const defaultLayout = layouts.find(layout => layout.layout_name === "Default");
+                const defaultLayout = layouts.find((layout) => layout.layout_name === "Default");
                 if (defaultLayout) {
                     savedLayout = JSON.parse(defaultLayout.layout_json);
                 } else {
@@ -83,7 +83,7 @@ function useSearchpatterns () {
             }
             if (savedSearchpattern.sorts) {
                 savedLayout.map((column) => {
-                    const savedSort = savedSearchpattern.sorts.find(item => item.colId === column.colId);
+                    const savedSort = savedSearchpattern.sorts.find((item) => item.colId === column.colId);
                     if (savedSort) {
                         column.sort = savedSort.sort;
                     }
