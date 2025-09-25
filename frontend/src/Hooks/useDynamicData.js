@@ -60,45 +60,138 @@ function useDynamicData() {
         }
     }
 
+    // Helper function to get filter type based on field type
+    const getFilterType = (fieldType) => {
+        const filterMap = {
+            date: "agDateColumnFilter",
+            number: "agNumberColumnFilter",
+            default: "agTextColumnFilter"
+        };
+        return filterMap[fieldType] || filterMap.default;
+    };
+
+    // Helper function to create numeric comparator for set filter
+    const createNumericComparator = () => (a, b) => {
+        const numA = parseFloat(a);
+        const numB = parseFloat(b);
+        if (isNaN(numA) && isNaN(numB)) return 0;
+        if (isNaN(numA)) return -1;
+        if (isNaN(numB)) return 1;
+        return numA - numB;
+    };
+
+    // Helper function to create case-insensitive text comparator for set filter
+    const createTextComparator = () => (a, b) => 
+        a?.toString().toLowerCase().localeCompare(b?.toString().toLowerCase());
+
+    // Helper function to create date column definition
+    const createDateColumnDef = (item) => ({
+        field: item.field_name,
+        headerName: item.field_label,
+        filter: 'agMultiColumnFilter',
+        filterParams: {
+            filters: [
+                { filter: 'agDateColumnFilter' },
+                {
+                    filter: 'agSetColumnFilter',
+                    filterParams: {
+                        caseSensitive: false,
+                        keyCreator: p => p.value ? String(p.value.getFullYear()) : '',
+                        comparator: (a, b) => {
+                            const yearA = parseInt(a, 10);
+                            const yearB = parseInt(b, 10);
+                            if (isNaN(yearA) && isNaN(yearB)) return 0;
+                            if (isNaN(yearA)) return -1;
+                            if (isNaN(yearB)) return 1;
+                            return yearA - yearB;
+                        },
+                    }
+                }
+            ]
+        },
+        valueGetter: p => p.data[item.field_name] ? new Date(p.data[item.field_name]) : null,
+        valueFormatter: p => p.value ? p.value.toLocaleDateString() : '',
+        cellDataType: 'date',
+        flex: 1,
+        hide: false
+    });
+
+    // Helper function to create text column definition
+    const createTextColumnDef = (item) => ({
+        field: item.field_name,
+        headerName: item.field_label,
+        filter: "agMultiColumnFilter",
+        filterParams: {
+            filters: [
+                { filter: getFilterType(item.field_type) },
+                {
+                    filter: "agSetColumnFilter",
+                    filterParams: {
+                        caseSensitive: false,
+                        comparator: createTextComparator()
+                    }
+                }
+            ]
+        },
+        textFormatter: (val) => val ? val.toLowerCase() : '',
+        flex: 1,
+        hide: false
+    });
+
+    // Helper function to create number column definition
+    const createNumberColumnDef = (item) => ({
+        field: item.field_name,
+        headerName: item.field_label,
+        filter: "agMultiColumnFilter",
+        filterParams: {
+            filters: [
+                { filter: getFilterType(item.field_type) },
+                {
+                    filter: "agSetColumnFilter",
+                    filterParams: {
+                        caseSensitive: false,
+                        comparator: createNumericComparator()
+                    }
+                }
+            ]
+        },
+        flex: 1,
+        hide: false
+    });
+
+    // Main function to get column definitions
     const getColumnDefs = (tableView) => {
         try {
+            if (!searchConfig || !Array.isArray(searchConfig)) {
+                console.warn("searchConfig is not available or not an array");
+                return [];
+            }
+
             const columnData = searchConfig
                 .filter(item => item.table_name === tableView)
                 .map((item) => {
-                    let columnFiltername = "";
+                    if (!item.field_name || !item.field_label) {
+                        console.warn("Invalid field configuration:", item);
+                        return null;
+                    }
+
                     switch (item.field_type) {
                         case "date":
-                            columnFiltername = "agDateColumnFilter";
-                            break;
+                            return createDateColumnDef(item);
                         case "number":
-                            columnFiltername = "agNumberColumnFilter";
-                            break;
+                            return createNumberColumnDef(item);
                         default:
-                            columnFiltername = "agTextColumnFilter";
-                            break;
+                            return createTextColumnDef(item);
                     }
-                    if (item.field_type === "date") {
-                        return {
-                            field: item.field_name,
-                            headerName: item.field_label,
-                            filter: 'agMultiColumnFilter',
-                            filterParams: [
-                                { filter: 'agSetColumnFilter', caseSensitive: false, keyCreator: p => p.value ? p.value.toLocaleDateString() : '' },
-                                { filter: 'agDateColumnFilter' }
-                            ],
-                            // make the grid work with Date objects internally
-                            valueGetter: p => p.data[item.field_name] ? new Date(p.data[item.field_name]) : null,
-                            valueFormatter: p => p.value ? p.value.toLocaleDateString() : '',
-                            cellDataType: 'date',
-                        }
-                    }
-                    return { field: item.field_name, headerName: item.field_label, filter: "agMultiColumnFilter", filterParams: [{ filter: "agSetColumnFilter", caseSensitive: false }, { filter: columnFiltername }], textFormatter: (val) => val ? val.toLowerCase() : '', flex: 1, hide: false };
                 })
+                .filter(Boolean); // Remove null entries
+
             return columnData;
         } catch (error) {
-            console.log("getColumnDefsError: ", error);
+            console.error("getColumnDefsError:", error);
+            return [];
         }
-    }
+    };
 
     return (
         { dynamicData, setDynamicData, getDynamicData, getColumnDefs, createDynamicData, updateDynamicData, deleteDynamicData }

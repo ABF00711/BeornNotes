@@ -87,6 +87,15 @@ function Customers2({ tableView = "customers2" }) {
         setDataCount(gridRef.current.api.getDisplayedRowCount());
     }, [])
 
+    const statusBar = useMemo(() => ({
+        statusPanels: [
+            {
+                statusPanel: 'agTotalAndFilteredRowCountComponent',
+                align: 'left',
+            },
+        ],
+    }), []);
+
     useEffect(() => {
         setColumnDefs(getColumnDefs("customers"));
     }, [searchConfig])
@@ -132,12 +141,6 @@ function Customers2({ tableView = "customers2" }) {
                                 <span className="btn-label">Search</span>
                             </button>
                         </div>
-                        <div className="toolbar-right">
-                            <div className="total-count">
-                                <span className="total-label">Total:</span>
-                                <span className="total-value">{dataCount}</span>
-                            </div>
-                        </div>
                     </div>
                     <div className="table">
                         <AgGridReact
@@ -152,6 +155,7 @@ function Customers2({ tableView = "customers2" }) {
                             onColumnResized={onColumnChanged}
                             onBodyScroll={true}
                             accentedSort
+                            statusBar={statusBar}
                             defaultColDef={{
                                 filter: true,
                                 floatingFilter: true,

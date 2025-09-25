@@ -49,7 +49,7 @@ function useTabbedInterfaces() {
                 setTabbedInterfaces(res.tabInterfaces);
                 return;
             }
-            toast.error(res.message);
+            // toast.error(res.message);
         } catch (error) {
             console.log("getTabInterfacesError: ", error);
         }
