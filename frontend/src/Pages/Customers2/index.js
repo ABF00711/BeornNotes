@@ -21,7 +21,6 @@ function Customers2({ tableView = "customers2" }) {
     const gridRef = useRef();
     const [columnDefs, setColumnDefs] = useState([]);
     const [searchKey, setSearchKey] = useState({ age: "", job: "" });
-    const [dataCount, setDataCount] = useState(0);
 
     const onColumnChanged = () => {
         setTimeout(() => {
@@ -78,12 +77,7 @@ function Customers2({ tableView = "customers2" }) {
         })
     }
 
-    const onFilterChanged = useCallback(() => {
-        setDataCount(gridRef.current.api.getDisplayedRowCount());
-    }, [])
-
     const onGridReady = useCallback(() => {
-        setDataCount(gridRef.current.api.getDisplayedRowCount());
     }, [])
 
     const statusBar = useMemo(() => ({
@@ -148,7 +142,6 @@ function Customers2({ tableView = "customers2" }) {
                             rowData={gridData}
                             columnDefs={columnDefs}
                             theme={themeAlpine}
-                            onFilterChanged={onFilterChanged}
                             onSortChanged={onColumnChanged}
                             onColumnMoved={onColumnChanged}
                             onColumnResized={onColumnChanged}

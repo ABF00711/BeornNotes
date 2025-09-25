@@ -96,19 +96,63 @@ function useDynamicData() {
                     filter: 'agSetColumnFilter',
                     filterParams: {
                         caseSensitive: false,
+                        treeList: true,
                         keyCreator: p => {
-                          const d = p.value instanceof Date ? p.value : new Date(p.value);
-                          const y = Number.isNaN(d.getTime()) ? null : d.getFullYear();
-                          return y; // return a Number, not a string
+                            if (p.value && p.value instanceof Date && !isNaN(p.value.getTime())) {
+                                const year = p.value.getFullYear();
+                                const month = p.value.getMonth() + 1; // getMonth() returns 0-11, we want 1-12
+                                const day = p.value.getDate();
+                                return `${year}/${month}/${day}`;
+                            }
+                            return null;
+                        },
+                        valueFormatter: p => {
+                            if (p.value && p.value instanceof Date && !isNaN(p.value.getTime())) {
+                                const year = p.value.getFullYear();
+                                const month = p.value.getMonth() + 1;
+                                const day = p.value.getDate();
+                                return `${year}/${month}/${day}`;
+                            }
+                            return '';
+                        },
+                        pathGetter: p => {
+                            if (p.value && p.value instanceof Date && !isNaN(p.value.getTime())) {
+                                const year = p.value.getFullYear();
+                                const month = p.value.getMonth() + 1;
+                                const day = p.value.getDate();
+                                return [year.toString(), month.toString(), day.toString()];
+                            }
+                            return [];
                         },
                         comparator: (a, b) => {
-                          // a and b are Numbers from keyCreator
-                          if (a == null && b == null) return 0;
-                          if (a == null) return -1;
-                          if (b == null) return 1;
-                          return a - b;
+                            // Convert to strings and handle non-string values
+                            const strA = String(a || '');
+                            const strB = String(b || '');
+                            
+                            // If either is empty, handle appropriately
+                            if (!strA && !strB) return 0;
+                            if (!strA) return -1;
+                            if (!strB) return 1;
+                            
+                            // For hierarchical sorting, we need to handle different levels
+                            const partsA = strA.split('/');
+                            const partsB = strB.split('/');
+                            
+                            // Compare at the appropriate level
+                            const maxLength = Math.max(partsA.length, partsB.length);
+                            
+                            for (let i = 0; i < maxLength; i++) {
+                                const partA = parseInt(partsA[i] || '0', 10);
+                                const partB = parseInt(partsB[i] || '0', 10);
+                                
+                                if (partA !== partB) {
+                                    return partA - partB;
+                                }
+                            }
+                            
+                            return 0;
                         }
-                      }
+                    }
                 }
             ]
         },
