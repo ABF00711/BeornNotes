@@ -10,6 +10,7 @@ function useDynamicData() {
         try {
             const res = await services.getDynamicData(tableView, token);
             if (res.message === "getDynamicData success") {
+                console.log("res.dynamicData: ", res.dynamicData);
                 setDynamicData(res.dynamicData);
             }
         } catch (error) {
@@ -96,16 +97,19 @@ function useDynamicData() {
                     filter: 'agSetColumnFilter',
                     filterParams: {
                         caseSensitive: false,
-                        keyCreator: p => p.value ? String(p.value.getFullYear()) : '',
-                        comparator: (a, b) => {
-                            const yearA = parseInt(a, 10);
-                            const yearB = parseInt(b, 10);
-                            if (isNaN(yearA) && isNaN(yearB)) return 0;
-                            if (isNaN(yearA)) return -1;
-                            if (isNaN(yearB)) return 1;
-                            return yearA - yearB;
+                        keyCreator: p => {
+                          const d = p.value instanceof Date ? p.value : new Date(p.value);
+                          const y = Number.isNaN(d.getTime()) ? null : d.getFullYear();
+                          return y; // return a Number, not a string
                         },
-                    }
+                        comparator: (a, b) => {
+                          // a and b are Numbers from keyCreator
+                          if (a == null && b == null) return 0;
+                          if (a == null) return -1;
+                          if (b == null) return 1;
+                          return a - b;
+                        }
+                      }
                 }
             ]
         },
