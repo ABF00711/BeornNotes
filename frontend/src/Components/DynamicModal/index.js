@@ -59,7 +59,7 @@ function DynamicModal({ table_name, isOpen, setIsOpen, title, role, fieldsData, 
 
     useEffect(() => {
         setFormData(initData);
-    }, [initData])
+    }, [isOpen, initData])
 
     return (
         <>

@@ -114,7 +114,7 @@ function DynamicGrid({ tableView }) {
                     }}
                 />
             </div>
-            <Update tablename={tableView} isOpen={isOpenUpdate} setIsOpen={setIsOpenUpdate} updateData={updateData} />
+            <Update tablename={tableView} isOpen={isOpenUpdate} setIsOpen={setIsOpenUpdate} updateData={updateData} setUpdateData={setUpdateData} />
         </div>
     );
 }

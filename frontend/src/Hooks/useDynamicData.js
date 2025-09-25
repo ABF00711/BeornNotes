@@ -10,7 +10,6 @@ function useDynamicData() {
         try {
             const res = await services.getDynamicData(tableView, token);
             if (res.message === "getDynamicData success") {
-                console.log("res.dynamicData: ", res.dynamicData);
                 setDynamicData(res.dynamicData);
             }
         } catch (error) {

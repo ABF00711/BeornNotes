@@ -95,7 +95,7 @@
     font-weight: 700;
 }
 .table{
-    width: 50%;
+    width: 99%;
     /* Make grid height responsive to viewport so toolbar remains visible */
     height: calc(100vh - 230px);
     max-height: 700px;
