@@ -10,7 +10,10 @@ function Update({tablename, isOpen, setIsOpen, updateData}) {
 
     const getFormData = () => {
         try {
-            if(!isOpen || !updateData) return;
+            if(!updateData){
+                setFormData({});
+                return;
+            }
             const pickedData = updateData;
             fieldsData.forEach(element => {
                 if(element.field_type === "date"){
@@ -26,7 +29,7 @@ function Update({tablename, isOpen, setIsOpen, updateData}) {
 
     useEffect(() => {
         getFormData();
-    }, [isOpen])
+    }, [updateData])
 
     useEffect(() => {
         setFieldsData(searchConfig.filter(item => item.table_name === tablename));

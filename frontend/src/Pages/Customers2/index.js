@@ -11,6 +11,9 @@ import Navbar from "../Navbar";
 import Sidebar from "../Sidebar";
 import { MyContext } from "../../Context";
 import InputGroup from "../../Components/InputGroup";
+import Add from "../../Components/Add";
+import Delete from "../../Components/Delete";
+import Update from "../../Components/Update";
 
 function Customers2({ tableView = "customers2" }) {
     const { isCollapsed } = useContext(MyContext);
@@ -21,6 +24,8 @@ function Customers2({ tableView = "customers2" }) {
     const gridRef = useRef();
     const [columnDefs, setColumnDefs] = useState([]);
     const [searchKey, setSearchKey] = useState({ age: "", job: "" });
+    const [isOpenUpdate, setIsOpenUpdate] = useState(false);
+    const [updateData, setUpdateData] = useState(null);
 
     const onColumnChanged = () => {
         setTimeout(() => {
@@ -89,6 +94,19 @@ function Customers2({ tableView = "customers2" }) {
         ],
     }), []);
 
+    const rowSelection = useMemo(() => {
+        return {
+            mode: "multiRow",
+            groupSelects: "descendants",
+            headerCheckbox: true,
+        };
+    }, []);
+
+    const openUpdateModal = (params) => {
+        setUpdateData(params.data);
+        setIsOpenUpdate(!isOpenUpdate);
+    }
+
     useEffect(() => {
         setColumnDefs(getColumnDefs("customers"));
     }, [searchConfig])
@@ -117,6 +135,8 @@ function Customers2({ tableView = "customers2" }) {
                 <div className="dynamic-grid">
                     <div className="grid-toolbar">
                         <div className="toolbar-left">
+                            <Add table_name={"customers"} gridRef={gridRef} />
+                            <Delete tablename={"customers"} gridRef={gridRef} />
                             <div>
                                 <InputGroup props={{
                                     fieldFormat: { id: "age", field_type: "number", field_label: "Age", field_name: "age" },
@@ -142,9 +162,11 @@ function Customers2({ tableView = "customers2" }) {
                             rowData={gridData}
                             columnDefs={columnDefs}
                             theme={themeAlpine}
+                            onRowDoubleClicked={openUpdateModal}
                             onSortChanged={onColumnChanged}
                             onColumnMoved={onColumnChanged}
                             onColumnResized={onColumnChanged}
+                            rowSelection={rowSelection}
                             onBodyScroll={true}
                             accentedSort
                             statusBar={statusBar}
@@ -155,6 +177,7 @@ function Customers2({ tableView = "customers2" }) {
                             }}
                         />
                     </div>
+                    <Update tablename={"customers"} isOpen={isOpenUpdate} setIsOpen={setIsOpenUpdate} updateData={updateData} setUpdateData={setUpdateData} />
                 </div>
             </div>
             <Sidebar />

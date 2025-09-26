@@ -29,15 +29,15 @@ function DynamicModal({ table_name, isOpen, setIsOpen, title, role, fieldsData, 
             if (role === "create") createDynamicData(table_name, formData);
             if (role === "update") updateDynamicData(table_name, formData);
 
-            onInit();
+            initializeFields();
             setIsOpen(false);
         } catch (error) {
             console.log("hanleSubmitError: ", error);
         }
     }
 
-    const onInit = () => {
-        let _formData = {};
+    const initializeFields = () => {
+        const _formData = {};
         for (const key in formData) {
             _formData[key] = "";
         }
@@ -46,8 +46,8 @@ function DynamicModal({ table_name, isOpen, setIsOpen, title, role, fieldsData, 
     }
 
     const onCancel = () => {
-        onInit();
         setIsOpen(false);
+        initializeFields();
     }
 
     const handleChange = (e) => {
@@ -59,7 +59,7 @@ function DynamicModal({ table_name, isOpen, setIsOpen, title, role, fieldsData, 
 
     useEffect(() => {
         setFormData(initData);
-    }, [isOpen, initData])
+    }, [initData])
 
     return (
         <>
@@ -67,7 +67,7 @@ function DynamicModal({ table_name, isOpen, setIsOpen, title, role, fieldsData, 
                 <h1>{title}</h1>
                 {
                     fieldsData.map((item) => {
-                        return <InputGroup props={{ fieldFormat: item, value: formData[item.field_name], handleChange, submitted }} />
+                        return <InputGroup props={{ fieldFormat: item, value: formData[item.field_name] || "", handleChange, submitted }} />
                     })
                 }
             </Modal>

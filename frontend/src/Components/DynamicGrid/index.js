@@ -36,6 +36,11 @@ function DynamicGrid({ tableView }) {
         setIsOpenUpdate(!isOpenUpdate);
     }
 
+    useEffect(() => {
+        if(isOpenUpdate) return;
+        setUpdateData(null)
+    }, [isOpenUpdate])
+
     const onColumnChanged = () => {
         setTimeout(() => {
             const currentGrid = gridRef.current.api.getColumnState();
