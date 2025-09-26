@@ -108,6 +108,11 @@ function Customers2({ tableView = "customers2" }) {
     }
 
     useEffect(() => {
+        if (isOpenUpdate) return;
+        setUpdateData(null)
+    }, [isOpenUpdate])
+
+    useEffect(() => {
         setColumnDefs(getColumnDefs("customers"));
     }, [searchConfig])
 
