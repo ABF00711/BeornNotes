@@ -97,60 +97,68 @@ function useDynamicData() {
                     filterParams: {
                         caseSensitive: false,
                         treeList: true,
+                        suppressSorting: false,
+                        // Generate a stable, zero-padded key so lexical and numeric order align
                         keyCreator: p => {
-                            if (p.value && p.value instanceof Date && !isNaN(p.value.getTime())) {
-                                const year = p.value.getFullYear();
-                                const month = p.value.getMonth() + 1; // getMonth() returns 0-11, we want 1-12
-                                const day = p.value.getDate();
-                                return `${year}/${month}/${day}`;
-                            }
-                            return null;
+                            const value = p.value instanceof Date ? p.value : new Date(p.value);
+                            if (!value || isNaN(value.getTime())) return null;
+                            const y = value.getFullYear();
+                            const m = String(value.getMonth() + 1).padStart(2, '0');
+                            const d = String(value.getDate()).padStart(2, '0');
+                            return `${y}/${m}/${d}`; // e.g., 2000/02/05
                         },
-                        valueFormatter: p => {
-                            if (p.value && p.value instanceof Date && !isNaN(p.value.getTime())) {
-                                const year = p.value.getFullYear();
-                                const month = p.value.getMonth() + 1;
-                                const day = p.value.getDate();
-                                return `${year}/${month}/${day}`;
-                            }
-                            return '';
-                        },
+                        // Build the hierarchical path [YYYY, MM, DD] with zero-padded month/day
                         pathGetter: p => {
-                            if (p.value && p.value instanceof Date && !isNaN(p.value.getTime())) {
-                                const year = p.value.getFullYear();
-                                const month = p.value.getMonth() + 1;
-                                const day = p.value.getDate();
-                                return [year.toString(), month.toString(), day.toString()];
-                            }
-                            return [];
+                            const value = p.value instanceof Date ? p.value : new Date(p.value);
+                            if (!value || isNaN(value.getTime())) return [];
+                            const y = String(value.getFullYear());
+                            const m = String(value.getMonth() + 1).padStart(2, '0');
+                            const d = String(value.getDate()).padStart(2, '0');
+                            return [y, m, d];
                         },
-                        comparator: (a, b) => {
-                            // Convert to strings and handle non-string values
-                            const strA = String(a || '');
-                            const strB = String(b || '');
-                            
-                            // If either is empty, handle appropriately
-                            if (!strA && !strB) return 0;
-                            if (!strA) return -1;
-                            if (!strB) return 1;
-                            
-                            // For hierarchical sorting, we need to handle different levels
-                            const partsA = strA.split('/');
-                            const partsB = strB.split('/');
-                            
-                            // Compare at the appropriate level
-                            const maxLength = Math.max(partsA.length, partsB.length);
-                            
-                            for (let i = 0; i < maxLength; i++) {
-                                const partA = parseInt(partsA[i] || '0', 10);
-                                const partB = parseInt(partsB[i] || '0', 10);
-                                
-                                if (partA !== partB) {
-                                    return partA - partB;
-                                }
+                        // Format labels while preserving numeric sort via zero-padded keys
+                        treeListFormatter: function (...args) {
+                            // Support both signatures:
+                            // 1) (paramsObject) where { value, level }
+                            // 2) (pathKey, level)
+                            let valueRaw;
+                            let level;
+                            if (args.length === 1 && typeof args[0] === 'object' && args[0] !== null) {
+                                valueRaw = args[0].value;
+                                level = args[0].level;
+                            } else {
+                                valueRaw = args[0];
+                                level = typeof args[1] === 'number' ? args[1] : 0;
                             }
-                            
-                            return 0;
+
+                            if (valueRaw == null) return '';
+                            const value = String(valueRaw);
+
+                            if (level === 1) {
+                                const mapMonth = (token) => {
+                                    if (token == null) return '';
+                                    const s = String(token).trim();
+                                    const lower = s.toLowerCase();
+                                    const num = parseInt(s, 10);
+                                    const full = [
+                                        'January','February','March','April','May','June','July','August','September','October','November','December'
+                                    ];
+                                    // Numeric month like "2" or "02"
+                                    if (!Number.isNaN(num) && num >= 1 && num <= 12) return full[num - 1];
+                                    // Abbrev or full names
+                                    const abbrev = {
+                                        jan: 1, feb: 2, mar: 3, apr: 4, may: 5, jun: 6, jul: 7, aug: 8, sep: 9, sept: 9, oct: 10, nov: 11, dec: 12
+                                    };
+                                    if (lower in abbrev) return full[abbrev[lower] - 1];
+                                    if (full.map(n => n.toLowerCase()).includes(lower)) return s; // already full name
+                                    return s;
+                                };
+                                return mapMonth(value);
+                            }
+                            if (level === 2) {
+                                return value.startsWith('0') ? value.slice(1) : value;
+                            }
+                            return value;
                         }
                     }
                 }
