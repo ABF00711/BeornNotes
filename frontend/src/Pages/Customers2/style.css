@@ -96,8 +96,8 @@
 }
 .table{
     width: 99%;
-    height: calc(100vh - 230px);
-    max-height: 700px;
+    height: calc(100vh - 210px);
+    max-height: 730px;
     min-height: 220px;
     padding: 10px;
 }
