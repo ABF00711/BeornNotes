@@ -1,15 +1,15 @@
 import services from "../Services";
 import { toast } from "react-toastify";
-import {useCallback, useContext} from "react";
+import { useCallback, useContext } from "react";
 import { MyContext } from "../Context";
 
-function useSearchpatterns () {
-    const {searchpatterns, setSearchpatterns, token, layouts} = useContext(MyContext);
+function useSearchpatterns() {
+    const { searchpatterns, setSearchpatterns, token, layouts } = useContext(MyContext);
 
-    const getSearchpatterns = async(tablename) => {
+    const getSearchpatterns = async (tablename) => {
         try {
             const res = await services.getSearchpatterns(tablename, token);
-            if(res.message == "getSearchpatterns success"){
+            if (res.message == "getSearchpatterns success") {
                 setSearchpatterns(res.searchpatterns);
             }
         } catch (error) {
@@ -17,10 +17,10 @@ function useSearchpatterns () {
         }
     }
 
-    const updateSearchpatterns = async(searchData, searchName, tablename) => {
+    const updateSearchpatterns = async (searchData, searchName, tablename) => {
         try {
             const res = await services.updateSearchpatterns(searchData, searchName, tablename, token);
-            if(res.message == "updateSearchpatterns success"){
+            if (res.message == "updateSearchpatterns success") {
                 toast.success("Update searchpatterns success");
                 getSearchpatterns(tablename);
             }
@@ -29,10 +29,10 @@ function useSearchpatterns () {
         }
     }
 
-    const createSearchpatterns = async(searchData, searchName, tablename) => {
+    const createSearchpatterns = async (searchData, searchName, tablename) => {
         try {
             const res = await services.createSearchpatterns(searchData, searchName, tablename, token);
-            if(res.message == "createSearchpatterns success"){
+            if (res.message == "createSearchpatterns success") {
                 toast.success("Create searchpatterns success");
                 getSearchpatterns(tablename);
             }
@@ -41,10 +41,10 @@ function useSearchpatterns () {
         }
     }
 
-    const deleteSearchpatterns = async(tablename, patternId) => {
+    const deleteSearchpatterns = async (tablename, patternId) => {
         try {
             const res = await services.deleteSearchpatterns(patternId, token);
-            if(res.message == "deleteSearchpatterns success"){
+            if (res.message == "deleteSearchpatterns success") {
                 toast.success("Delete searchpatterns success");
                 getSearchpatterns(tablename);
             }
@@ -101,17 +101,17 @@ function useSearchpatterns () {
     };
 
     const onSortChanged = useCallback((gridRef) => {
-            if (gridRef.current) {
-                const currentColumnState = gridRef.current.api.getColumnState();
-                const sortState = [];
-                currentColumnState.map((column) => {
-                    sortState.push({ colId: column.colId, sort: column.sort });
-                })
-                const searchpatterns = JSON.parse(localStorage.getItem("searchpatterns") || "{}");
-                searchpatterns.sorts = sortState;
-                localStorage.setItem("searchpatterns", JSON.stringify(searchpatterns));
-            }
-        }, []);
+        if (gridRef.current) {
+            const currentColumnState = gridRef.current.api.getColumnState();
+            const sortState = [];
+            currentColumnState.map((column) => {
+                sortState.push({ colId: column.colId, sort: column.sort });
+            })
+            const searchpatterns = JSON.parse(localStorage.getItem("searchpatterns") || "{}");
+            searchpatterns.sorts = sortState;
+            localStorage.setItem("searchpatterns", JSON.stringify(searchpatterns));
+        }
+    }, []);
 
     const saveFilterInfo = (params) => {
         try {
@@ -126,11 +126,11 @@ function useSearchpatterns () {
 
     return ({
         getSearchpatterns,
-        searchpatterns, 
-        updateSearchpatterns, 
-        createSearchpatterns, 
-        deleteSearchpatterns, 
-        restoreSearchpatterns, 
+        searchpatterns,
+        updateSearchpatterns,
+        createSearchpatterns,
+        deleteSearchpatterns,
+        restoreSearchpatterns,
         onSortChanged,
         saveFilterInfo
     })

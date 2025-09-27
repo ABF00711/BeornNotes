@@ -29,7 +29,7 @@ function Customers2({ tableView = "customers2" }) {
 
     const onColumnChanged = () => {
         setTimeout(() => {
-            const currentGrid = gridRef.current.api.getColumnState();
+            const currentGrid = gridRef.current?.api.getColumnState();
             localStorage.setItem("customers2Layout", JSON.stringify(currentGrid));
         }, 100);
     }

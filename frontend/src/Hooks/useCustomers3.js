@@ -1,0 +1,88 @@
+import { useCallback } from "react";
+import useSearchpatterns from "./useFilters";
+import useLayouts from "./useLayouts";
+
+const useCustomers3 = () => {
+    const {searchpatterns} = useSearchpatterns;
+    const {layouts} = useLayouts();
+
+    const onColumnChanged = (gridRef) => {
+        setTimeout(() => {
+            const currentGrid = gridRef.current?.api.getColumnState();
+            localStorage.setItem("customers3Layout", JSON.stringify(currentGrid));
+        }, 300);
+    }
+
+    const onFilterChanged = useCallback((params) => {
+        const filterInfo = params.api.getFilterModel();
+        const searchpatterns = JSON.parse(localStorage.getItem("customers3Searchpatterns") || "{}");
+        searchpatterns.filters = filterInfo;
+        localStorage.setItem("customers3Searchpatterns", JSON.stringify(searchpatterns));
+    }, []);
+
+    const restoreSearchpatterns = (gridRef) => {
+        if (!gridRef.current?.api) return;
+        try {
+            let savedSearchpattern = JSON.parse(localStorage.getItem("customers3Searchpatterns") || null);
+            if (savedSearchpattern == null) {
+                const defaultPattern = searchpatterns.find((pattern) => pattern.name == "Default");
+                if (defaultPattern && defaultPattern.data) {
+                    const parsedPattern = JSON.parse(defaultPattern.data);
+                    savedSearchpattern = {
+                        filters: parsedPattern.filters || [],
+                        sorts: parsedPattern.sorts || []
+                    }
+                } else {
+                    savedSearchpattern = {
+                        filters: [],
+                        sorts: []
+                    }
+                }
+            }
+            let savedLayout = JSON.parse(localStorage.getItem("customers3Layout") || null);
+            if (savedLayout == null) {
+                const defaultLayout = layouts.find((layout) => layout.layout_name === "Default");
+                if (defaultLayout) {
+                    savedLayout = JSON.parse(defaultLayout.layout_json);
+                } else {
+                    savedLayout = gridRef.current.api.getColumnState();
+                }
+            }
+            if (savedSearchpattern.sorts) {
+                savedLayout.map((column) => {
+                    const savedSort = savedSearchpattern.sorts.find((item) => item.colId === column.colId);
+                    if (savedSort) {
+                        column.sort = savedSort.sort;
+                    }
+                    return column
+                })
+            }
+            gridRef.current.api.applyColumnState({
+                state: savedLayout,
+                applyOrder: true,
+            });
+            gridRef.current.api.setFilterModel(savedSearchpattern.filters);
+        } catch (error) {
+            console.log("restoreSearchpatterns error:", error);
+        }
+    };
+
+    const onSortChanged = useCallback((gridRef) => {
+        if (gridRef.current) {
+            const currentColumnState = gridRef.current.api.getColumnState();
+            const sortState = [];
+            currentColumnState.map((column) => {
+                sortState.push({ colId: column.colId, sort: column.sort });
+            })
+            const searchpatterns = JSON.parse(localStorage.getItem("customers3Searchpatterns") || "{}");
+            searchpatterns.sorts = sortState;
+            localStorage.setItem("customers3Searchpatterns", JSON.stringify(searchpatterns));
+        }
+    }, []);
+
+    return {
+        onColumnChanged, onFilterChanged, restoreSearchpatterns, onSortChanged
+    }
+}
+
+export default useCustomers3;

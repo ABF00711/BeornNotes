@@ -43,7 +43,7 @@ function DynamicGrid({ tableView }) {
 
     const onColumnChanged = () => {
         setTimeout(() => {
-            const currentGrid = gridRef.current.api.getColumnState();
+            const currentGrid = gridRef?.current?.api.getColumnState();
             localStorage.setItem("layout", JSON.stringify(currentGrid));
         }, 300);
     }

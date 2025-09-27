@@ -15,18 +15,20 @@ import Searchpatterns from "../../Components/Searchpatterns";
 import { useNavigate } from "react-router-dom";
 import useSearchpatterns from "../../Hooks/useFilters";
 import { themeAlpine } from "ag-grid-community";
+import useCustomers3 from "../../Hooks/useCustomers3";
 
 
-function Customers3({tableView = "customers3"}) {
+function Customers3({ tableView = "customers3" }) {
     const navigate = useNavigate();
     const { isCollapsed } = useContext(MyContext);
-    const { dynamicData, getDynamicData, getColumnDefs, } = useDynamicData();
+    const { dynamicData, getDynamicData, getColumnDefs, statusBar} = useDynamicData();
+    const {onColumnChanged, onFilterChanged, restoreSearchpatterns, onSortChanged} = useCustomers3();
     const { searchConfig, getSearchConfigData } = useSearchConfig();
-    const { searchpatterns, getSearchpatterns, restoreSearchpatterns, onSortChanged, saveFilterInfo } = useSearchpatterns();
+    const { searchpatterns, getSearchpatterns, } = useSearchpatterns();
     const { layouts, getLayouts } = useLayouts();
     const gridRef = useRef();
     const [columnDefs, setColumnDefs] = useState([]);
-    const [updateData, setUpdateData] = useState(null);
+
     const rowSelection = useMemo(() => {
         return {
             mode: "multiRow",
@@ -35,34 +37,13 @@ function Customers3({tableView = "customers3"}) {
         };
     }, []);
 
-    const onColumnChanged = () => {
-        setTimeout(() => {
-            const currentGrid = gridRef.current.api.getColumnState();
-            localStorage.setItem("layout", JSON.stringify(currentGrid));
-        }, 300);
-    }
-
     const onDoubleClick = (params) => {
         try {
-            setUpdateData(params.data);
-            navigate("/customers3/create");
+            navigate("/customers3/update", {data: params.data});
         } catch (error) {
             console.log("onDoubleClickError: ", error);
         }
     }
-
-    const statusBar = useMemo(() => ({
-        statusPanels: [
-            {
-                statusPanel: 'agTotalAndFilteredRowCountComponent',
-                align: 'left',
-            },
-        ],
-    }), []);
-
-    const onFilterChanged = useCallback((params) => {
-        saveFilterInfo(params);
-    }, []);
 
     useEffect(() => {
         setColumnDefs(getColumnDefs("customers"));
@@ -105,12 +86,12 @@ function Customers3({tableView = "customers3"}) {
                             rowData={dynamicData}
                             columnDefs={columnDefs}
                             theme={themeAlpine}
+                            rowSelection={rowSelection}
                             onRowDoubleClicked={onDoubleClick}
                             onFilterChanged={onFilterChanged}
-                            rowSelection={rowSelection}
                             onSortChanged={() => { onSortChanged(gridRef) }}
-                            onColumnMoved={onColumnChanged}
-                            onColumnResized={onColumnChanged}
+                            onColumnMoved={() => {onColumnChanged(gridRef)}}
+                            onColumnResized={() => {onColumnChanged(gridRef)}}
                             onBodyScroll={true}
                             accentedSort
                             statusBar={statusBar}
