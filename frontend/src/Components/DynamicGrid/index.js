@@ -15,7 +15,7 @@ import "ag-grid-enterprise";
 import Reset from "./Reset";
 
 function DynamicGrid({ tableView }) {
-    const { dynamicData, getDynamicData, getColumnDefs, } = useDynamicData();
+    const { dynamicData, getDynamicData, getColumnDefs, statusBar} = useDynamicData();
     const { searchConfig, getSearchConfigData } = useSearchConfig();
     const { searchpatterns, getSearchpatterns, restoreSearchpatterns, onSortChanged, saveFilterInfo } = useSearchpatterns();
     const { layouts, getLayouts } = useLayouts();
@@ -48,19 +48,6 @@ function DynamicGrid({ tableView }) {
         }, 300);
     }
 
-    const statusBar = useMemo(() => ({
-        statusPanels: [
-            {
-                statusPanel: 'agTotalAndFilteredRowCountComponent',
-                align: 'left',
-            },
-        ],
-    }), []);
-
-    const onFilterChanged = useCallback((params) => {
-        saveFilterInfo(params);
-    }, []);
-
     useEffect(() => {
         setColumnDefs(getColumnDefs(tableView));
     }, [searchConfig])
@@ -79,9 +66,6 @@ function DynamicGrid({ tableView }) {
         getLayouts(tableView);
         getSearchpatterns(tableView);
     }, [])
-    
-    useEffect(() => {
-    }, [tableView])
 
     return (
         <div className="dynamic-grid">
@@ -99,12 +83,11 @@ function DynamicGrid({ tableView }) {
             <div className="table">
                 <AgGridReact
                     ref={gridRef}
-                    // onGridReady={onGridReady}
                     rowData={dynamicData}
                     columnDefs={columnDefs}
                     theme={themeAlpine}
                     onRowDoubleClicked={openUpdateModal}
-                    onFilterChanged={onFilterChanged}
+                    onFilterChanged={(params) => {saveFilterInfo(params)}}
                     rowSelection={rowSelection}
                     onSortChanged={() => { onSortChanged(gridRef) }}
                     onColumnMoved={onColumnChanged}

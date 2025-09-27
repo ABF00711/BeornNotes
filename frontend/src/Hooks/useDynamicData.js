@@ -1,10 +1,19 @@
-import { useContext } from "react"
+import { useContext, useMemo } from "react"
 import { MyContext } from "../Context"
 import services from "../Services";
 import { toast } from "react-toastify";
 
 function useDynamicData() {
     const { dynamicData, setDynamicData, searchConfig, token } = useContext(MyContext);
+
+    const statusBar = useMemo(() => ({
+            statusPanels: [
+                {
+                    statusPanel: 'agTotalAndFilteredRowCountComponent',
+                    align: 'left',
+                },
+            ],
+        }), []);
 
     const getDynamicData = async (tableView) => {
         try {
@@ -249,7 +258,7 @@ function useDynamicData() {
     };
 
     return (
-        { dynamicData, setDynamicData, getDynamicData, getColumnDefs, createDynamicData, updateDynamicData, deleteDynamicData }
+        { dynamicData, setDynamicData, getDynamicData, getColumnDefs, createDynamicData, updateDynamicData, deleteDynamicData, statusBar }
     );
 }
 

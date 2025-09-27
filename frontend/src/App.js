@@ -15,6 +15,7 @@ import SummaryReport from './Pages/Reports/SummaryReport';
 import Profile from './Pages/Profile';
 import Products from './Pages/Products';
 import Customers2 from './Pages/Customers2';
+import Customers3 from './Pages/Customers3';
 
 // Register all Community features
 ModuleRegistry.registerModules([AllCommunityModule, AllEnterpriseModule ]);
@@ -34,6 +35,7 @@ function App() {
             <Route path="/customers" element={<Customers />} />
             <Route path="/products" element={<Products />} />
             <Route path="/customers2" element={<Customers2 />} />
+            <Route path="/customers3" element={<Customers3 />} />
             <Route path="/orders" element={<Orders />} />
             <Route path="/summary_report" element={<SummaryReport />} />
             <Route path="/inventory_report" element={<InventoryReport />} />
