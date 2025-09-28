@@ -47,7 +47,6 @@ function useDynamicData() {
             const res = await services.updateDynamicData(tablename, newData, token);
             if (res.message == "updateDynamicData success") {
                 toast.success(`Updated ${tablename} data successfully.`);
-                // setDynamicData(dynamicData.map((item) => item.id === newData.id ? newData : item))
                 getDynamicData(tablename);
                 return;
             }

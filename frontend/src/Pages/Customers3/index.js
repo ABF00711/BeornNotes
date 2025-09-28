@@ -21,8 +21,8 @@ import useCustomers3 from "../../Hooks/useCustomers3";
 function Customers3({ tableView = "customers3" }) {
     const navigate = useNavigate();
     const { isCollapsed } = useContext(MyContext);
-    const { dynamicData, getDynamicData, getColumnDefs, statusBar} = useDynamicData();
-    const {onColumnChanged, onFilterChanged, restoreSearchpatterns, onSortChanged} = useCustomers3();
+    const { dynamicData, getDynamicData, getColumnDefs, statusBar } = useDynamicData();
+    const { onColumnChanged, onFilterChanged, restoreSearchpatterns, onSortChanged } = useCustomers3();
     const { searchConfig, getSearchConfigData } = useSearchConfig();
     const { searchpatterns, getSearchpatterns, } = useSearchpatterns();
     const { layouts, getLayouts } = useLayouts();
@@ -36,14 +36,6 @@ function Customers3({ tableView = "customers3" }) {
             headerCheckbox: true,
         };
     }, []);
-
-    const onDoubleClick = (params) => {
-        try {
-            navigate("/customers3/update", {data: params.data});
-        } catch (error) {
-            console.log("onDoubleClickError: ", error);
-        }
-    }
 
     useEffect(() => {
         setColumnDefs(getColumnDefs("customers"));
@@ -72,6 +64,10 @@ function Customers3({ tableView = "customers3" }) {
                 <div className="dynamic-grid">
                     <div className="grid-toolbar">
                         <div className="toolbar-left">
+                            <button onClick={() => {navigate("/customers3/create")}} type="button" className="btn btn-primary">
+                                <span className="btn-icon">＋</span>
+                                <span className="btn-label">Add</span>
+                            </button>
                             <Delete tablename={"customers"} gridRef={gridRef} />
                             <Reset gridRef={gridRef} />
                         </div>
@@ -87,11 +83,11 @@ function Customers3({ tableView = "customers3" }) {
                             columnDefs={columnDefs}
                             theme={themeAlpine}
                             rowSelection={rowSelection}
-                            onRowDoubleClicked={onDoubleClick}
+                            onRowDoubleClicked={(params) => {navigate("/customers3/update", { state: params.data })}}
                             onFilterChanged={onFilterChanged}
                             onSortChanged={() => { onSortChanged(gridRef) }}
-                            onColumnMoved={() => {onColumnChanged(gridRef)}}
-                            onColumnResized={() => {onColumnChanged(gridRef)}}
+                            onColumnMoved={() => { onColumnChanged(gridRef) }}
+                            onColumnResized={() => { onColumnChanged(gridRef) }}
                             onBodyScroll={true}
                             accentedSort
                             statusBar={statusBar}
