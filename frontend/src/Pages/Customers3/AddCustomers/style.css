@@ -33,7 +33,7 @@
 }
 
 /* Form Header */
-.addCustomers form::before {
+addCustomers_title{
     content: "Add New Customer";
     display: block;
     text-align: center;
@@ -46,7 +46,6 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
 }
-
 /* Form Fields Container */
 .addCustomers form > div {
     margin-bottom: 25px;

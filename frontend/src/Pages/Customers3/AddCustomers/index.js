@@ -14,9 +14,9 @@ function AddCustomers() {
     const data = location.state || null;
     const [isLoading, setIsLoading] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
-    const {jobs, getJobs} = useJob();
+    const { jobs, getJobs } = useJob();
     const [options, setOptions] = useState([]);
-    const {formatDateForInput} = useCustomers3();
+    const { formatDateForInput } = useCustomers3();
 
     // Prepare default values with formatted date
     const defaultValues = data ? {
@@ -32,7 +32,8 @@ function AddCustomers() {
     // Reset form with formatted data when data changes
     useEffect(() => {
         if (data) {
-            const formattedData = {...data, birthday: formatDateForInput(data.birthday)
+            const formattedData = {
+                ...data, birthday: formatDateForInput(data.birthday)
             };
             reset(formattedData);
 
@@ -62,7 +63,7 @@ function AddCustomers() {
         } finally {
             setIsLoading(false);
         }
-    } 
+    }
 
     useEffect(() => {
         setOptions(jobs.map((job) => {
@@ -77,6 +78,7 @@ function AddCustomers() {
     return (
         <div className="addCustomers">
             <form onSubmit={handleSubmit(onSubmit)}>
+                <h2 className="addCustomers_title">{data == null ? "Add New" : "Update"} Customer</h2>
                 <div className={`field-container ${errors.fullname ? 'has-error' : ''} ${isSubmitted && !errors.fullname ? 'has-success' : ''}`}>
                     <label>Fullname</label>
                     <input
@@ -131,7 +133,7 @@ function AddCustomers() {
                             <InputableSelectField
                                 {...field}
                                 placeholder="Search and select a job..."
-                                options = {options}
+                                options={options}
                                 submitted={isSubmitted}
                                 error={!!errors.job}
                                 className={errors.job ? 'error' : ''}
@@ -156,8 +158,8 @@ function AddCustomers() {
                             :
                             (data ? 'Update Customer' : 'Create Customer')}
                 </button>
-                <button 
-                    type="button" 
+                <button
+                    type="button"
                     className="cancel-button"
                     onClick={() => navigate("/customers3")}
                 >
