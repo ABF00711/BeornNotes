@@ -22,6 +22,8 @@ function ContextProvider({ children }) {
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [searchpatterns, setSearchpatterns] = useState([]);
     const [layouts, setLayouts] = useState([]);
+    
+    const [jobs, setJobs] = useState([]);
 
     useEffect(() => {
         const savedUserData = JSON.parse(localStorage.getItem("userData") || null);
@@ -45,7 +47,8 @@ function ContextProvider({ children }) {
             dynamicData, setDynamicData,
             searchpatterns, setSearchpatterns,
             layouts, setLayouts,
-            currentInterface, setCurrentInterface
+            currentInterface, setCurrentInterface,
+            jobs, setJobs
         }}>
             {children}
         </DataContext.Provider>

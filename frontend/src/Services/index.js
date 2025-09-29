@@ -271,6 +271,16 @@ const services = {
         } catch (error) {
             console.log("deleteTabInterfaceError: ", error);
         }
+    },
+
+    getJobs: async (token) => {
+        try {
+            services.setAuthToken(token);
+            const res = await axios.get(services.serverURL + "/job/get");
+            return res.data;
+        } catch (error) {
+            console.log("servicesGetJobsError: ", error);
+        }
     }
 }
 

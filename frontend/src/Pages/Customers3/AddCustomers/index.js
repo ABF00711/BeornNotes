@@ -6,17 +6,41 @@ import { useForm, Controller } from "react-hook-form";
 import useDynamicData from "../../../Hooks/useDynamicData";
 import { useNavigate, useLocation } from "react-router-dom";
 import InputableSelectField from "../../../Components/InputableSelect/InputableSelectField";
+import useJob from "../../../Hooks/useJob";
+import useCustomers3 from "../../../Hooks/useCustomers3";
 
 function AddCustomers() {
     const location = useLocation();
     const data = location.state || null;
     const [isLoading, setIsLoading] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
+    const {jobs, getJobs} = useJob();
+    const [options, setOptions] = useState([]);
+    const {formatDateForInput} = useCustomers3();
 
-    const { register, handleSubmit, control, formState: { errors, isSubmitted } } = useForm({
+    // Prepare default values with formatted date
+    const defaultValues = data ? {
+        ...data,
+        birthday: formatDateForInput(data.birthday)
+    } : {};
+
+    const { register, handleSubmit, control, reset, setValue, formState: { errors, isSubmitted } } = useForm({
         resolver: zodResolver(customersSchema),
-        defaultValues: data
+        defaultValues
     });
+
+    // Reset form with formatted data when data changes
+    useEffect(() => {
+        if (data) {
+            const formattedData = {...data, birthday: formatDateForInput(data.birthday)
+            };
+            reset(formattedData);
+
+            const formattedBirthday = formatDateForInput(data.birthday);
+
+            setValue('birthday', formattedBirthday);
+        }
+    }, [data, reset, setValue]);
     const { createDynamicData, updateDynamicData } = useDynamicData();
     const navigate = useNavigate();
 
@@ -38,7 +62,17 @@ function AddCustomers() {
         } finally {
             setIsLoading(false);
         }
-    }
+    } 
+
+    useEffect(() => {
+        setOptions(jobs.map((job) => {
+            return job.name;
+        }))
+    }, [jobs])
+
+    useEffect(() => {
+        getJobs();
+    }, [])
 
     return (
         <div className="addCustomers">
@@ -97,12 +131,7 @@ function AddCustomers() {
                             <InputableSelectField
                                 {...field}
                                 placeholder="Search and select a job..."
-                                options={[
-                                    "Developer",
-                                    "Designer", 
-                                    "Manager",
-                                    "Other"
-                                ]}
+                                options = {options}
                                 submitted={isSubmitted}
                                 error={!!errors.job}
                                 className={errors.job ? 'error' : ''}

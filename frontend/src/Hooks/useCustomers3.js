@@ -3,8 +3,8 @@ import useSearchpatterns from "./useFilters";
 import useLayouts from "./useLayouts";
 
 const useCustomers3 = () => {
-    const {searchpatterns} = useSearchpatterns;
-    const {layouts} = useLayouts();
+    const { searchpatterns } = useSearchpatterns;
+    const { layouts } = useLayouts();
 
     const onColumnChanged = (gridRef) => {
         setTimeout(() => {
@@ -80,8 +80,20 @@ const useCustomers3 = () => {
         }
     }, []);
 
+    // Format date for HTML date input (YYYY-MM-DD)
+    const formatDateForInput = (dateString) => {
+        if (!dateString) return '';
+        const date = new Date(dateString);
+        if (isNaN(date.getTime())) return '';
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+
+
     return {
-        onColumnChanged, onFilterChanged, restoreSearchpatterns, onSortChanged
+        onColumnChanged, onFilterChanged, restoreSearchpatterns, onSortChanged, formatDateForInput
     }
 }
 

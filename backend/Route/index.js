@@ -8,6 +8,7 @@ const dynamicDataController = require("../Controller/dynamicDataController.js");
 const filterController = require("../Controller/filterController.js");
 const layoutsController = require("../Controller/layoutsController.js");
 const tabInterfaceController = require("../Controller/tabInterfaceController.js");
+const jobController = require("../Controller/jobController.js");
 const router = express.Router();
 
 router.get('/searchConfigData', searchConfigController.getAll);
@@ -44,4 +45,6 @@ router.get('/tabInterfaces/get', authMiddleware, tabInterfaceController.getTabIn
 router.post('/tabInterfaces/create', authMiddleware, tabInterfaceController.createTabInterface);
 router.post('/tabInterfaces/update', authMiddleware, tabInterfaceController.updateTabInterface);
 router.post('/tabInterfaces/delete', authMiddleware, tabInterfaceController.deleteTabInterface);
+
+router.get('/job/get', authMiddleware, jobController.getJobs)
 module.exports = router;
