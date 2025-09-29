@@ -33,7 +33,7 @@
 }
 
 /* Form Header */
-addCustomers_title{
+.addCustomers form::before {
     content: "Add New Customer";
     display: block;
     text-align: center;
@@ -46,10 +46,21 @@ addCustomers_title{
     -webkit-text-fill-color: transparent;
     background-clip: text;
 }
+
 /* Form Fields Container */
 .addCustomers form > div {
     margin-bottom: 25px;
     position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+/* Input wrapper for proper error message positioning */
+.addCustomers .input-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Labels */
@@ -58,8 +69,12 @@ addCustomers_title{
     color: #4a5568;
     font-size: 14px;
     font-weight: 600;
-    margin-bottom: 8px;
+    min-width: 120px;
+    text-align: right;
     transition: color 0.3s ease;
+    flex-shrink: 0;
+    padding-top: 16px;
+    padding-right: 10px;
 }
 
 .addCustomers form > div:focus-within label {
@@ -70,7 +85,7 @@ addCustomers_title{
 /* Input Fields */
 .addCustomers input,
 .addCustomers select {
-    width: 100%;
+    flex: 1;
     padding: 16px 20px;
     border: 2px solid #e2e8f0;
     border-radius: 12px;
@@ -282,6 +297,19 @@ addCustomers_title{
     .addCustomers form::before {
         font-size: 24px;
         margin-bottom: 25px;
+    }
+    
+    /* Stack labels above inputs on mobile */
+    .addCustomers form > div {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .addCustomers label {
+        min-width: auto;
+        text-align: left;
+        margin-bottom: 0;
     }
     
     .addCustomers input,

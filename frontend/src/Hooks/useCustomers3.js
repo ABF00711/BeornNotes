@@ -1,10 +1,13 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import useSearchpatterns from "./useFilters";
 import useLayouts from "./useLayouts";
+import useSearchConfig from "./useSearchConfig";
 
 const useCustomers3 = () => {
     const { searchpatterns } = useSearchpatterns;
     const { layouts } = useLayouts();
+    const [labels, setLabels] = useState({});
+    const {searchConfig} = useSearchConfig();
 
     const onColumnChanged = (gridRef) => {
         setTimeout(() => {
@@ -91,9 +94,23 @@ const useCustomers3 = () => {
         return `${year}-${month}-${day}`;
     };
 
+    const getLabels = () => {
+        try {
+            if(!searchConfig) return;
+            const _labels = {};
+            searchConfig.map((data) => {
+                if(data.table_name == "customers"){
+                    _labels[data.field_name] = data.field_label;
+                }
+            })
+            setLabels(_labels);
+        } catch (error) {
+            console.log("getLabelsError: ", error);
+        }
+    }
 
     return {
-        onColumnChanged, onFilterChanged, restoreSearchpatterns, onSortChanged, formatDateForInput
+        onColumnChanged, onFilterChanged, restoreSearchpatterns, onSortChanged, formatDateForInput, labels, getLabels
     }
 }
 

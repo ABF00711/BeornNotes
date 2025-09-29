@@ -14,9 +14,9 @@ function AddCustomers() {
     const data = location.state || null;
     const [isLoading, setIsLoading] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
-    const { jobs, getJobs } = useJob();
+    const {jobs, getJobs} = useJob();
     const [options, setOptions] = useState([]);
-    const { formatDateForInput } = useCustomers3();
+    const {formatDateForInput} = useCustomers3();
 
     // Prepare default values with formatted date
     const defaultValues = data ? {
@@ -32,8 +32,7 @@ function AddCustomers() {
     // Reset form with formatted data when data changes
     useEffect(() => {
         if (data) {
-            const formattedData = {
-                ...data, birthday: formatDateForInput(data.birthday)
+            const formattedData = {...data, birthday: formatDateForInput(data.birthday)
             };
             reset(formattedData);
 
@@ -63,7 +62,7 @@ function AddCustomers() {
         } finally {
             setIsLoading(false);
         }
-    }
+    } 
 
     useEffect(() => {
         setOptions(jobs.map((job) => {
@@ -78,69 +77,78 @@ function AddCustomers() {
     return (
         <div className="addCustomers">
             <form onSubmit={handleSubmit(onSubmit)}>
-                <h2 className="addCustomers_title">{data == null ? "Add New" : "Update"} Customer</h2>
                 <div className={`field-container ${errors.fullname ? 'has-error' : ''} ${isSubmitted && !errors.fullname ? 'has-success' : ''}`}>
                     <label>Fullname</label>
-                    <input
-                        type="text"
-                        {...register("fullname")}
-                        placeholder="Enter full name"
-                        className={errors.fullname ? 'error' : ''}
-                    />
-                    {errors.fullname && <p>{errors.fullname.message}</p>}
+                    <div className="input-wrapper">
+                        <input
+                            type="text"
+                            {...register("fullname")}
+                            placeholder="Enter full name"
+                            className={errors.fullname ? 'error' : ''}
+                        />
+                        {errors.fullname && <p>{errors.fullname.message}</p>}
+                    </div>
                 </div>
 
                 <div className={`field-container ${errors.displayname ? 'has-error' : ''} ${isSubmitted && !errors.displayname ? 'has-success' : ''}`}>
                     <label>Displayname</label>
-                    <input
-                        type="text"
-                        {...register("displayname")}
-                        placeholder="Enter display name"
-                        className={errors.displayname ? 'error' : ''}
-                    />
-                    {errors.displayname && <p>{errors.displayname.message}</p>}
+                    <div className="input-wrapper">
+                        <input
+                            type="text"
+                            {...register("displayname")}
+                            placeholder="Enter display name"
+                            className={errors.displayname ? 'error' : ''}
+                        />
+                        {errors.displayname && <p>{errors.displayname.message}</p>}
+                    </div>
                 </div>
 
                 <div className={`field-container ${errors.birthday ? 'has-error' : ''} ${isSubmitted && !errors.birthday ? 'has-success' : ''}`}>
                     <label>Birthday</label>
-                    <input
-                        type="date"
-                        {...register("birthday")}
-                        className={errors.birthday ? 'error' : ''}
-                    />
-                    {errors.birthday && <p>{errors.birthday.message}</p>}
+                    <div className="input-wrapper">
+                        <input
+                            type="date"
+                            {...register("birthday")}
+                            className={errors.birthday ? 'error' : ''}
+                        />
+                        {errors.birthday && <p>{errors.birthday.message}</p>}
+                    </div>
                 </div>
 
                 <div className={`field-container ${errors.age ? 'has-error' : ''} ${isSubmitted && !errors.age ? 'has-success' : ''}`}>
                     <label>Age</label>
-                    <input
-                        type="number"
-                        {...register("age")}
-                        placeholder="Enter age"
-                        min="1"
-                        max="120"
-                        className={errors.age ? 'error' : ''}
-                    />
-                    {errors.age && <p>{errors.age.message}</p>}
+                    <div className="input-wrapper">
+                        <input
+                            type="number"
+                            {...register("age")}
+                            placeholder="Enter age"
+                            min="1"
+                            max="120"
+                            className={errors.age ? 'error' : ''}
+                        />
+                        {errors.age && <p>{errors.age.message}</p>}
+                    </div>
                 </div>
 
                 <div className={`field-container ${errors.job ? 'has-error' : ''} ${isSubmitted && !errors.job ? 'has-success' : ''}`}>
                     <label>Job</label>
-                    <Controller
-                        name="job"
-                        control={control}
-                        render={({ field }) => (
-                            <InputableSelectField
-                                {...field}
-                                placeholder="Search and select a job..."
-                                options={options}
-                                submitted={isSubmitted}
-                                error={!!errors.job}
-                                className={errors.job ? 'error' : ''}
-                            />
-                        )}
-                    />
-                    {errors.job && <p>{errors.job.message}</p>}
+                    <div className="input-wrapper">
+                        <Controller
+                            name="job"
+                            control={control}
+                            render={({ field }) => (
+                                <InputableSelectField
+                                    {...field}
+                                    placeholder="Search and select a job..."
+                                    options = {options}
+                                    submitted={isSubmitted}
+                                    error={!!errors.job}
+                                    className={errors.job ? 'error' : ''}
+                                />
+                            )}
+                        />
+                        {errors.job && <p>{errors.job.message}</p>}
+                    </div>
                 </div>
 
                 <button
@@ -158,8 +166,8 @@ function AddCustomers() {
                             :
                             (data ? 'Update Customer' : 'Create Customer')}
                 </button>
-                <button
-                    type="button"
+                <button 
+                    type="button" 
                     className="cancel-button"
                     onClick={() => navigate("/customers3")}
                 >
