@@ -6,8 +6,7 @@ import Sidebar from "../Sidebar";
 import { MyContext } from "../../Context";
 import SmartGrid from "../../Components/SmartGrid";
 import Add from "../../Components/Add";
-import Layouts from "../../Components/Layouts";
-import Delete from "../../Components/Delete";
+import SmartDelete from "./Delete";
 
 
 function Customers4() {
@@ -23,6 +22,7 @@ function Customers4() {
                     <div className="customers4-toolbar">
                         <div className="toolbar-left">
                             <Add table_name="customers" />
+                            <SmartDelete tablename = "customers" gridRef = {gridRef} />
                         </div>
                         <div className="toolbar-right">
                         </div>

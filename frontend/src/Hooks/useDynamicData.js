@@ -61,8 +61,10 @@ function useDynamicData() {
             const res = await services.deleteDynamicData(tablename, selectedRows, token);
             if (res.message === "deleteDynamicData success") {
                 toast.success("Deleted rows selected successfully");
-                getDynamicData(tablename);
+                // getDynamicData(tablename);
+                return;
             }
+            toast.error(res.message);
         } catch (error) {
             console.log("deleteDynamicData: ", error);
         }

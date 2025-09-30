@@ -52,7 +52,7 @@ function SmartGrid({ tableName, gridRef }) {
         if(savedColumnsState == null) return;
         const grid = gridRef.current;
         grid.loadState(savedColumnsState);
-    }, [columns])
+    }, [columns, dynamicData])
 
     const initializeData = async () => {
         await getSearchConfigData();
