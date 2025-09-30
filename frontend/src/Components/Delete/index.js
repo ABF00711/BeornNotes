@@ -10,14 +10,14 @@ function Delete(props) {
 
     const onDelete = () => {
         try {
-            const selectedRows = gridRef.current.api.getSelectedRows();
+            const selectedRows = gridRef.current?.api.getSelectedRows();
             if (!selectedRows || selectedRows.length === 0) {
                 toast.error("No rows selected!");
                 return;
             }
             if(window.confirm("Really want to delete selected rows?") === true){
                 deleteDynamicData(tablename, selectedRows);
-                gridRef.current.api.applyTransaction(selectedRows);
+                gridRef.current?.api.applyTransaction(selectedRows);
             }
         } catch (error) {
             console.log("onDeleteError: ", error);

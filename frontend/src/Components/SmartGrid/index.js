@@ -6,12 +6,11 @@ import useDynamicData from "../../Hooks/useDynamicData";
 import useSearchConfig from "../../Hooks/useSearchConfig";
 import useSmartGrid from "../../Hooks/useSmartGrid";
 
-function SmartGrid({ tableName }) {
+function SmartGrid({ tableName, gridRef }) {
     const [columns, setColumns] = useState([]);
     const { getSearchConfigData, searchConfig } = useSearchConfig();
     const { dynamicData, getDynamicData } = useDynamicData();
     const { getSmartColumns } = useSmartGrid();
-    const gridRef = useRef(null);
 
     const behavior = {
         allowColumnReorder: true,
@@ -48,26 +47,26 @@ function SmartGrid({ tableName }) {
     }
 
     useEffect(() => {
-        if(!columns) return;
-        const savedColumnState = JSON.parse(localStorage.getItem("Grid View") || null);
+        if(!columns || !tableName)return;
+        const savedColumnsState = JSON.parse(localStorage.getItem("Grid View") || null);
+        if(savedColumnsState == null) return;
         const grid = gridRef.current;
-        if (grid && savedColumnState) {
-            grid.loadState(savedColumnState);
-        }
+        grid.loadState(savedColumnsState);
     }, [columns])
 
-    useEffect(() => {
+    const initializeData = async () => {
+        await getSearchConfigData();
+        await getDynamicData(tableName);
         setColumns(getSmartColumns());
-    }, [searchConfig])
-
+    }
+    
     useEffect(() => {
-        getSearchConfigData();
-        getDynamicData(tableName);
+        initializeData();
     }, [])
 
     return (
         <div className="smartGridTable">
-            <Grid id="grid"
+            <Grid id="myGrid"
                 ref={gridRef}
                 dataSource={dynamicData}
                 columns={columns}

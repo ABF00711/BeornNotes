@@ -1,0 +1,23 @@
+.customers4 {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 25px;
+}
+.customers4-toolbar {
+    width: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.toolbar-left,
+.toolbar-right{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+}
+.toolbar-right{ margin-left: auto; }
