@@ -1,0 +1,12 @@
+.smartGridTable{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 25px;
+}
+
+.smart-grid {
+	width: 100%;
+    height: calc(100vh - 200px);
+}

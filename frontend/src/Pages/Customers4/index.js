@@ -3,11 +3,11 @@ import "./style.css";
 import Header from "../../Components/Header";
 import Navbar from "../Navbar";
 import Sidebar from "../Sidebar";
-import DynamicGrid from "../../Components/DynamicGrid";
 import { MyContext } from "../../Context";
+import SmartGrid from "../../Components/SmartGrid";
 
 
-function Customers() {
+function Customers4() {
     const {isCollapsed} = useContext(MyContext);
 
     return (
@@ -15,11 +15,11 @@ function Customers() {
             <Header />
             <Navbar />
             <div className={`dashboard-container ${!isCollapsed ? 'M_L_280' : ''}`}>
-                <DynamicGrid tableView={"customers"} />
+                <SmartGrid tableName = "customers" />
             </div>
             <Sidebar />
         </div>
     );
 }
 
-export default Customers;
+export default Customers4;

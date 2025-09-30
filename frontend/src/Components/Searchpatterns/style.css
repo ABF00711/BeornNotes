@@ -13,7 +13,7 @@
     border-radius: 12px;
     position: absolute;
     top: 44px;
-    left: 0;
+    right: 0;
     background: rgba(255, 255, 255, 0.75);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(30, 144, 255, 0.25);
