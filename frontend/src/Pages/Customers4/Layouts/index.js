@@ -29,7 +29,6 @@ function SmartLayouts({tablename, gridRef}) {
     }
     const applyLayout = () => {
         try {
-            if (!gridRef.current?.api) return;
             const selected = layouts.find(l => l.layout_name === layoutName);
             if (!selected) {
                 toast.error("Please select layout exactly!");
@@ -70,7 +69,10 @@ function SmartLayouts({tablename, gridRef}) {
     }
     const saveDefault = () => {
         try {
-            if (!gridRef.current?.api) return;
+            const columnState = JSON.parse(localStorage.getItem("Grid View") || "{}");
+            const layoutJson = JSON.stringify(columnState.columns);
+            updateLayouts(tablename, "Default", layoutJson);
+            setIsOpen(false);
         }
         catch (error) {
             console.log("saveDefaultLayoutError: ", error);
@@ -78,7 +80,13 @@ function SmartLayouts({tablename, gridRef}) {
     }
     const removeLayout = () => {
         try {
-            if (!gridRef.current?.api) return;
+            const selected = layouts.find(l => l.layout_name === layoutName);
+            if (!selected) {
+                toast.error("Please select layout exactly!");
+                return;
+            }
+            deleteLayouts(tablename, selected.id);
+            setIsOpen(false);
         }
         catch (error) {
             console.log("removeLayoutError: ", error);

@@ -6,28 +6,40 @@ function useSmartGrid() {
 
     const getSmartColumns = () => {
         try {
-            if (!searchConfig) return [];
-            const columns = [];
-            searchConfig.map((configData) => {
-                if (configData.table_name == "customers") {
-                    const column = {
-                        label: configData.field_label,
-                        dataField: configData.field_name,
-                    };
-                    if (configData.field_type == "date") {
-                        column.cellsFormat = 'dd/MM/yyyy';
-                    }
-                    columns.push(column);
-                }
-            })
-            return columns;
+          if (!searchConfig) return [];
+          const columns = [];
+      
+          searchConfig.forEach((configData) => {
+            if (configData.table_name === "customers") {
+              let dataType = configData.field_type;
+      
+              // 🔹 Fix mappings
+              if (dataType === "combobox") dataType = "string";
+              if (dataType === "text") dataType = "string";
+              if (dataType === "number") dataType = "number";
+              if (dataType === "date") dataType = "date";
+      
+              const column = {
+                label: configData.field_label,
+                dataField: configData.field_name,
+                dataType
+              };
+      
+              if (dataType === "date") {
+                column.cellsFormat = "dd/MM/yyyy";
+              }
+              columns.push(column);
+            }
+          });
+          
+          return columns;
         } catch (error) {
-            console.log("getSmartColumnsError: ", error);
+          console.log("getSmartColumnsError: ", error);
         }
-    }
+      };      
 
     return {
-        getSmartColumns
+        getSmartColumns, 
     }
 }
 

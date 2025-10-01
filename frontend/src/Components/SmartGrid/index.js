@@ -5,12 +5,17 @@ import 'smart-webcomponents-react/source/styles/smart.default.css';
 import useDynamicData from "../../Hooks/useDynamicData";
 import useSearchConfig from "../../Hooks/useSearchConfig";
 import useSmartGrid from "../../Hooks/useSmartGrid";
+import useLayouts from "../../Hooks/useLayouts";
+import useSearchpatterns from "../../Hooks/useFilters";
 
 function SmartGrid({ tablename, gridRef }) {
     const [columns, setColumns] = useState([]);
     const { getSearchConfigData, searchConfig } = useSearchConfig();
+    const {layouts} = useLayouts();
+    const {searchpatterns} = useSearchpatterns();
     const { dynamicData, getDynamicData } = useDynamicData();
     const { getSmartColumns } = useSmartGrid();
+    const [dataSourseSettings, setDataSourseSettings] = useState({});
 
     const behavior = {
         allowColumnReorder: true,
@@ -19,7 +24,7 @@ function SmartGrid({ tablename, gridRef }) {
 
     const sorting = {
         enabled: true,
-        sortMode: 'one'
+        mode: 'many'
     };
 
     const filtering = {
@@ -46,20 +51,36 @@ function SmartGrid({ tablename, gridRef }) {
         autoLoad: true
     }
 
-    useEffect(() => {
-        if(!columns || !tablename)return;
-        const savedColumnsState = JSON.parse(localStorage.getItem("Grid View") || null);
-        if(savedColumnsState == null) return;
-        const grid = gridRef.current;
-        grid.loadState(savedColumnsState);
-    }, [columns, dynamicData])
+    const getDataSourceSettings = () => {
+        try {
+            if(!searchConfig) return;
+            const dataFields = [];
+            searchConfig.forEach(config => {
+                if(config.table_name !== "customers")return;
+                let dataType = '';
+                if(config.field_type == "text") dataType = "string";
+                if(config.field_type == "combobox") dataType = "string";
+                if(config.field_type == "number") dataType = "number";
+                if(config.field_type == "date") dataType = "date";
+
+                dataFields.push(`${config.field_name}: ${dataType}`);
+            });
+            setDataSourseSettings({dataFields});
+        } catch (error) {
+            console.log("getDataSourceSettingsError: ", error);
+        }
+    }
 
     const initializeData = async () => {
         await getSearchConfigData();
         await getDynamicData(tablename);
-        setColumns(getSmartColumns());
     }
-    
+
+    useEffect(() => {
+        setColumns(getSmartColumns());
+        getDataSourceSettings();
+    }, [searchConfig])
+
     useEffect(() => {
         initializeData();
     }, [])
@@ -68,7 +89,11 @@ function SmartGrid({ tablename, gridRef }) {
         <div className="smartGridTable">
             <Grid id="myGrid"
                 ref={gridRef}
-                dataSource={dynamicData}
+                dataSource={new window.Smart.DataAdapter({
+                    dataSource: dynamicData,
+                    dataFields: dataSourseSettings.dataFields
+                })}
+                dataSourceSettings={dataSourseSettings}
                 columns={columns}
                 behavior={behavior}
                 sorting={sorting}
