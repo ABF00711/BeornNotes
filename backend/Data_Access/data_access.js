@@ -76,6 +76,7 @@ class DataAccess{
             return rows[0] || null;        
         } catch (error) {
             console.log("DA_getOneDataError: ", error);
+            return error.message
         }
     }
 

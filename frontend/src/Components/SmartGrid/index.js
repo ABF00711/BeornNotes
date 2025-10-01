@@ -6,7 +6,7 @@ import useDynamicData from "../../Hooks/useDynamicData";
 import useSearchConfig from "../../Hooks/useSearchConfig";
 import useSmartGrid from "../../Hooks/useSmartGrid";
 
-function SmartGrid({ tableName, gridRef }) {
+function SmartGrid({ tablename, gridRef }) {
     const [columns, setColumns] = useState([]);
     const { getSearchConfigData, searchConfig } = useSearchConfig();
     const { dynamicData, getDynamicData } = useDynamicData();
@@ -47,7 +47,7 @@ function SmartGrid({ tableName, gridRef }) {
     }
 
     useEffect(() => {
-        if(!columns || !tableName)return;
+        if(!columns || !tablename)return;
         const savedColumnsState = JSON.parse(localStorage.getItem("Grid View") || null);
         if(savedColumnsState == null) return;
         const grid = gridRef.current;
@@ -56,7 +56,7 @@ function SmartGrid({ tableName, gridRef }) {
 
     const initializeData = async () => {
         await getSearchConfigData();
-        await getDynamicData(tableName);
+        await getDynamicData(tablename);
         setColumns(getSmartColumns());
     }
     

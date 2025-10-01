@@ -5,7 +5,6 @@ const layoutsController = {
         try {
             const {user} = req;
             const {tablename} = req.body;
-
             const userData = await mysqlDA.getOneData("users", {name: user.name});
             if(!userData){
                 console.log("User of this pattern is not existing");

@@ -16,7 +16,7 @@ function AddCustomers() {
     const [isSuccess, setIsSuccess] = useState(false);
     const {jobs, getJobs} = useJob();
     const [options, setOptions] = useState([]);
-    const {formatDateForInput} = useCustomers3();
+    const {formatDateForInput, getLabels, labels} = useCustomers3();
 
     // Prepare default values with formatted date
     const defaultValues = data ? {
@@ -72,18 +72,18 @@ function AddCustomers() {
 
     useEffect(() => {
         getJobs();
+        getLabels();
     }, [])
 
     return (
         <div className="addCustomers">
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className={`field-container ${errors.fullname ? 'has-error' : ''} ${isSubmitted && !errors.fullname ? 'has-success' : ''}`}>
-                    <label>Fullname</label>
+                    <label>{labels.fullname}</label>
                     <div className="input-wrapper">
                         <input
                             type="text"
                             {...register("fullname")}
-                            placeholder="Enter full name"
                             className={errors.fullname ? 'error' : ''}
                         />
                         {errors.fullname && <p>{errors.fullname.message}</p>}
@@ -91,12 +91,11 @@ function AddCustomers() {
                 </div>
 
                 <div className={`field-container ${errors.displayname ? 'has-error' : ''} ${isSubmitted && !errors.displayname ? 'has-success' : ''}`}>
-                    <label>Displayname</label>
+                    <label>{labels.displayname}</label>
                     <div className="input-wrapper">
                         <input
                             type="text"
                             {...register("displayname")}
-                            placeholder="Enter display name"
                             className={errors.displayname ? 'error' : ''}
                         />
                         {errors.displayname && <p>{errors.displayname.message}</p>}
@@ -104,7 +103,7 @@ function AddCustomers() {
                 </div>
 
                 <div className={`field-container ${errors.birthday ? 'has-error' : ''} ${isSubmitted && !errors.birthday ? 'has-success' : ''}`}>
-                    <label>Birthday</label>
+                    <label>{labels.birthday}</label>
                     <div className="input-wrapper">
                         <input
                             type="date"
@@ -116,12 +115,11 @@ function AddCustomers() {
                 </div>
 
                 <div className={`field-container ${errors.age ? 'has-error' : ''} ${isSubmitted && !errors.age ? 'has-success' : ''}`}>
-                    <label>Age</label>
+                    <label>{labels.age}</label>
                     <div className="input-wrapper">
                         <input
                             type="number"
                             {...register("age")}
-                            placeholder="Enter age"
                             min="1"
                             max="120"
                             className={errors.age ? 'error' : ''}
@@ -131,7 +129,7 @@ function AddCustomers() {
                 </div>
 
                 <div className={`field-container ${errors.job ? 'has-error' : ''} ${isSubmitted && !errors.job ? 'has-success' : ''}`}>
-                    <label>Job</label>
+                    <label>{labels.job}</label>
                     <div className="input-wrapper">
                         <Controller
                             name="job"
@@ -139,7 +137,6 @@ function AddCustomers() {
                             render={({ field }) => (
                                 <InputableSelectField
                                     {...field}
-                                    placeholder="Search and select a job..."
                                     options = {options}
                                     submitted={isSubmitted}
                                     error={!!errors.job}

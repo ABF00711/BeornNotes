@@ -7,6 +7,7 @@ import { MyContext } from "../../Context";
 import SmartGrid from "../../Components/SmartGrid";
 import Add from "../../Components/Add";
 import SmartDelete from "./Delete";
+import SmartLayouts from "./Layouts";
 
 
 function Customers4() {
@@ -25,9 +26,10 @@ function Customers4() {
                             <SmartDelete tablename = "customers" gridRef = {gridRef} />
                         </div>
                         <div className="toolbar-right">
+                            <SmartLayouts tablename = "customers4" gridRef = {gridRef} />
                         </div>
                     </div>
-                    <SmartGrid tableName = "customers" gridRef={gridRef} />
+                    <SmartGrid tablename = "customers" gridRef={gridRef} />
                 </div>
             </div>
             <Sidebar />
