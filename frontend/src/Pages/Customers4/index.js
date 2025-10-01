@@ -8,6 +8,7 @@ import SmartGrid from "../../Components/SmartGrid";
 import Add from "../../Components/Add";
 import SmartDelete from "./Delete";
 import SmartLayouts from "./Layouts";
+import SmartSearchPattern from "./SearchPattern";
 
 
 function Customers4() {
@@ -27,6 +28,7 @@ function Customers4() {
                         </div>
                         <div className="toolbar-right">
                             <SmartLayouts tablename = "customers4" gridRef = {gridRef} />
+                            <SmartSearchPattern tablename = "customers4" gridRef = {gridRef} />
                         </div>
                     </div>
                     <SmartGrid tablename = "customers" gridRef={gridRef} />
