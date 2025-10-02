@@ -5,14 +5,11 @@ import 'smart-webcomponents-react/source/styles/smart.default.css';
 import useDynamicData from "../../Hooks/useDynamicData";
 import useSearchConfig from "../../Hooks/useSearchConfig";
 import useSmartGrid from "../../Hooks/useSmartGrid";
-import useLayouts from "../../Hooks/useLayouts";
-import useSearchpatterns from "../../Hooks/useFilters";
 
-function SmartGrid({ tablename, gridRef }) {
+function SmartGrid(props) {
+    const { tablename, gridRef, setIsOpen, setUpdateData } = props;
     const [columns, setColumns] = useState([]);
     const { getSearchConfigData, searchConfig } = useSearchConfig();
-    const {layouts} = useLayouts();
-    const {searchpatterns} = useSearchpatterns();
     const { dynamicData, getDynamicData } = useDynamicData();
     const { getSmartColumns } = useSmartGrid();
     const [dataSourseSettings, setDataSourseSettings] = useState({});
@@ -51,10 +48,16 @@ function SmartGrid({ tablename, gridRef }) {
         autoLoad: true
     }
 
+    const onRowDoubleClick = (ev) => {
+        console.log("ev.detail.data:", ev.detail.data);
+        setIsOpen(true);
+        setUpdateData(ev.detail.data);
+    }
+
     const getDataSourceSettings = () => {
         try {
             if(!searchConfig) return;
-            const dataFields = [];
+            const dataFields = ['id: number'];
             searchConfig.forEach(config => {
                 if(config.table_name !== "customers")return;
                 let dataType = '';
@@ -101,6 +104,7 @@ function SmartGrid({ tablename, gridRef }) {
                 selection={selection}
                 header={header}
                 stateSettings={stateSettings}
+                onRowDoubleClick={onRowDoubleClick}
             ></Grid>
         </div>
     );

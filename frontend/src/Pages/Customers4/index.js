@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import "./style.css";
 import Header from "../../Components/Header";
 import Navbar from "../Navbar";
@@ -9,11 +9,14 @@ import Add from "../../Components/Add";
 import SmartDelete from "./Delete";
 import SmartLayouts from "./Layouts";
 import SmartSearchPattern from "./SearchPattern";
+import Update from "../../Components/Update";
 
 
 function Customers4() {
-    const {isCollapsed} = useContext(MyContext);
+    const { isCollapsed } = useContext(MyContext);
     const gridRef = useRef(null);
+    const [isOpen, setIsOpen] = useState(false);
+    const [updateData, setUpdateData] = useState({});
 
     return (
         <div className="dashboard">
@@ -24,14 +27,25 @@ function Customers4() {
                     <div className="customers4-toolbar">
                         <div className="toolbar-left">
                             <Add table_name="customers" />
-                            <SmartDelete tablename = "customers" gridRef = {gridRef} />
+                            <SmartDelete tablename="customers" gridRef={gridRef} />
                         </div>
                         <div className="toolbar-right">
-                            <SmartLayouts tablename = "customers4" gridRef = {gridRef} />
-                            <SmartSearchPattern tablename = "customers4" gridRef = {gridRef} />
+                            <SmartLayouts tablename="customers4" gridRef={gridRef} />
+                            <SmartSearchPattern tablename="customers4" gridRef={gridRef} />
                         </div>
                     </div>
-                    <SmartGrid tablename = "customers" gridRef={gridRef} />
+                    <SmartGrid
+                        tablename="customers"
+                        gridRef={gridRef}
+                        setIsOpen={setIsOpen}
+                        setUpdateData={setUpdateData}
+                    />
+                    <Update
+                        tablename={"customers"}
+                        isOpen={isOpen}
+                        setIsOpen={setIsOpen}
+                        updateData={updateData}
+                    />
                 </div>
             </div>
             <Sidebar />
