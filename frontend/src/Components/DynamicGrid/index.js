@@ -67,6 +67,8 @@ function DynamicGrid({ tableView }) {
         getSearchpatterns(tableView);
     }, [])
 
+    console.log("updateData: ", updateData);
+
     return (
         <div className="dynamic-grid">
             <div className="grid-toolbar">

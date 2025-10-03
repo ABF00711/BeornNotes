@@ -1,10 +1,11 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
 import "./style.css";
 import Header from "../../Components/Header";
 import Navbar from "../Navbar";
 import Sidebar from "../Sidebar";
 import { MyContext } from "../../Context";
 import SmartGrid from "../../Components/SmartGrid";
+import { Smart } from "smart-webcomponents-react/grid";
 import Add from "../../Components/Add";
 import SmartDelete from "./Delete";
 import SmartLayouts from "./Layouts";
@@ -17,6 +18,11 @@ function Customers4() {
     const gridRef = useRef(null);
     const [isOpen, setIsOpen] = useState(false);
     const [updateData, setUpdateData] = useState({});
+
+    const openUpdateModal = useCallback((data) => {
+        setUpdateData(data);
+        setIsOpen(true);
+    }, [])
 
     return (
         <div className="dashboard">
@@ -37,14 +43,14 @@ function Customers4() {
                     <SmartGrid
                         tablename="customers"
                         gridRef={gridRef}
-                        setIsOpen={setIsOpen}
-                        setUpdateData={setUpdateData}
-                    />
+                        openUpdateModal = {openUpdateModal}
+                        />
                     <Update
                         tablename={"customers"}
                         isOpen={isOpen}
                         setIsOpen={setIsOpen}
                         updateData={updateData}
+                        setUpdateData={setUpdateData}
                     />
                 </div>
             </div>
