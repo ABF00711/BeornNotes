@@ -6,47 +6,33 @@ import PasswordField from "../../Components/PasswordField";
 import TextField from "../../Components/TextField"
 import useTabbedInterfaces from "../../Hooks/useTabbedInterfaces";
 import { toast } from "react-toastify";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { loginSchema } from "./userLoginSchema";
 
 function Login() {
     const navigate = useNavigate();
-    const [formData, setFormData] = useState({
-        email: "",
-        password: "",
-        mfaCode: "",
-        rememberMe: false
-    })
-    const [mfaRequired, setMfaRequired] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
     const { login } = useAuth();
-    const {currentInterface} = useTabbedInterfaces();
-    
-    const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value
-        })
-    }
-    const [submitted, setSubmitted] = useState(false);
+    const { currentInterface } = useTabbedInterfaces();
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setSubmitted(true);
-        setIsLoading(true);
-        try {
-            const result = await login(formData);
-            
-            if (result === "mfa_required") {
-                setMfaRequired(true);
-                toast.info("Please enter your 6-digit authentication code");
-            } else if (result === true) {
-                navigate(currentInterface.activeUrl);
-            }
-        } catch (error) {
-            console.log("Login error:", error);
-        } finally {
-            setIsLoading(false);
+    const [mfaRequired, setMfaRequired] = useState(false);
+
+    const { control, register, handleSubmit, setValue, setFocus, formState: { errors, isSubmitting, isSubmitted }, watch } = useForm({
+        resolver: zodResolver(loginSchema),
+        defaultValues: { email: "", password: "", mfaCode: "", rememberMe: false, mfaRequired: false }
+    });
+
+    const onSubmit = async (data) => {
+        const result = await login(data);
+        if (result === "mfa_required") {
+            setMfaRequired(true);
+            setValue("mfaRequired", true, { shouldValidate: true });
+            toast.info("Please enter your 6-digit authentication code");
+            setTimeout(() => setFocus("mfaCode"), 0);
+        } else if (result === true) {
+            navigate(currentInterface.activeUrl);
         }
-    }
+    };
 
     return (
         <div className="auth-container">
@@ -56,45 +42,65 @@ function Login() {
                     <p>Sign in to your BeornNotes account</p>
                 </div>
 
-                <form className="auth-form" onSubmit={handleSubmit}>
-                    <TextField
-                        name="email"
-                        label="Username or Email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        required={true}
-                        submitted={submitted}
-                        disabled={mfaRequired}
-                    />
+                <form className="auth-form" onSubmit={handleSubmit(onSubmit)}>
+                    <div className={`field-container ${errors.email ? 'has-error' : ''} ${isSubmitted && !errors.email ? 'has-success' : ''}`}>
+                        <Controller
+                            name="email"
+                            control={control}
+                            render={({ field }) => (
+                                <TextField
+                                    name="email"
+                                    label="Username or Email"
+                                    value={field.value}
+                                    onChange={field.onChange}
+                                    required={true}
+                                    submitted={isSubmitted}
+                                />
+                            )}
+                        />
+                        {errors.email && <p>{errors.email.message}</p>}
+                    </div>
 
-                    <PasswordField
-                        name="password"
-                        label="Password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        required={true}
-                        submitted={submitted}
-                        disabled={mfaRequired}
-                    />
+                    <div className={`field-container ${errors.password ? 'has-error' : ''} ${isSubmitted && !errors.password ? 'has-success' : ''}`}>
+                        <Controller
+                            name="password"
+                            control={control}
+                            render={({ field }) => (
+                                <PasswordField
+                                    name="password"
+                                    label="Password"
+                                    value={field.value}
+                                    onChange={field.onChange}
+                                    required={true}
+                                    submitted={isSubmitted}
+                                />
+                            )}
+                        />
+                        {errors.password && <p>{errors.password.message}</p>}
+                    </div>
 
                     {mfaRequired && (
                         <div className="mfa-section">
-                            <TextField
-                                name="mfaCode"
-                                label="Authentication Code"
-                                value={formData.mfaCode}
-                                onChange={handleChange}
-                                required={true}
-                                submitted={submitted}
-                                placeholder="Enter 6-digit code"
-                                maxLength={6}
-                                style={{ 
-                                    textAlign: 'center', 
-                                    fontSize: '18px', 
-                                    letterSpacing: '2px',
-                                    fontFamily: 'monospace'
-                                }}
-                            />
+                            <div className={`field-container ${errors.mfaCode ? 'has-error' : ''} ${isSubmitted && !errors.mfaCode ? 'has-success' : ''}`}>
+                                <Controller
+                                    name="mfaCode"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <TextField
+                                            name="mfaCode"
+                                            label="Authentication Code"
+                                            value={field.value}
+                                            onChange={(e) => {
+                                                const onlyDigits = e.target.value.replace(/\D/g, '').slice(0, 6);
+                                                field.onChange(onlyDigits);
+                                            }}
+                                            required={true}
+                                            submitted={isSubmitted}
+                                        />
+                                    )}
+                                />
+                                {errors.mfaCode && <p>{errors.mfaCode.message}</p>}
+                            </div>
                             <p className="mfa-help">
                                 Enter the 6-digit code from your authenticator app
                             </p>
@@ -104,7 +110,7 @@ function Login() {
                     {!mfaRequired && (
                         <div className="form-options">
                             <label className="remember-me">
-                                <input name="rememberMe" type="checkbox" value={formData.rememberMe} onChange={handleChange} />
+                                <input type="checkbox" {...register("rememberMe")} />
                                 <span>Remember me</span>
                             </label>
                             <a href="#" className="forgot-password">Forgot password?</a>
@@ -114,9 +120,9 @@ function Login() {
                     <button 
                         type="submit" 
                         className="auth-button"
-                        disabled={isLoading}
+                        disabled={isSubmitting}
                     >
-                        {isLoading ? "Signing In..." : mfaRequired ? "Verify & Sign In" : "Sign In"}
+                        {isSubmitting ? "Signing In..." : mfaRequired ? "Verify & Sign In" : "Sign In"}
                     </button>
 
                     {mfaRequired && (
@@ -125,7 +131,8 @@ function Login() {
                             className="auth-button secondary"
                             onClick={() => {
                                 setMfaRequired(false);
-                                setFormData(prev => ({ ...prev, mfaCode: "" }));
+                                setValue("mfaRequired", false, { shouldValidate: true });
+                                setValue("mfaCode", "", { shouldValidate: true });
                             }}
                         >
                             Back to Login
