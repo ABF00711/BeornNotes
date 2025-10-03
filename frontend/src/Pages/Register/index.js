@@ -1,19 +1,14 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./style.css";
 import useAuth from "../../Hooks/useAuth";
 import { toast } from "react-toastify";
-import useSearchConfig from "../../Hooks/useSearchConfig";
-import { MyContext } from "../../Context";
-import InputGroup from "../../Components/InputGroup";
 import TextField from "../../Components/TextField";
 import EmailField from "../../Components/EmailField";
 import PasswordField from "../../Components/PasswordField";
 
 function Register() {
     const navigate = useNavigate();
-    const { searchConfig } = useContext(MyContext);
-    const { getSearchConfigData } = useSearchConfig();
     const [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -21,17 +16,7 @@ function Register() {
         confirmPassword: ""
     });
     const { register } = useAuth();
-    const [registerData, setRegisterData] = useState([]);
     const [submitted, setSubmitted] = useState(false);
-
-    const getRigisterData = () => {
-        const _registerData = searchConfig.filter((item) => { return item.table_name == "registeration" });
-        _registerData.map((item) => {
-            setFormData((prevFormData) => ({ ...prevFormData, [item.field_name]: "" }));
-        })
-
-        setRegisterData(_registerData);
-    }
 
     const handleChange = (e) => {
         setFormData({
@@ -44,9 +29,6 @@ function Register() {
         let result = true;
         if(formData.password == "") result = false;
         if(formData.name == "" || formData.email == "") result = false;
-        registerData.forEach((item) => {
-            if(item.mandatory && (formData[item.field_name].trim(" ") == "")) result = false;
-        })
         return result;
     }
 
@@ -63,14 +45,6 @@ function Register() {
             navigate("/");
         }
     };
-
-    useEffect(() => {
-        getRigisterData();
-    }, [searchConfig])
-
-    useEffect(() => {
-        getSearchConfigData()
-    }, [])
 
     return (
         <div className="auth-container">
@@ -112,11 +86,6 @@ function Register() {
                         required={true}
                         submitted={submitted}
                     />
-                    {registerData.map((item) => {
-                        return (
-                        <InputGroup props={{ fieldFormat: item, value: formData[item.field_name], handleChange, submitted }} />
-                    )
-                    })}
                     <div className="terms-section">
                         <label className="terms-checkbox">
                             <input type="checkbox" required />
