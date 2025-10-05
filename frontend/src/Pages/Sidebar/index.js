@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./style.css";
 import useMenuItems from "../../Hooks/useMenuItems";
@@ -13,6 +13,51 @@ function Sidebar() {
     const {isCollapsed, setIsCollapsed} = useContext(MyContext);
     const [expandedMenus, setExpandedMenus] = useState(new Set());
     const {addTabbedInterface} = useTabbedInterfaces();
+
+    // Resizable sidebar state
+    const [sidebarWidth, setSidebarWidth] = useState(() => {
+        const stored = localStorage.getItem("sidebarWidth");
+        const parsed = stored ? parseInt(stored, 10) : 280;
+        return isNaN(parsed) ? 280 : parsed;
+    });
+    const isDraggingRef = useRef(false);
+
+    useEffect(() => {
+        // keep a CSS var for layout margins
+        const effectiveWidth = isCollapsed ? 70 : sidebarWidth;
+        document.documentElement.style.setProperty('--sidebar-width', effectiveWidth + 'px');
+    }, [sidebarWidth, isCollapsed]);
+
+    useEffect(() => {
+        const handleMouseMove = (e) => {
+            if (!isDraggingRef.current || isCollapsed) return;
+            const min = 200;
+            const max = 480;
+            const newWidth = Math.min(Math.max(e.clientX, min), max);
+            setSidebarWidth(newWidth);
+        };
+        const handleMouseUp = () => {
+            if (!isDraggingRef.current) return;
+            isDraggingRef.current = false;
+            localStorage.setItem('sidebarWidth', String(sidebarWidth));
+            document.body.style.userSelect = '';
+            document.body.style.cursor = '';
+        };
+        window.addEventListener('mousemove', handleMouseMove);
+        window.addEventListener('mouseup', handleMouseUp);
+        return () => {
+            window.removeEventListener('mousemove', handleMouseMove);
+            window.removeEventListener('mouseup', handleMouseUp);
+        };
+    }, [sidebarWidth, isCollapsed]);
+
+    const startDragging = (e) => {
+        if (isCollapsed) return;
+        isDraggingRef.current = true;
+        document.body.style.userSelect = 'none';
+        document.body.style.cursor = 'col-resize';
+        e.preventDefault();
+    };
 
     // Auto-expand parent menus when child is active
     useEffect(() => {
@@ -56,7 +101,7 @@ function Sidebar() {
     }, [])
 
     return (
-        <div className={`sidebar ${isCollapsed ? 'collapsed' : ''}`}>
+        <div className={`sidebar ${isCollapsed ? 'collapsed' : ''}`} style={{ width: isCollapsed ? 70 : sidebarWidth }}>
             <div className="sidebar-header">
                 <div className="sidebar-logo">
                     <img src="/logo.png" alt="BeornNotes Logo" className="logo" />
@@ -88,6 +133,10 @@ function Sidebar() {
                     })}
                 </ul>
             </nav>
+            {/* Resize handle */}
+            {!isCollapsed && (
+                <div className="sidebar-resize-handle" onMouseDown={startDragging} />
+            )}
         </div>
     );
 }

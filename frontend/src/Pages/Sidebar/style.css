@@ -1,5 +1,5 @@
 .sidebar {
-    width: 280px;
+    width: var(--sidebar-width, 280px);
     height: 100vh;
     background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
     color: white;
@@ -15,6 +15,19 @@
 
 .sidebar.collapsed {
     width: 70px;
+}
+/* Resize handle */
+.sidebar-resize-handle {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 6px;
+    height: 100%;
+    cursor: col-resize;
+    background: transparent;
+}
+.sidebar-resize-handle:hover {
+    background: rgba(255, 255, 255, 0.15);
 }
 
 .sidebar-header {
