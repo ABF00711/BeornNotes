@@ -1,80 +1,55 @@
-import React, { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useContext, useState } from "react";
 import "./style.css";
 import useAuth from "../../Hooks/useAuth";
 import Header from "../../Components/Header";
 import Sidebar from "../Sidebar";
 import Navbar from "../Navbar";
 import { MyContext } from "../../Context";
-import useSearchConfig from "../../Hooks/useSearchConfig";
-import InputGroup from "../../Components/InputGroup";
 import TextField from "../../Components/TextField";
 import EmailField from "../../Components/EmailField";
 import PasswordField from "../../Components/PasswordField";
-import { Switch } from "antd";
 import GAuthenticator from "./GAthenticator";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { profileSchema } from "./profileSchema";
+import { useForm, Controller } from "react-hook-form";
+import { passwordSchema } from "./passwordSchema";
 
 function Profile() {
-    const navigate = useNavigate();
-    const { userData, getProfileData, updateProfile, changePassword } = useAuth();
-    const { isCollapsed, searchConfig } = useContext(MyContext);
-    const { getSearchConfigData } = useSearchConfig();
-
-    const [formData, setFormData] = useState({
-        name: userData.name,
-        email: userData.email,
-        currentPassword: "",
-        newPassword: "",
-        confirmPassword: ""
-    });
-    const [profileData, setProfileData] = useState([]);
-    const [profileSubmitted, setProfileSubmitted] = useState(false);
-    const [submitted, setSubmitted] = useState(false);
+    const { updateProfile, changePassword, userData } = useAuth();
+    const { isCollapsed } = useContext(MyContext);
     const [isLoading, setIsLoading] = useState(false);
-    const [isMFA, setIsMFA] = useState(userData.mfa);
 
-    const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value
-        });
+    const { control: profileControl, handleSubmit: handleSubmitProfile, formState: { errors: profileErrors, isSubmitting: isSubmittingProfile, isSubmitted: isSubmittedProfile } } = useForm({
+        resolver: zodResolver(profileSchema),
+        defaultValues: { name: userData.name, email: userData.email }
+    });
+
+    const { control: passwordControl, handleSubmit: handleSubmitPassword, formState: { errors: passwordErrors, isSubmitting: isSubmittingPassword, isSubmitted: isSubmittedPassword } } = useForm({
+        resolver: zodResolver(passwordSchema),
+        defaultValues: { currentPassword: "", newPassword: "", confirmPassword: "" }
+    });
+
+    const handleUpdateProfile = async (data) => {
+        try {
+            setIsLoading(true);
+            await updateProfile(data);
+        } catch (error) {
+            console.log("handleError: ", error);
+        } finally {
+            setIsLoading(false);
+        }
     };
-
-    const handleUpdateProfile = async (e) => {
+    
+    const handlePasswordChange = async (data) => {
         try {
             setIsLoading(true);
-            e.preventDefault();
-            setProfileSubmitted(true);
-            updateProfile(formData, profileData);
+            await changePassword(data);
         } catch (error) {
             console.log("handleError: ", error);
         } finally {
             setIsLoading(false);
         }
-    }
-
-    const handlePasswordChange = async (e) => {
-        try {
-            setIsLoading(true);
-            e.preventDefault();
-            setSubmitted(true);
-            changePassword(formData, setFormData);
-        } catch (error) {
-            console.log("handleError: ", error);
-        } finally {
-            setIsLoading(false);
-        }
-    }
-
-    useEffect(() => {
-        if (userData && searchConfig.length > 0) {
-            getProfileData(setProfileData, setFormData);
-        }
-    }, [userData, searchConfig]);
-
-    useEffect(() => {
-        getSearchConfigData();
-    }, []);
+    };
 
     return (
         <div className="dashboard">
@@ -91,68 +66,101 @@ function Profile() {
                         <div className="profile-content">
                             <div className="profile-section">
                                 <h2>Basic Information</h2>
-                                <form className="profile-form" onSubmit={handleUpdateProfile}>
-                                    <TextField
-                                        name="name"
-                                        label="Username"
-                                        value={formData.name}
-                                        onChange={handleChange}
-                                        required={true}
-                                        submitted={profileSubmitted}
-                                    />
-                                    <EmailField
-                                        name="email"
-                                        label="Email"
-                                        value={formData.email}
-                                        onChange={handleChange}
-                                        required={true}
-                                        submitted={profileSubmitted}
-                                    />
-
-                                    {profileData.map((item) => (
-                                        <InputGroup
-                                            key={item.field_name}
-                                            props={{
-                                                fieldFormat: item,
-                                                value: formData[item.field_name] || "",
-                                                handleChange,
-                                                submitted: profileSubmitted
-                                            }}
+                                <form className="profile-form" onSubmit={handleSubmitProfile(handleUpdateProfile)}>
+                                    <div className={`field-container ${profileErrors.name ? 'has-error' : ''} ${isSubmittedProfile && !profileErrors.name ? 'has-success' : ''}`}>
+                                        <Controller
+                                            name="name"
+                                            control={profileControl}
+                                            render={({ field }) => (
+                                                <TextField
+                                                    name="name"
+                                                    label="Username"
+                                                    value={field.value}
+                                                    onChange={field.onChange}
+                                                    required={true}
+                                                    submitted={isSubmittedProfile}
+                                                />
+                                            )}
                                         />
-                                    ))}
+                                        {profileErrors.name && <p>{profileErrors.name.message}</p>}
+                                    </div>
+                                    <div className={`field-container ${profileErrors.email ? 'has-error' : ''} ${isSubmittedProfile && !profileErrors.email ? 'has-success' : ''}`}>
+                                        <Controller
+                                            name="email"
+                                            control={profileControl}
+                                            render={({ field }) => (
+                                                <EmailField
+                                                    name="email"
+                                                    label="Email"
+                                                    value={field.value}
+                                                    onChange={field.onChange}
+                                                    required={true}
+                                                    submitted={isSubmittedProfile}
+                                                />
+                                            )}
+                                        />
+                                        {profileErrors.email && <p>{profileErrors.email.message}</p>}
+                                    </div>
 
-                                    <button type="submit" className="profile-button" disabled={isLoading}>
-                                        {isLoading ? "Updating..." : "Update Profile"}
+                                    <button type="submit" className="profile-button" disabled={isSubmittingProfile || isLoading}>
+                                        {isSubmittingProfile || isLoading ? "Updating..." : "Update Profile"}
                                     </button>
                                 </form>
                                 <h2>Change Password</h2>
-                                <form className="profile-form" onSubmit={handlePasswordChange}>
-                                    <PasswordField
-                                        name="currentPassword"
-                                        label="Current Password"
-                                        value={formData.currentPassword}
-                                        onChange={handleChange}
-                                        required={true}
-                                        submitted={submitted}
-                                    />
-                                    <PasswordField
-                                        name="newPassword"
-                                        label="New Password"
-                                        value={formData.newPassword}
-                                        onChange={handleChange}
-                                        required={true}
-                                        submitted={submitted}
-                                    />
-                                    <PasswordField
-                                        name="confirmPassword"
-                                        label="Confirm New Password"
-                                        value={formData.confirmPassword}
-                                        onChange={handleChange}
-                                        required={true}
-                                        submitted={submitted}
-                                    />
-                                    <button type="submit" className="profile-button secondary" disabled={isLoading}>
-                                        {isLoading ? "Changing..." : "Change Password"}
+                                <form className="profile-form" onSubmit={handleSubmitPassword(handlePasswordChange)}>
+                                    <div className={`field-container ${passwordErrors.currentPassword ? 'has-error' : ''} ${isSubmittedPassword && !passwordErrors.currentPassword ? 'has-success' : ''}`}>
+                                        <Controller
+                                            name="currentPassword"
+                                            control={passwordControl}
+                                            render={({ field }) => (
+                                                <PasswordField
+                                                    name="currentPassword"
+                                                    label="Current Password"
+                                                    value={field.value}
+                                                    onChange={field.onChange}
+                                                    required={true}
+                                                    submitted={isSubmittedPassword}
+                                                />
+                                            )}
+                                        />
+                                        {passwordErrors.currentPassword && <p>{passwordErrors.currentPassword.message}</p>}
+                                    </div>
+                                    <div className={`field-container ${passwordErrors.newPassword ? 'has-error' : ''} ${isSubmittedPassword && !passwordErrors.newPassword ? 'has-success' : ''}`}>
+                                        <Controller
+                                            name="newPassword"
+                                            control={passwordControl}
+                                            render={({ field }) => (
+                                                <PasswordField
+                                                    name="newPassword"
+                                                    label="New Password"
+                                                    value={field.value}
+                                                    onChange={field.onChange}
+                                                    required={true}
+                                                    submitted={isSubmittedPassword}
+                                                />
+                                            )}
+                                        />
+                                        {passwordErrors.newPassword && <p>{passwordErrors.newPassword.message}</p>}
+                                    </div>
+                                    <div className={`field-container ${passwordErrors.confirmPassword ? 'has-error' : ''} ${isSubmittedPassword && !passwordErrors.confirmPassword ? 'has-success' : ''}`}>
+                                        <Controller
+                                            name="confirmPassword"
+                                            control={passwordControl}
+                                            render={({ field }) => (
+                                                <PasswordField
+                                                    name="confirmPassword"
+                                                    label="Confirm New Password"
+                                                    value={field.value}
+                                                    onChange={field.onChange}
+                                                    required={true}
+                                                    submitted={isSubmittedPassword}
+                                                />
+                                            )}
+                                        />
+                                        {passwordErrors.confirmPassword && <p>{passwordErrors.confirmPassword.message}</p>}
+                                    </div>
+                                    <button type="submit" className="profile-button secondary" disabled={isSubmittingPassword || isLoading}>
+                                        {isSubmittingPassword || isLoading ? "Changing..." : "Change Password"}
                                     </button>
                                 </form>
                                 <GAuthenticator />

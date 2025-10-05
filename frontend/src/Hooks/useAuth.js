@@ -124,19 +124,13 @@ function useAuth() {
         }
     }
 
-    const updateProfile = async (formData, profileData) => {
+    const updateProfile = async (formData) => {
         try {
             if (formData.name.trim() == "") throw new Error("Please input Username exactly!");
             if (formData.email.trim() == "") throw new Error("Please input Email exactly!");
-            profileData.map((data) => {
-                if (data.mandatory && (formData[data.field_name] == "")) throw new Error(`Please input required field exactly!`);
-            })
             const updatedUserData = {};
             updatedUserData.name = formData.name;
             updatedUserData.email = formData.email;
-            profileData.map((data) => {
-                updatedUserData[data.field_name] = formData[data.field_name];
-            })
             if (!window.confirm("Really want update profile?")) return;
             const res = await services.updateProfile(updatedUserData, userData.id, token);
             if (res.message == "updateProfile success") {
