@@ -27,12 +27,12 @@ function Customers2({ tableView = "customers2" }) {
     const [isOpenUpdate, setIsOpenUpdate] = useState(false);
     const [updateData, setUpdateData] = useState(null);
 
-    const onColumnChanged = () => {
+    const onColumnChanged = useCallback(() => {
         setTimeout(() => {
             const currentGrid = gridRef.current?.api.getColumnState();
             localStorage.setItem("customers2Layout", JSON.stringify(currentGrid));
-        }, 100);
-    }
+        }, 500);
+    }, [])
 
     const restoreSearchpatterns = (gridRef) => {
         if (!gridRef.current?.api) return;
@@ -111,11 +111,7 @@ function Customers2({ tableView = "customers2" }) {
         if (isOpenUpdate) return;
         setUpdateData(null)
     }, [isOpenUpdate])
-
-    useEffect(() => {
-        setColumnDefs(getColumnDefs("customers"));
-    }, [searchConfig])
-
+    
     useEffect(() => {
         setGridData(dynamicData);
         if (dynamicData && dynamicData.length > 0 && gridRef.current?.api) {
@@ -124,6 +120,11 @@ function Customers2({ tableView = "customers2" }) {
             }, 100);
         }
     }, [dynamicData, columnDefs])
+
+    useEffect(() => {
+        setColumnDefs(getColumnDefs("customers"));
+    }, [searchConfig])
+
 
     useEffect(() => {
         getSearchConfigData();
