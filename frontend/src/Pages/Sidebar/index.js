@@ -9,10 +9,10 @@ import useTabbedInterfaces from "../../Hooks/useTabbedInterfaces";
 function Sidebar() {
     const navigate = useNavigate();
     const location = useLocation();
-    const {menuItems, getMenuItems} = useMenuItems();
-    const {isCollapsed, setIsCollapsed} = useContext(MyContext);
+    const { menuItems, getMenuItems } = useMenuItems();
+    const { isCollapsed, setIsCollapsed } = useContext(MyContext);
     const [expandedMenus, setExpandedMenus] = useState(new Set());
-    const {addTabbedInterface} = useTabbedInterfaces();
+    const { addTabbedInterface } = useTabbedInterfaces();
 
     // Resizable sidebar state
     const [sidebarWidth, setSidebarWidth] = useState(() => {
@@ -23,10 +23,31 @@ function Sidebar() {
     const isDraggingRef = useRef(false);
 
     useEffect(() => {
-        // keep a CSS var for layout margins
-        const effectiveWidth = isCollapsed ? 70 : sidebarWidth;
-        document.documentElement.style.setProperty('--sidebar-width', effectiveWidth + 'px');
-    }, [sidebarWidth, isCollapsed]);
+        if (isCollapsed) {
+            setSidebarWidth(70);
+        } else {
+            setSidebarWidth(280);
+        }
+    }, [isCollapsed]);
+
+    useEffect(() => {
+        const handleResize = () => {
+            const isSmallScreen = window.innerWidth < 768;
+            if (isSmallScreen) {
+                setIsCollapsed(true);
+            } else if (!isSmallScreen) {
+                const wasManuallyCollapsed = localStorage.getItem('sidebarManuallyCollapsed') === 'true';
+                if (!wasManuallyCollapsed) {
+                    setIsCollapsed(false);
+                }
+            }
+        };
+
+        handleResize();
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, [setIsCollapsed]);
 
     useEffect(() => {
         const handleMouseMove = (e) => {
@@ -74,6 +95,9 @@ function Sidebar() {
 
     const toggleSidebar = () => {
         setIsCollapsed(!isCollapsed);
+        // Track if user manually collapsed/expanded
+        localStorage.setItem('sidebarManuallyCollapsed', (!isCollapsed).toString());
+        console.log("!isCollapsed: ", (!isCollapsed).toString())
     };
 
     const toggleSubmenu = (parentId) => {
@@ -118,7 +142,7 @@ function Sidebar() {
                         const hasChildren = parent.children && parent.children.length > 0;
                         const isExpanded = expandedMenus.has(parent.id);
                         parent.active = location.pathname === parent.path;
-                        
+
                         return (
                             <MenuItem
                                 key={parent.screen_id}

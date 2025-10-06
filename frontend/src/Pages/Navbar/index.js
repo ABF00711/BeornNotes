@@ -60,7 +60,7 @@ function Navbar() {
     return (
         <div className="navbar">
             <div className="navbar-container">
-                <div className={`breadcrumb ${!isCollapsed ? 'M_L_280' : 'M_L_50'}`}>
+                <div className={`breadcrumb ${!isCollapsed ? 'M_L_280' : 'M_L_60'}`}>
                     {renderTabs()}
                 </div>
                 <div className="navbar-actions">
