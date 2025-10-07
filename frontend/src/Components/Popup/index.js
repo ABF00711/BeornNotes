@@ -63,7 +63,7 @@ function Popup({ fieldFormat, value, handleChange, options = [], submitted = fal
     return (
         <div className="field row" ref={popupRef}>
             <label htmlFor={fieldFormat.field_name} className="field-label">
-                {fieldFormat.field_label}
+                {fieldFormat.field_label}{fieldFormat.mandatory ? " *" : ""}
             </label>
             <div className="popup-container">
                 <div 
@@ -115,7 +115,6 @@ function Popup({ fieldFormat, value, handleChange, options = [], submitted = fal
                 </div>
             )}
             </div>
-            {fieldFormat.mandatory ? " *" : ""}
         </div>
     );
 }
