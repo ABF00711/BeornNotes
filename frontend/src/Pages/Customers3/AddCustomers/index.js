@@ -24,9 +24,9 @@ function AddCustomers() {
         birthday: formatDateForInput(data.birthday)
     } : {};
 
-    const { register, handleSubmit, control, reset, setValue, formState: { errors, isSubmitted } } = useForm({
+    const { register, handleSubmit, control, reset, setValue, formState: { errors, isSubmitted }, trigger } = useForm({
         resolver: zodResolver(customersSchema),
-        defaultValues
+        defaultValues,
     });
 
     // Reset form with formatted data when data changes
@@ -73,12 +73,13 @@ function AddCustomers() {
     useEffect(() => {
         getJobs();
         getLabels();
+        trigger();
     }, [])
 
     return (
         <div className="addCustomers">
             <form onSubmit={handleSubmit(onSubmit)}>
-                <div className="">Add New customer</div>
+                <div className="title">{data ? 'Update Customer' : 'Add New customer'}</div>
                 <div className={`field-container ${errors.fullname ? 'has-error' : ''} ${isSubmitted && !errors.fullname ? 'has-success' : ''}`}>
                     <label>{labels.fullname}</label>
                     <div className="input-wrapper">
@@ -139,7 +140,7 @@ function AddCustomers() {
                                 <InputableSelectField
                                     {...field}
                                     options = {options}
-                                    submitted={isSubmitted}
+                                    submitted={false}
                                     error={!!errors.job}
                                     className={errors.job ? 'error' : ''}
                                 />
