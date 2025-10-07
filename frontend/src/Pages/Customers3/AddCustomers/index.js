@@ -78,6 +78,7 @@ function AddCustomers() {
     return (
         <div className="addCustomers">
             <form onSubmit={handleSubmit(onSubmit)}>
+                <div className="">Add New customer</div>
                 <div className={`field-container ${errors.fullname ? 'has-error' : ''} ${isSubmitted && !errors.fullname ? 'has-success' : ''}`}>
                     <label>{labels.fullname}</label>
                     <div className="input-wrapper">

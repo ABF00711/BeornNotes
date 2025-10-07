@@ -5,7 +5,7 @@ import InputGroup from "../InputGroup";
 import useDynamicData from "../../Hooks/useDynamicData";
 
 function DynamicModal({ table_name, isOpen, setIsOpen, title, role, fieldsData, initData = {} }) {
-    const [submitted, setSubmitted] = useState(false);
+    const [submitted, setSubmitted] = useState(true);
     const [formData, setFormData] = useState({});
     const { createDynamicData, updateDynamicData } = useDynamicData();
 

@@ -58,7 +58,7 @@ function InputGroup({ props }) {
     return (
         <div className="input-group">
             <div className="field row">
-                <label htmlFor={fieldFormat.field_name} className="field-label">{fieldFormat.field_label}{fieldFormat.mandatory ? " *" : ""}</label>
+                <label htmlFor={fieldFormat.field_name} className="field-label">{fieldFormat.field_label}</label>
                 <input
                     id={fieldFormat.field_name}
                     type={fieldFormat.field_type}
@@ -68,6 +68,7 @@ function InputGroup({ props }) {
                     onChange={handleChange}
                     autoComplete="off"
                 />
+                {fieldFormat.mandatory ? " *" : ""}
             </div>
         </div>
     );

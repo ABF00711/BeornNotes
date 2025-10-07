@@ -177,7 +177,7 @@ function Combobox({ fieldFormat, value, handleChange, options = [], submitted = 
     return (
         <div className="field row" ref={comboboxRef}>
             <label htmlFor={fieldFormat.field_name} className="field-label">
-                {fieldFormat.field_label}{fieldFormat.mandatory ? " *" : ""}
+                {fieldFormat.field_label}
             </label>
             <div className="combobox-container">
                 <input
@@ -206,6 +206,7 @@ function Combobox({ fieldFormat, value, handleChange, options = [], submitted = 
                     </div>
                 )}
             </div>
+            {fieldFormat.mandatory ? " *" : ""}
         </div>
     );
 }

@@ -34,7 +34,6 @@
 
 /* Form Header */
 .addCustomers form::before {
-    content: "Add New Customer";
     display: block;
     text-align: center;
     font-size: 28px;
