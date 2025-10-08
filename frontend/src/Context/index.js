@@ -5,6 +5,8 @@ const DataContext = createContext([]);
 
 export const MyContext = DataContext;
 
+const defaultUserTime = 10;
+
 function ContextProvider({ children }) {
     const [userData, setUserData] = useState({
         name: "",
@@ -24,9 +26,11 @@ function ContextProvider({ children }) {
     const [layouts, setLayouts] = useState([]);
     
     const [jobs, setJobs] = useState([]);
+    const [userTime, setUserTime] = useState(defaultUserTime);
 
     useEffect(() => {
         const savedUserData = JSON.parse(localStorage.getItem("userData") || null);
+        const savedUserTime = JSON.parse(localStorage.getItem(`${savedUserData.name}`) || null);
         const savedCurrentInterface = JSON.parse(localStorage.getItem("currentInterface") || null);
         if(!!savedCurrentInterface){
             setCurrentInterface(savedCurrentInterface);
@@ -34,6 +38,7 @@ function ContextProvider({ children }) {
         if(!!savedUserData){
             setUserData(savedUserData);
         }
+        if(!savedUserTime) setUserTime(savedUserTime);
     }, [])
 
     return (
@@ -48,7 +53,8 @@ function ContextProvider({ children }) {
             searchpatterns, setSearchpatterns,
             layouts, setLayouts,
             currentInterface, setCurrentInterface,
-            jobs, setJobs
+            jobs, setJobs,
+            userTime, setUserTime
         }}>
             {children}
         </DataContext.Provider>

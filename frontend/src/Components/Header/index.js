@@ -1,11 +1,14 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import "./style.css";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../../Hooks/useAuth";
+import { MyContext } from "../../Context";
+import ActiveTimeCounter from "../ActiveTimeCounter";
 
 function Header() {
     const navigate = useNavigate();
-    const { logout, userData, setUserData, isAuthenticated } = useAuth();
+    const { isCollapsed } = useContext(MyContext);
+    const { logout, userData, isAuthenticated } = useAuth();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [dropdownPosition, setDropdownPosition] = useState({ top: 0, right: 0 });
     const dropdownRef = useRef(null);
@@ -41,18 +44,12 @@ function Header() {
             }
         };
 
-        if (isDropdownOpen) {
-            document.addEventListener('mousedown', handleClickOutside);
-        }
+        if (isDropdownOpen) document.addEventListener('mousedown', handleClickOutside);
 
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, [isDropdownOpen]);
-
-    const getUserDataFromLocalStorage = () => {
-        setUserData(JSON.parse(localStorage.getItem("userData")));
-    }
 
     useEffect(() => {
         isAuthenticated()
@@ -61,7 +58,7 @@ function Header() {
     return (
         <div className="header">
             <div className="header-container">
-                <div className="header-left">
+                <div className={`header-left ${!isCollapsed ? 'M_L_280' : 'M_L_60'}`}>
                 </div>
 
                 <div className="header-right">
@@ -148,6 +145,7 @@ function Header() {
                     </div>
                 </div>
             </div>
+            <ActiveTimeCounter />
         </div>
     );
 }
