@@ -6,7 +6,6 @@ import ContextProvider from './Context';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Dashboard from './Pages/Dashboard';
-import Customers from './Pages/Customers';
 import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community'; 
 import { AllEnterpriseModule, LicenseManager } from "ag-grid-enterprise";
 import Orders from './Pages/Orders';
@@ -43,7 +42,6 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/profile" element={<Profile />} />
-            <Route path="/customers" element={<Customers />} />
             <Route path="/products" element={<Products />} />
             <Route path="/customers2" element={<Customers2 />} />
             <Route path="/customers3" element={<Customers3 />} />
