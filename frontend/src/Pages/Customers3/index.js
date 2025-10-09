@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import useSearchpatterns from "../../Hooks/useFilters";
 import { themeAlpine } from "ag-grid-community";
 import useCustomers3 from "../../Hooks/useCustomers3";
+import useJob from "../../Hooks/useJob";
 
 
 function Customers3({ tableView = "customers3" }) {
@@ -28,6 +29,8 @@ function Customers3({ tableView = "customers3" }) {
     const { layouts, getLayouts } = useLayouts();
     const gridRef = useRef();
     const [columnDefs, setColumnDefs] = useState([]);
+    const [displayData, setDisplayData] = useState([]);
+    const { jobs, getJobs } = useJob();
 
     const rowSelection = useMemo(() => {
         return {
@@ -54,7 +57,24 @@ function Customers3({ tableView = "customers3" }) {
         getDynamicData("customers");
         getLayouts(tableView);
         getSearchpatterns(tableView);
+        getJobs();
     }, [])
+
+    // Map job id -> job name for grid display
+    useEffect(() => {
+        if (!Array.isArray(dynamicData)) { setDisplayData([]); return; }
+        const idToName = new Map((jobs || []).map(j => [String(j.id), j.name]));
+        const mapped = dynamicData.map(row => {
+            const jobId = row?.job;
+            const jobName = jobId != null ? idToName.get(String(jobId)) : undefined;
+            return jobName ? { ...row, job: jobName } : row;
+        });
+        setDisplayData(mapped);
+    }, [dynamicData, jobs])
+
+    useEffect(() => {
+        console.log("displaydata: ", displayData);
+    }, [displayData])
 
     return (
         <div className="dashboard">
@@ -79,7 +99,7 @@ function Customers3({ tableView = "customers3" }) {
                     <div className="table">
                         <AgGridReact
                             ref={gridRef}
-                            rowData={dynamicData}
+                            rowData={displayData}
                             columnDefs={columnDefs}
                             theme={themeAlpine}
                             rowSelection={rowSelection}

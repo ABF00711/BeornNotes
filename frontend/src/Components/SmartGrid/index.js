@@ -5,6 +5,7 @@ import 'smart-webcomponents-react/source/styles/smart.default.css';
 import useDynamicData from "../../Hooks/useDynamicData";
 import useSearchConfig from "../../Hooks/useSearchConfig";
 import useSmartGrid from "../../Hooks/useSmartGrid";
+import useJob from "../../Hooks/useJob";
 
 function SmartGrid(props) {
     const { tablename, gridRef, openUpdateModal } = props;
@@ -13,6 +14,8 @@ function SmartGrid(props) {
     const { dynamicData, getDynamicData } = useDynamicData();
     const { getSmartColumns } = useSmartGrid();
     const [dataSourseSettings, setDataSourseSettings] = useState({});
+    const [displayData, setDisplayData] = useState([]);
+    const { jobs, getJobs } = useJob();
 
     const behavior = useMemo(() => ({
         allowColumnReorder: true,
@@ -74,6 +77,7 @@ function SmartGrid(props) {
         try {
             await getSearchConfigData();
             await getDynamicData(tablename);
+            await getJobs();
         } catch (error) {
             console.log('Data initialization error:', error);
         }
@@ -88,16 +92,28 @@ function SmartGrid(props) {
         initializeData();
     }, [])
 
+    // Map job id -> name for display
+    useEffect(() => {
+        if (!Array.isArray(dynamicData)) { setDisplayData([]); return; }
+        const idToName = new Map((jobs || []).map(j => [String(j.id), j.name]));
+        const mapped = dynamicData.map(row => {
+            const jobId = row?.job;
+            const jobName = jobId != null ? idToName.get(String(jobId)) : undefined;
+            return jobName ? { ...row, job: jobName } : row;
+        });
+        setDisplayData(mapped);
+    }, [dynamicData, jobs])
+
     const dataAdapter = useMemo(() => {
-        if (!dynamicData || !dataSourseSettings.dataFields) return [];
+        if (!displayData || !dataSourseSettings.dataFields) return [];
         return new window.Smart.DataAdapter({
-            dataSource: dynamicData,
+            dataSource: displayData,
             dataFields: dataSourseSettings.dataFields
         });
-    }, [dynamicData, dataSourseSettings.dataFields?.length]); 
+    }, [displayData, dataSourseSettings.dataFields?.length]); 
 
     const isDataReady = columns.length > 0 && 
-                       dynamicData.length > 0 && 
+                       displayData.length > 0 && 
                        dataSourseSettings.dataFields?.length > 0;
 
     // One-time nudge to ensure autoLoad applies after grid is ready
