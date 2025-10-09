@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./style.css";
 import { Modal } from "antd";
 import { useNavigate } from "react-router-dom";
@@ -70,4 +70,4 @@ function ActiveTimeCounter() {
     );
 }
 
-export default ActiveTimeCounter;
+export default ActiveTimeCounter; 

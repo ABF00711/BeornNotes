@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import "./style.css";
-import { customersSchema } from "./customerSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, Controller } from "react-hook-form";
 import useDynamicData from "../../../Hooks/useDynamicData";
@@ -8,6 +7,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import InputableSelectField from "../../../Components/InputableSelect/InputableSelectField";
 import useJob from "../../../Hooks/useJob";
 import useCustomers3 from "../../../Hooks/useCustomers3";
+import { z } from "zod";
 
 function AddCustomers() {
     const location = useLocation();
@@ -16,7 +16,61 @@ function AddCustomers() {
     const [isSuccess, setIsSuccess] = useState(false);
     const {jobs, getJobs} = useJob();
     const [options, setOptions] = useState([]);
-    const {formatDateForInput, getLabels, labels} = useCustomers3();
+    const {formatDateForInput, getLabels, labels, mandatoryFields, getMandatoryFields} = useCustomers3();
+
+    // Dynamic schema based on mandatory fields from database
+    const customersSchema = useMemo(() => {
+        const schemaFields = {
+            fullname: mandatoryFields.fullname 
+                ? z.string().min(1, "Fullname is required")
+                : z.union([z.string(), z.null(), z.undefined()])
+                    .optional()
+                    .transform((val) => val === null || val === undefined ? undefined : val),
+            displayname: mandatoryFields.displayname 
+                ? z.string().min(1, "Displayname is required")
+                : z.union([z.string(), z.null(), z.undefined()])
+                    .optional()
+                    .transform((val) => val === null || val === undefined ? undefined : val),
+            birthday: mandatoryFields.birthday 
+                ? z.string().min(1, "Birthday is required").transform((str) => new Date(str))
+                : z.union([z.string(), z.null(), z.undefined()])
+                    .optional()
+                    .transform((val) => {
+                        if (val === null || val === undefined) return undefined;
+                        return val ? new Date(val) : undefined;
+                    }),
+            age: mandatoryFields.age 
+                ? z.union([z.string(), z.number()])
+                    .refine((val) => {
+                        if (typeof val === 'string') {
+                            return val.trim() !== '' && !isNaN(parseInt(val, 10)) && parseInt(val, 10) > 0;
+                        }
+                        return val !== null && val !== undefined && val > 0;
+                    }, "Age is required")
+                    .transform((val) => {
+                        if (typeof val === 'string') {
+                            return parseInt(val, 10);
+                        }
+                        return val;
+                    })
+                : z.union([z.string(), z.number(), z.null(), z.undefined()])
+                    .optional()
+                    .transform((val) => {
+                        if (val === null || val === undefined) return undefined;
+                        if (typeof val === 'string' && val.trim() !== '') {
+                            return parseInt(val, 10);
+                        }
+                        return val;
+                    }),
+            job: mandatoryFields.job 
+                ? z.string().min(1, "Job is required")
+                : z.union([z.string(), z.null(), z.undefined()])
+                    .optional()
+                    .transform((val) => val === null || val === undefined ? undefined : val)
+        };
+
+        return z.object(schemaFields);
+    }, [mandatoryFields]);
 
     // Prepare default values with formatted date
     const defaultValues = data ? {
@@ -73,8 +127,15 @@ function AddCustomers() {
     useEffect(() => {
         getJobs();
         getLabels();
-        trigger();
+        getMandatoryFields();
     }, [])
+
+    // Trigger validation after mandatory fields are loaded and schema is updated
+    useEffect(() => {
+        if (Object.keys(mandatoryFields).length > 0) {
+            trigger();
+        }
+    }, [mandatoryFields, trigger]);
 
     return (
         <div className="addCustomers">

@@ -28,6 +28,11 @@ function useDynamicData() {
 
     const createDynamicData = async (tablename, newData) => {
         try {
+            for (const key in newData) {
+                if(!newData[key]){
+                    newData[key] = null;
+                }
+            }
             const res = await services.createDynamicData(tablename, newData, token);
 
             if (res.message === "createDynamicData success") {
@@ -44,6 +49,11 @@ function useDynamicData() {
 
     const updateDynamicData = async (tablename, newData) => {
         try {
+            for (const key in newData) {
+                if(!newData[key]){
+                    newData[key] = null;
+                }
+            }
             const res = await services.updateDynamicData(tablename, newData, token);
             if (res.message == "updateDynamicData success") {
                 toast.success(`Updated ${tablename} data successfully.`);

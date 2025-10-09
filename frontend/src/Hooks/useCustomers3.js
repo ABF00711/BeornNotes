@@ -7,6 +7,7 @@ const useCustomers3 = () => {
     const { searchpatterns } = useSearchpatterns;
     const { layouts } = useLayouts();
     const [labels, setLabels] = useState({});
+    const [mandatoryFields, setMandatoryFields] = useState({});
     const {searchConfig} = useSearchConfig();
 
     const onColumnChanged = (gridRef) => {
@@ -109,8 +110,29 @@ const useCustomers3 = () => {
         }
     }
 
+    const getMandatoryFields = () => {
+        try {
+            if(!searchConfig) return;
+            const _mandatoryFields = {};
+            searchConfig.map((data) => {
+                if(data.table_name == "customers"){
+                    console.log("data.mandatory: ", data.mandatory);
+                    _mandatoryFields[data.field_name] = data.mandatory;
+                }
+            })
+            console.log("_mandatoryFields: ", _mandatoryFields);
+            setMandatoryFields(_mandatoryFields);
+        } catch (error) {
+            console.log("getMandatoryFieldsError: ", error);
+        }
+    }
+
     return {
-        onColumnChanged, onFilterChanged, restoreSearchpatterns, onSortChanged, formatDateForInput, labels, getLabels
+        onColumnChanged, onFilterChanged, 
+        restoreSearchpatterns, onSortChanged, 
+        formatDateForInput, 
+        labels, getLabels,
+        mandatoryFields, getMandatoryFields
     }
 }
 
