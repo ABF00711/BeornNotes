@@ -15,3 +15,46 @@
 	padding: 20px;
 	border-radius: 10px;
 }
+
+/* Field Container Styling */
+.field-container {
+	margin-bottom: 20px;
+}
+
+.field-container label {
+	display: block;
+	margin-bottom: 8px;
+	font-weight: 600;
+	color: #2d3748;
+	font-size: 14px;
+}
+
+.input-wrapper {
+	position: relative;
+	width: 100%;
+}
+
+.field-container p {
+	margin: 4px 0 0 0;
+	color: #e53e3e;
+	font-size: 12px;
+	font-weight: 500;
+}
+
+/* Success and Error States */
+.field-container.has-error label {
+	color: #e53e3e;
+}
+
+.field-container.has-success label {
+	color: #38a169;
+}
+
+/* Title Styling */
+.title {
+	font-size: 18px;
+	font-weight: 700;
+	color: #2d3748;
+	margin-bottom: 24px;
+	text-align: center;
+}

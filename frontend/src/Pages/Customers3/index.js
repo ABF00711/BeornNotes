@@ -72,10 +72,6 @@ function Customers3({ tableView = "customers3" }) {
         setDisplayData(mapped);
     }, [dynamicData, jobs])
 
-    useEffect(() => {
-        console.log("displaydata: ", displayData);
-    }, [displayData])
-
     return (
         <div className="dashboard">
             <Header />
