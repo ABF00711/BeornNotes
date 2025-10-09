@@ -105,7 +105,7 @@ function SmartGrid(props) {
         if (isDataReady && gridRef.current) {
             // Small delay to ensure grid is fully bound
             setTimeout(() => {
-                gridRef.current.loadState(JSON.parse(localStorage.getItem("Grid View")));
+                gridRef.current?.loadState(JSON.parse(localStorage.getItem("Grid View")));
             }, 200);
         }
     }, [isDataReady]);

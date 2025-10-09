@@ -3,7 +3,7 @@ import "./style.css";
 import { Modal } from "antd";
 import { useNavigate } from "react-router-dom";
 
-const defaultInactiveTime = 1 * 60;
+const defaultInactiveTime = 30 * 60;
 const alertingTime = 10;
 
 function ActiveTimeCounter() {

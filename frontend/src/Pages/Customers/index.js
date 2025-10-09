@@ -5,7 +5,6 @@ import Navbar from "../Navbar";
 import Sidebar from "../Sidebar";
 import { MyContext } from "../../Context";
 import SmartGrid from "../../Components/SmartGrid";
-import { Smart } from "smart-webcomponents-react/grid";
 import Add from "../../Components/Add";
 import SmartDelete from "./Delete";
 import SmartLayouts from "./Layouts";
@@ -13,7 +12,7 @@ import SmartSearchPattern from "./SearchPattern";
 import Update from "../../Components/Update";
 
 
-function Customers4() {
+function Customers() {
     const { isCollapsed } = useContext(MyContext);
     const gridRef = useRef(null);
     const [isOpen, setIsOpen] = useState(false);
@@ -59,4 +58,4 @@ function Customers4() {
     );
 }
 
-export default Customers4;
+export default Customers;

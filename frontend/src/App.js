@@ -17,7 +17,7 @@ import Customers2 from './Pages/Customers2';
 import Customers3 from './Pages/Customers3';
 import AddCustomers from './Pages/Customers3/AddCustomers';
 import { Smart } from 'smart-webcomponents-react/grid';
-import Customers4 from './Pages/Customers4';
+import Customers from './Pages/Customers';
 
 // Register all Community features
 ModuleRegistry.registerModules([AllCommunityModule, AllEnterpriseModule ]);
@@ -43,9 +43,9 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/products" element={<Products />} />
+            <Route path="/customers" element={<Customers />} />
             <Route path="/customers2" element={<Customers2 />} />
             <Route path="/customers3" element={<Customers3 />} />
-            <Route path="/customers4" element={<Customers4 />} />
             <Route path="/customers3/create" element={<AddCustomers />} />
             <Route path="/customers3/update" element={<AddCustomers />} />
             <Route path="/orders" element={<Orders />} />

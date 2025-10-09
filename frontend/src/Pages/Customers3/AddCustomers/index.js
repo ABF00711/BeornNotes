@@ -15,7 +15,6 @@ function AddCustomers() {
     const [isLoading, setIsLoading] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
     const {jobs, getJobs} = useJob();
-    const [options, setOptions] = useState([]);
     const {formatDateForInput, getLabels, labels, mandatoryFields, getMandatoryFields} = useCustomers3();
 
     // Dynamic schema based on mandatory fields from database
@@ -68,12 +67,6 @@ function AddCustomers() {
             setIsLoading(false);
         }
     } 
-
-    useEffect(() => {
-        setOptions(jobs.map((job) => {
-            return job.name;
-        }))
-    }, [jobs])
 
     useEffect(() => {
         getJobs();
@@ -151,7 +144,7 @@ function AddCustomers() {
                             render={({ field }) => (
                                 <InputableSelectField
                                     {...field}
-                                    options = {options}
+                                    options = {jobs}
                                     submitted={false}
                                     error={!!errors.job}
                                     className={errors.job ? 'error' : ''}

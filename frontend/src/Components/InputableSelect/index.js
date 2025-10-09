@@ -16,10 +16,24 @@ function InputableSelect({
     const [filteredOptions, setFilteredOptions] = useState([]);
     const selectRef = useRef(null);
 
-    // Keep input in sync with external value
+    // Normalize options to { value: id, name }
+    const normalizedOptions = useRef([]);
     useEffect(() => {
-        setSearchTerm(value || "");
-    }, [value]);
+        normalizedOptions.current = (options || []).map((opt) => ({
+            value: opt?.id,
+            name: opt?.name ?? String(opt?.id ?? "")
+        }));
+    }, [options]);
+
+    // Keep input display in sync with external selected id (value)
+    useEffect(() => {
+        if (!value) {
+            setSearchTerm("");
+            return;
+        }
+        const found = normalizedOptions.current.find(o => String(o.value) === String(value));
+        setSearchTerm(found ? found.name : "");
+    }, [value, options]);
 
     // Smart filtering and sorting based on search term
     useEffect(() => {
@@ -66,10 +80,11 @@ function InputableSelect({
             };
             
             // Sort all options by match score (best matches first, unmatched at end)
-            const sortedOptions = options
+            const sortedOptions = normalizedOptions.current
                 .map(option => ({
-                    value: option,
-                    score: getMatchScore(option)
+                    value: option.value,
+                    name: option.name,
+                    score: getMatchScore(option.name)
                 }))
                 .sort((a, b) => {
                     // First sort by score (descending)
@@ -77,14 +92,14 @@ function InputableSelect({
                         return b.score - a.score;
                     }
                     // Then sort alphabetically for items with same score
-                    return a.value.localeCompare(b.value);
+                    return a.name.localeCompare(b.name);
                 })
-                .map(({ score, ...item }) => item.value); // Remove score from final result
+                .map(({ score, ...item }) => { return {value: item.value, name: item.name}}); // Remove score from final result
             
             setFilteredOptions(sortedOptions);
         } else {
             // When no search term, show all options in original order
-            setFilteredOptions(options);
+            setFilteredOptions(normalizedOptions.current);
         }
     }, [searchTerm, options]);
 
@@ -144,24 +159,24 @@ function InputableSelect({
 
     // Handle input change
     const handleInputChange = (e) => {
-        const value = e?.target?.value || '';
-        setSearchTerm(value);
+        const text = e?.target?.value || '';
+        setSearchTerm(text);
         setIsOpen(true);
         
-        // Update the form value - pass the value directly
-        if (onChange) {
-            onChange(value);
+        // If user clears the input, clear the selected value
+        if (onChange && text === '') {
+            onChange(undefined);
         }
     };
 
     // Handle option selection
     const handleOptionSelect = (option) => {
-        setSearchTerm(option);
+        setSearchTerm(option.name);
         setIsOpen(false);
         
-        // Update the form value - pass the value directly
+        // Update the form value with selected id
         if (onChange) {
-            onChange(option);
+            onChange(option.value);
         }
     };
 
@@ -212,7 +227,7 @@ function InputableSelect({
                                 className="inputable-select-option"
                                 onClick={() => handleOptionSelect(option)}
                             >
-                                {option}
+                                {option.name}
                             </div>
                         ))
                     ) : (

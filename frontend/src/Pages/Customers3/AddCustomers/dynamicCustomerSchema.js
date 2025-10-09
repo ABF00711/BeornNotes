@@ -45,7 +45,7 @@ export const createCustomerSchema = (mandatoryFields) => {
                 }),
         job: mandatoryFields.job 
             ? z.string().min(1, "Job is required")
-            : z.union([z.string(), z.null(), z.undefined()])
+            : z.union([z.string(), z.null(), z.undefined(), z.number()])
                 .optional()
                 .transform((val) => val === null || val === undefined ? undefined : val)
     };
