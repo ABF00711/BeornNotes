@@ -15,7 +15,7 @@ import useDynamicData from "../../Hooks/useDynamicData";
 import useJob from "../../Hooks/useJob";
 
 
-function Customers2() {
+function Customers() {
     const { isCollapsed } = useContext(MyContext);
     const gridRef = useRef(null);
     const [isOpen, setIsOpen] = useState(false);
@@ -118,4 +118,4 @@ function Customers2() {
     );
 }
 
-export default Customers2;
+export default Customers;

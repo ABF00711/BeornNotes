@@ -8,7 +8,7 @@ import useSmartGrid from "../../Hooks/useSmartGrid";
 import useJob from "../../Hooks/useJob";
 
 function SmartGrid(props) {
-    const { tablename, gridRef, openUpdateModal } = props;
+    const { tablename, gridRef, openUpdateModal, customData } = props;
     const [columns, setColumns] = useState([]);
     const { getSearchConfigData, searchConfig } = useSearchConfig();
     const { dynamicData, getDynamicData } = useDynamicData();
@@ -94,15 +94,16 @@ function SmartGrid(props) {
 
     // Map job id -> name for display
     useEffect(() => {
-        if (!Array.isArray(dynamicData)) { setDisplayData([]); return; }
+        const dataToUse = customData || dynamicData;
+        if (!Array.isArray(dataToUse)) { setDisplayData([]); return; }
         const idToName = new Map((jobs || []).map(j => [String(j.id), j.name]));
-        const mapped = dynamicData.map(row => {
+        const mapped = dataToUse.map(row => {
             const jobId = row?.job;
             const jobName = jobId != null ? idToName.get(String(jobId)) : undefined;
             return jobName ? { ...row, job: jobName } : row;
         });
         setDisplayData(mapped);
-    }, [dynamicData, jobs])
+    }, [customData, dynamicData, jobs])
 
     const dataAdapter = useMemo(() => {
         if (!displayData || !dataSourseSettings.dataFields) return [];
