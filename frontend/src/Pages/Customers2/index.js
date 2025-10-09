@@ -4,6 +4,7 @@ import { AgGridReact } from 'ag-grid-react';
 import { themeAlpine } from "ag-grid-community";
 import useDynamicData from "../../Hooks/useDynamicData";
 import useSearchConfig from "../../Hooks/useSearchConfig";
+import useJob from "../../Hooks/useJob";
 
 import useLayouts from "../../Hooks/useLayouts";
 import Header from "../../Components/Header";
@@ -26,6 +27,7 @@ function Customers2({ tableView = "customers2" }) {
     const [searchKey, setSearchKey] = useState({ age: "", job: "" });
     const [isOpenUpdate, setIsOpenUpdate] = useState(false);
     const [updateData, setUpdateData] = useState(null);
+    const { jobs, getJobs } = useJob();
 
     const onColumnChanged = useCallback(() => {
         setTimeout(() => {
@@ -113,13 +115,20 @@ function Customers2({ tableView = "customers2" }) {
     }, [isOpenUpdate])
     
     useEffect(() => {
-        setGridData(dynamicData);
+        // Map job id -> name for display
+        const idToName = new Map((jobs || []).map(j => [String(j.id), j.name]));
+        const mapped = (dynamicData || []).map(row => {
+            const jobId = row?.job;
+            const jobName = jobId != null ? idToName.get(String(jobId)) : undefined;
+            return jobName ? { ...row, job: jobName } : row;
+        });
+        setGridData(mapped);
         if (dynamicData && dynamicData.length > 0 && gridRef.current?.api) {
             setTimeout(() => {
                 restoreSearchpatterns(gridRef);
             }, 100);
         }
-    }, [dynamicData, columnDefs])
+    }, [dynamicData, columnDefs, jobs])
 
     useEffect(() => {
         setColumnDefs(getColumnDefs("customers"));
@@ -130,6 +139,7 @@ function Customers2({ tableView = "customers2" }) {
         getSearchConfigData();
         getLayouts(tableView);
         getDynamicData("customers");
+        getJobs();
     }, [])
 
 
