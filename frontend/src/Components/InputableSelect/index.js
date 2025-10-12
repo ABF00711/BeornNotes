@@ -31,8 +31,7 @@ function InputableSelect({
             setSearchTerm("");
             return;
         }
-        const found = normalizedOptions.current.find(o => String(o.value) === String(value));
-        setSearchTerm(found ? found.name : "");
+        setSearchTerm(value);
     }, [value, options]);
 
     // Smart filtering and sorting based on search term
