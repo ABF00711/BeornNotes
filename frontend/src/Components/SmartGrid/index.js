@@ -22,16 +22,20 @@ function SmartGrid(props) {
         columnResizeMode: 'growAndShrink'
     }), []);
 
+    const appearance = {
+		alternationCount: 2
+	};
+
     const sorting = useMemo(() => ({
         enabled: true,
-        mode: 'many'
+        mode: 'single'
     }), []);
 
     const filtering = useMemo(() => ({
         enabled: true,
-        filterMenu: {
-            mode: 'excel'
-        }
+        filterRow: {
+			visible: true
+		}
     }), []);
 
     const selection = useMemo(() => ({
@@ -84,7 +88,7 @@ function SmartGrid(props) {
     }
 
     useEffect(() => {
-        setColumns(getSmartColumns());
+        setColumns(getSmartColumns(openUpdateModal));
         getDataSourceSettings();
     }, [searchConfig])
 
@@ -136,6 +140,7 @@ function SmartGrid(props) {
         <div className="smartGridTable">
             <Grid id={tablename}
                 ref={gridRef}
+                appearance={appearance}
                 dataSource={dataAdapter}
                 columns={columns}
                 behavior={behavior}
@@ -144,7 +149,7 @@ function SmartGrid(props) {
                 selection={selection}
                 header={header}
                 stateSettings={stateSettings}
-                onRowDoubleClick={(ev) => {openUpdateModal(ev.detail.data)}}
+                
             ></Grid>
         </div>
     );

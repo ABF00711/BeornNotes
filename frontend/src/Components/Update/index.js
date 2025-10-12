@@ -14,14 +14,7 @@ function Update({tablename, isOpen, setIsOpen, updateData}) {
                 setFormData({});
                 return;
             }
-            const pickedData = updateData;
-            fieldsData.forEach(element => {
-                if(element.field_type === "date"){
-                    if(!pickedData[element.field_name]) return;
-                    pickedData[element.field_name] = pickedData[element.field_name].split("T")[0];
-                }
-            });
-            setFormData(pickedData);
+            setFormData(updateData);
         } catch (error) {
             console.log("getFormDataError: ", error);
         }

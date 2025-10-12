@@ -27,7 +27,7 @@ function Customers() {
         <div className="dashboard">
             <Header />
             <Navbar />
-            <div className={`dashboard-container ${!isCollapsed ? 'M_L_280' : ''}`}>
+            <div className={`dashboard-container ${!isCollapsed ? 'M_L_280' : ''}`}> 
                 <div className="customers4">
                     <div className="customers4-toolbar">
                         <div className="toolbar-left">
