@@ -6,9 +6,9 @@ import Sidebar from "../Sidebar";
 import { MyContext } from "../../Context";
 import SmartGrid from "../../Components/SmartGrid";
 import Add from "../../Components/Add";
-import SmartDelete from "./Delete";
-import SmartLayouts from "./Layouts";
-import SmartSearchPattern from "./SearchPattern";
+import SmartDelete from "../../Components/Delete";
+import SmartLayouts from "../../Components/Layouts";
+import SmartSearchPattern from "../../Components/SearchPattern";
 import Update from "../../Components/Update";
 import ResetBtn from "../../Components/Reset";
 

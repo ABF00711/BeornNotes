@@ -1,23 +1,26 @@
 import React from "react";
 import "./style.css";
-import { MyContext } from "../../Context";
-import useDynamicData from "../../Hooks/useDynamicData";
 import { toast } from "react-toastify";
+import useDynamicData from "../../Hooks/useDynamicData";
 
-function Delete(props) {
+function SmartDelete(props) {
     const { tablename, gridRef } = props;
     const {deleteDynamicData} = useDynamicData();
 
     const onDelete = () => {
+        if(gridRef == null) return;
         try {
-            const selectedRows = gridRef.current?.api.getSelectedRows();
-            if (!selectedRows || selectedRows.length === 0) {
+            const selectedRows = gridRef.current?.getSelectedRowsData();
+            const selectedIds = gridRef.current?.getSelectedRowIds();
+            if (selectedIds.length === 0) {
                 toast.error("No rows selected!");
                 return;
             }
             if(window.confirm("Really want to delete selected rows?") === true){
                 deleteDynamicData(tablename, selectedRows);
-                gridRef.current?.api.applyTransaction({remove: selectedRows});
+                selectedIds.forEach(id => {
+                    gridRef.current.deleteRow(id);
+                });
             }
         } catch (error) {
             console.log("onDeleteError: ", error);
@@ -32,4 +35,4 @@ function Delete(props) {
     );
 }
 
-export default Delete;
+export default SmartDelete;

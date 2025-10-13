@@ -1,92 +1,85 @@
-import React, { useEffect, useRef, useState, useContext } from "react";
+import React from "react";
 import "./style.css";
-import { Select, Button } from "antd";
-import { toast } from "react-toastify";
-import useLayouts from "../../Hooks/useLayouts";
+import { Button, Select } from "antd";
+import { useState, useRef, useContext, useEffect } from "react";
 import { MyContext } from "../../Context";
+import useLayouts from "../../Hooks/useLayouts";
+import { toast } from "react-toastify";
 
-function Layouts(props) {
-    const { tablename, gridRef } = props;
+function SmartLayouts({tablename, gridRef}) {
     const { layouts } = useContext(MyContext);
     const { getLayouts, createLayouts, updateLayouts, deleteLayouts } = useLayouts();
-
     const [isOpen, setIsOpen] = useState(false);
     const [layoutName, setLayoutName] = useState("");
     const [selectedName, setSlectedName] = useState("");
     const [options, setOptions] = useState([]);
     const [justSelected, setJustSelected] = useState(false);
     const containerRef = useRef(null);
-
     const onChange = (value) => {
         setLayoutName(value);
     }
-
     const onSearch = (value) => {
         setJustSelected(true);
         setLayoutName(value);
         setTimeout(() => setJustSelected(false), 0);
     }
-
+    const onBlur = () => {
+        if(layoutName.trim() === "")return;
+        if(!justSelected){
+            setSlectedName(layoutName);
+        }
+    }
     const applyLayout = () => {
         try {
-            if (!gridRef.current?.api) return;
             const selected = layouts.find(l => l.layout_name === layoutName);
             if (!selected) {
                 toast.error("Please select layout exactly!");
                 return;
             }
             const layoutState = JSON.parse(selected.layout_json);
-            const savedSearchpattern = JSON.parse(localStorage.getItem("searchpatterns") || null);
-            if((savedSearchpattern !== null) && savedSearchpattern.sorts){
-                layoutState.map((layout) => {
-                    const sortState = savedSearchpattern.sorts.find((sort) => sort.colId == layout.colId);
-                    if(sortState) layout.sort = sortState.sort;
-                    return layout;
-                })
+            const savedColumnState = JSON.parse(localStorage.getItem(`smartGrid_${tablename}`) || null);
+            if((savedColumnState !== null) && savedColumnState.columns){
+                savedColumnState.columns = layoutState;
             }
-            gridRef.current.api.applyColumnState({ state: layoutState, applyOrder: true });
+            gridRef.current.loadState(savedColumnState);
             toast.success("Applied");
-        } catch (error) {
+        }
+        catch (error) {
             console.log("applyLayoutError: ", error);
         }
     }
-
     const saveLayout = () => {
         try {
-            if (!gridRef.current?.api) return;
-            if (selectedName.trim() === "") {
-                toast.error("Please input a layout name");
+            if(!selectedName){
+                toast.error("Please input name exactly!");
                 return;
             }
-            const columnState = gridRef.current.api.getColumnState();
-            const layoutJson = JSON.stringify(columnState);
+            const columnState = JSON.parse(localStorage.getItem(`smartGrid_${tablename}`) || "{}");
+            if(!columnState) return;
             const exists = layouts.find(l => l.layout_name === selectedName);
             if (exists) {
                 if (window.confirm("This layout name already exists, update it?")) {
-                    updateLayouts(tablename, selectedName, layoutJson);
-                    setIsOpen(false);
+                    updateLayouts(tablename, selectedName, JSON.stringify(columnState.columns));
                 }
                 return;
             }
-            createLayouts(tablename, selectedName, layoutJson);
+            createLayouts(tablename, selectedName, JSON.stringify(columnState.columns));
             setIsOpen(false);
-        } catch (error) {
+        }catch (error) {
             console.log("saveLayoutError: ", error);
         }
     }
-
     const saveDefault = () => {
         try {
-            if (!gridRef.current.api) return;
-            const columnState = gridRef.current.api.getColumnState();
-            const layoutJson = JSON.stringify(columnState);
+            const columnState = JSON.parse(localStorage.getItem(`smartGrid_${tablename}`) || "{}");
+            const layoutJson = JSON.stringify(columnState.columns);
             updateLayouts(tablename, "Default", layoutJson);
             setIsOpen(false);
-        } catch (error) {
+        }
+        catch (error) {
             console.log("saveDefaultLayoutError: ", error);
         }
     }
-
     const removeLayout = () => {
         try {
             const selected = layouts.find(l => l.layout_name === layoutName);
@@ -94,11 +87,10 @@ function Layouts(props) {
                 toast.error("Please select layout exactly!");
                 return;
             }
-            if (window.confirm("Really want to delete this!")) {
-                deleteLayouts(tablename, selected.id);
-                setIsOpen(false);
-            }
-        } catch (error) {
+            deleteLayouts(tablename, selected.id);
+            setIsOpen(false);
+        }
+        catch (error) {
             console.log("removeLayoutError: ", error);
         }
     }
@@ -110,32 +102,14 @@ function Layouts(props) {
             console.log("buildOptionsError: ", error);
         }
     }
-
-    const onBlur = () => {
-        if(layoutName.trim() === "")return;
-        if(!justSelected){
-            setSlectedName(layoutName);
-        }
-    }
-
+    
     useEffect(() => {
         buildOptions();
-    }, [layouts])
+    },[layouts])
 
     useEffect(() => {
         getLayouts(tablename);
-    }, [])
-
-    useEffect(() => {
-        const onDocClick = (e) => {
-            if (!isOpen) return;
-            if (containerRef.current && !containerRef.current.contains(e.target)) {
-                setIsOpen(false);
-            }
-        }
-        document.addEventListener("mousedown", onDocClick);
-        return () => document.removeEventListener("mousedown", onDocClick);
-    }, [isOpen])
+    }, []);
 
     return (
         <div className="layouts" ref={containerRef}>
@@ -174,4 +148,4 @@ function Layouts(props) {
     );
 }
 
-export default Layouts;
+export default SmartLayouts;

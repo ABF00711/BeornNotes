@@ -1,9 +1,9 @@
-import { Button, Select } from "antd";
-import { useState, useRef, useContext, useEffect } from "react";
-import { MyContext } from "../../../Context";
-import useLayouts from "../../../Hooks/useLayouts";
+import React from "react";
+import "./style.css";
+import { Select } from "antd";
+import { useState, useRef, useEffect } from "react";
 import { toast } from "react-toastify";
-import useSearchpatterns from "../../../Hooks/useFilters";
+import useSearchpatterns from "../../Hooks/useFilters";
 
 function SmartSearchPattern({ tablename, gridRef }) {
     const { getSearchpatterns, updateSearchpatterns, deleteSearchpatterns, createSearchpatterns, searchpatterns } = useSearchpatterns();
