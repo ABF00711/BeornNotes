@@ -23,6 +23,8 @@ function Customers() {
         setIsOpen(true);
     }, [])
 
+    console.log("Re-rendered!")
+
     return (
         <div className="dashboard">
             <Header />
@@ -33,6 +35,7 @@ function Customers() {
                         <div className="toolbar-left">
                             <Add table_name="customers" />
                             <SmartDelete tablename="customers" gridRef={gridRef} />
+                            
                         </div>
                         <div className="toolbar-right">
                             <SmartLayouts tablename="customers4" gridRef={gridRef} />

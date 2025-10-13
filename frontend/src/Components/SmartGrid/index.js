@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useMemo, useCallback, memo } from "react";
+import React, { useEffect, useState, useMemo, memo } from "react";
 import "./style.css";
 import { Grid } from "smart-webcomponents-react/grid";
 import 'smart-webcomponents-react/source/styles/smart.default.css';
@@ -13,7 +13,7 @@ function SmartGrid(props) {
     const { getSearchConfigData, searchConfig } = useSearchConfig();
     const { dynamicData, getDynamicData } = useDynamicData();
     const { getSmartColumns } = useSmartGrid();
-    const [dataSourseSettings, setDataSourseSettings] = useState({});
+    const [dataSourseSettings, setDataSourseSettings] = useState({ dataFields: [] });
     const [displayData, setDisplayData] = useState([]);
     const { jobs, getJobs } = useJob();
 
@@ -117,24 +117,22 @@ function SmartGrid(props) {
         });
     }, [displayData, dataSourseSettings.dataFields?.length]);
 
+
     const isDataReady = columns.length > 0 &&
         displayData.length > 0 &&
         dataSourseSettings.dataFields?.length > 0;
 
     // One-time nudge to ensure autoLoad applies after grid is ready
-    useEffect(() => {
-        if (isDataReady && gridRef.current) {
-            // Small delay to ensure grid is fully bound
-            setTimeout(() => {
-                gridRef.current?.loadState(JSON.parse(localStorage.getItem("Grid View")));
-            }, 200);
-        }
-    }, [isDataReady]);
+    if (isDataReady && gridRef.current) {
+        // Small delay to ensure grid is fully bound
+        setTimeout(() => {
+            gridRef.current?.loadState(JSON.parse(localStorage.getItem("Grid View")));
+        }, 500);
+    }
 
     if (!isDataReady) {
         return <div className="smartGridTable">Loading...</div>;
     }
-
 
     return (
         <div className="smartGridTable">
