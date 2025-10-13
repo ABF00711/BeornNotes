@@ -10,6 +10,7 @@ import SmartDelete from "./Delete";
 import SmartLayouts from "./Layouts";
 import SmartSearchPattern from "./SearchPattern";
 import Update from "../../Components/Update";
+import ResetBtn from "../../Components/Reset";
 
 
 function Customers() {
@@ -23,8 +24,6 @@ function Customers() {
         setIsOpen(true);
     }, [])
 
-    console.log("Re-rendered!")
-
     return (
         <div className="dashboard">
             <Header />
@@ -35,7 +34,7 @@ function Customers() {
                         <div className="toolbar-left">
                             <Add table_name="customers" />
                             <SmartDelete tablename="customers" gridRef={gridRef} />
-                            
+                            <ResetBtn gridRef = {gridRef} />
                         </div>
                         <div className="toolbar-right">
                             <SmartLayouts tablename="customers4" gridRef={gridRef} />

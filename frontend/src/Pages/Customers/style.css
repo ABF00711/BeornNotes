@@ -21,3 +21,97 @@
     gap: 10px;
 }
 .toolbar-right{ margin-left: auto; }
+
+.grid-toolbar{
+    width: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.btn{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 36px;
+    padding: 0 14px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    background: #f4f9ff;
+    color: #0984e3;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+.btn:hover{
+    transform: translateY(-1px);
+    background: #c2d9f1;
+}
+.btn-primary{
+    background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+    border-color: #0984e3;
+    color: #ffffff;
+}
+.btn-dangerous{
+    background: linear-gradient(135deg, #ff7674 0%, #e36b09 100%);
+    border-color: #e30909;
+    color: #ffffff;
+}
+.btn-dangerous-active{
+    background: linear-gradient(135deg, #ff7674 0%, #e30909 100%);
+}
+.btn-dangerous:hover{
+    transform: translateY(-1px);
+    background: #ff7b7b;
+}
+.btn-warning{
+    background: linear-gradient(135deg, #ffc774 0%, #e3b009 100%);
+    border-color: #e39e09;
+    color: #ffffff;
+}
+.btn-outline{
+    background: #ffffff;
+    border: 1px solid #cfe6ff;
+    color: #0984e3;
+}
+.btn-icon{
+    font-size: 16px;
+    line-height: 1;
+}
+.btn-label{
+    font-size: 14px;
+    font-weight: 600;
+}
+.total-count{
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: 8px;
+    padding: 0 10px;
+    height: 30px;
+    border-radius: 6px;
+    background: #e8f3ff;
+    color: #0984e3;
+    border: 1px solid #cfe6ff;
+}
+.total-label{
+    opacity: 0.9;
+    font-size: 13px;
+}
+.total-value{
+    font-weight: 700;
+}
+.table{
+    width: 99%;
+    /* Make grid height responsive to viewport so toolbar remains visible */
+    height: calc(100vh - 210px);
+    max-height: 730px;
+    min-height: 220px;
+    padding: 10px;
+}
+
+/* Ensure AG Grid stretches to fill the container height */
+.table .ag-root-wrapper{
+    height: 100% !important;
+}

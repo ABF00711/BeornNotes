@@ -42,7 +42,7 @@ function SmartSearchPattern({ tablename, gridRef }) {
             toast.error("Please input a search name");
             return;
         }
-        const savedColumnState = JSON.parse(localStorage.getItem("Grid View") || "{}");
+        const savedColumnState = JSON.parse(localStorage.getItem(`smartGrid_${tablename}`) || "{}");
         const searchDataJSON = JSON.stringify({
             filter: savedColumnState.filter,
             sort: savedColumnState.sort
@@ -62,7 +62,7 @@ function SmartSearchPattern({ tablename, gridRef }) {
     }
 
     const saveAsDefault = () => {
-        const savedColumnState = JSON.parse(localStorage.getItem("Grid View"));
+        const savedColumnState = JSON.parse(localStorage.getItem(`smartGrid_${tablename}`));
         const searchDataJSON = JSON.stringify({
             filter: savedColumnState.filter,
             sort: savedColumnState.sort
@@ -91,7 +91,7 @@ function SmartSearchPattern({ tablename, gridRef }) {
                 return;
             }
             const parsedPattern = JSON.parse(selectedPattern.data || "{}");
-            const savedColumnState = JSON.parse(localStorage.getItem("Grid View"));
+            const savedColumnState = JSON.parse(localStorage.getItem(`smartGrid_${tablename}`));
             savedColumnState.filter = parsedPattern.filter;
             savedColumnState.sort = parsedPattern.sort;
             gridRef.current.loadState(savedColumnState);

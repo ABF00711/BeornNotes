@@ -54,7 +54,8 @@ function SmartGrid(props) {
         autoSave: true,
         autoLoad: true,
         autoSaveTimeout: 100,
-        stateMethods: ['sorting', 'filtering', 'columns', 'grouping']
+        stateMethods: ['sorting', 'filtering', 'columns', 'grouping'],
+        storageName: `GridView_${tablename}`
     }), []);
 
     const getDataSourceSettings = () => {
@@ -122,12 +123,17 @@ function SmartGrid(props) {
         displayData.length > 0 &&
         dataSourseSettings.dataFields?.length > 0;
 
+    if (gridRef.current) {
+        console.log("storateId: ", gridRef.current.stateSettings.current)
+        gridRef.current.stateSettings.current = `smartGrid_${tablename}`;
+    }
+
     // One-time nudge to ensure autoLoad applies after grid is ready
     if (isDataReady && gridRef.current) {
         // Small delay to ensure grid is fully bound
         setTimeout(() => {
-            gridRef.current?.loadState(JSON.parse(localStorage.getItem("Grid View")));
-        }, 500);
+            gridRef.current?.loadState(JSON.parse(localStorage.getItem(`smartGrid_${tablename}`) || null));
+        }, 100);
     }
 
     if (!isDataReady) {
