@@ -116,11 +116,9 @@ const useCustomers3 = () => {
             const _mandatoryFields = {};
             searchConfig.map((data) => {
                 if(data.table_name == "customers"){
-                    console.log("data.mandatory: ", data.mandatory);
                     _mandatoryFields[data.field_name] = data.mandatory;
                 }
             })
-            console.log("_mandatoryFields: ", _mandatoryFields);
             setMandatoryFields(_mandatoryFields);
         } catch (error) {
             console.log("getMandatoryFieldsError: ", error);

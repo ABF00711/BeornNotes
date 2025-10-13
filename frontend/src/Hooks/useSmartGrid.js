@@ -5,7 +5,7 @@ import _ from "lodash"
 function useSmartGrid() {
   const { searchConfig } = useContext(MyContext);
 
-  const getSmartColumns = (openUpdateModal) => {
+  const getSmartColumns = (openUpdateModal, gridRef) => {
     try {
       if (!searchConfig) return [];
       const columns = [];
@@ -27,11 +27,12 @@ function useSmartGrid() {
           };
 
           if (dataType === "date") {
-            column.cellsFormat = "dd/MM/yyyy";
+            column.cellsFormat = "MM/dd/yyyy";
           }
           columns.push(column);
         }
       });
+
       columns.push({
         label: "Actions",
         dataField: "actions",
@@ -52,7 +53,8 @@ function useSmartGrid() {
           settings.cell.element.style.pointerEvents = 'none';
           button.style.pointerEvents = 'auto';
           settings.cell.element.appendChild(button);
-        }
+        },
+        summary: ['count']
       });
 
       return columns;

@@ -23,19 +23,19 @@ function SmartGrid(props) {
     }), []);
 
     const appearance = {
-		alternationCount: 2
-	};
+        alternationCount: 2
+    };
 
     const sorting = useMemo(() => ({
         enabled: true,
-        mode: 'single'
+        mode: 'one'
     }), []);
 
     const filtering = useMemo(() => ({
         enabled: true,
         filterRow: {
-			visible: true
-		}
+            visible: true
+        }
     }), []);
 
     const selection = useMemo(() => ({
@@ -88,7 +88,7 @@ function SmartGrid(props) {
     }
 
     useEffect(() => {
-        setColumns(getSmartColumns(openUpdateModal));
+        setColumns(getSmartColumns(openUpdateModal, gridRef));
         getDataSourceSettings();
     }, [searchConfig])
 
@@ -115,11 +115,11 @@ function SmartGrid(props) {
             dataSource: displayData,
             dataFields: dataSourseSettings.dataFields
         });
-    }, [displayData, dataSourseSettings.dataFields?.length]); 
+    }, [displayData, dataSourseSettings.dataFields?.length]);
 
-    const isDataReady = columns.length > 0 && 
-                       displayData.length > 0 && 
-                       dataSourseSettings.dataFields?.length > 0;
+    const isDataReady = columns.length > 0 &&
+        displayData.length > 0 &&
+        dataSourseSettings.dataFields?.length > 0;
 
     // One-time nudge to ensure autoLoad applies after grid is ready
     useEffect(() => {
@@ -149,7 +149,9 @@ function SmartGrid(props) {
                 selection={selection}
                 header={header}
                 stateSettings={stateSettings}
-                
+                summaryRow={{
+                    visible: true
+                }}
             ></Grid>
         </div>
     );
