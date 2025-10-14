@@ -11,8 +11,8 @@ function SmartGrid(props) {
     const { formName, gridRef, openUpdateModal, customData } = props;
     const {tableNames} = useDynamicData();
     const [columns, setColumns] = useState([]);
-    const { getSearchConfigData, searchConfig } = useSearchConfig();
-    const { dynamicData, getDynamicData } = useDynamicData();
+    const { searchConfig } = useSearchConfig();
+    const { dynamicData } = useDynamicData();
     const { getSmartColumns } = useSmartGrid();
     const [dataSourseSettings, setDataSourseSettings] = useState({ dataFields: [] });
     const [displayData, setDisplayData] = useState([]);
