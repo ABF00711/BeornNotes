@@ -12,6 +12,7 @@ import SmartSearchPattern from "../../Components/SearchPattern";
 import Update from "../../Components/Update";
 import ResetBtn from "../../Components/Reset";
 
+const formName = "Customers";
 
 function Customers() {
     const { isCollapsed } = useContext(MyContext);
@@ -32,13 +33,13 @@ function Customers() {
                 <div className="customers">
                     <div className="customers-toolbar">
                         <div className="toolbar-left">
-                            <Add table_name="customers" />
-                            <SmartDelete tablename="customers" gridRef={gridRef} />
-                            <ResetBtn gridRef = {gridRef} />
+                            <Add table_name={formName} />
+                            <SmartDelete tablename={formName} gridRef={gridRef} />
+                            <ResetBtn gridRef = {gridRef} tablename = {formName} />
                         </div>
                         <div className="toolbar-right">
-                            <SmartLayouts tablename="customers" gridRef={gridRef} />
-                            <SmartSearchPattern tablename="customers" gridRef={gridRef} />
+                            <SmartLayouts tablename={formName} gridRef={gridRef} />
+                            <SmartSearchPattern tablename={formName} gridRef={gridRef} />
                         </div>
                     </div>
                     <SmartGrid
