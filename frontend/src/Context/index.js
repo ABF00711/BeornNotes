@@ -14,6 +14,7 @@ function ContextProvider({ children }) {
     })
     const [token, setToken] = useState("");
     const [searchConfig, setSearchConfig] = useState([]);
+    const [tableNames, setTableNames] = useState({});
     const [dynamicData, setDynamicData] = useState([]);
     const [menuItems, setMenuItems] = useState([]);
     const [tabbedInterfaces, setTabbedInterfaces] = useState([]);
@@ -45,6 +46,7 @@ function ContextProvider({ children }) {
         <DataContext.Provider value={{
             userData, setUserData,
             token, setToken,
+            tableNames, setTableNames,
             searchConfig, setSearchConfig,
             menuItems, setMenuItems,
             tabbedInterfaces, setTabbedInterfaces,

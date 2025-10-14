@@ -8,7 +8,8 @@ import useSmartGrid from "../../Hooks/useSmartGrid";
 import useJob from "../../Hooks/useJob";
 
 function SmartGrid(props) {
-    const { tablename, gridRef, openUpdateModal, customData } = props;
+    const { formName, gridRef, openUpdateModal, customData } = props;
+    const {tableNames} = useDynamicData();
     const [columns, setColumns] = useState([]);
     const { getSearchConfigData, searchConfig } = useSearchConfig();
     const { dynamicData, getDynamicData } = useDynamicData();
@@ -55,7 +56,6 @@ function SmartGrid(props) {
         autoLoad: true,
         autoSaveTimeout: 100,
         stateMethods: ['sorting', 'filtering', 'columns', 'grouping'],
-        storageName: `GridView_${tablename}`
     }), []);
 
     const getDataSourceSettings = () => {
@@ -80,8 +80,6 @@ function SmartGrid(props) {
 
     const initializeData = async () => {
         try {
-            await getSearchConfigData();
-            await getDynamicData(tablename);
             await getJobs();
         } catch (error) {
             console.log('Data initialization error:', error);
@@ -125,14 +123,14 @@ function SmartGrid(props) {
 
     if (gridRef.current) {
         console.log("storateId: ", gridRef.current.stateSettings.current)
-        gridRef.current.stateSettings.current = `smartGrid_${tablename}`;
+        gridRef.current.stateSettings.current = `smartGrid_${formName}`;
     }
 
     // One-time nudge to ensure autoLoad applies after grid is ready
     if (isDataReady && gridRef.current) {
         // Small delay to ensure grid is fully bound
         setTimeout(() => {
-            gridRef.current?.loadState(JSON.parse(localStorage.getItem(`smartGrid_${tablename}`) || null));
+            gridRef.current?.loadState(JSON.parse(localStorage.getItem(`smartGrid_${formName}`) || null));
         }, 100);
     }
 
@@ -142,7 +140,7 @@ function SmartGrid(props) {
 
     return (
         <div className="smartGridTable">
-            <Grid id={tablename}
+            <Grid id={tableNames[formName]}
                 ref={gridRef}
                 appearance={appearance}
                 dataSource={dataAdapter}

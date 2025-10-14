@@ -5,7 +5,7 @@ import { useState, useRef, useEffect } from "react";
 import { toast } from "react-toastify";
 import useSearchpatterns from "../../Hooks/useFilters";
 
-function SmartSearchPattern({ tablename, gridRef }) {
+function SmartSearchPattern({ formName, gridRef }) {
     const { getSearchpatterns, updateSearchpatterns, deleteSearchpatterns, createSearchpatterns, searchpatterns } = useSearchpatterns();
     const [isOpen, setIsOpen] = useState(false);
     const [patternName, setPatternName] = useState("");
@@ -42,33 +42,33 @@ function SmartSearchPattern({ tablename, gridRef }) {
             toast.error("Please input a search name");
             return;
         }
-        const savedColumnState = JSON.parse(localStorage.getItem(`smartGrid_${tablename}`) || "{}");
+        const savedColumnState = JSON.parse(localStorage.getItem(`smartGrid_${formName}`) || "{}");
         const searchDataJSON = JSON.stringify({
             filter: savedColumnState.filter,
             sort: savedColumnState.sort
         });
         if (searchpatterns.find(pattern => pattern.name === searchName)) {
             if (window.confirm("This search name already exists, do you want to update it?") === true) {
-                updateSearchpatterns(searchDataJSON, searchName, tablename);
+                updateSearchpatterns(searchDataJSON, searchName, formName);
                 setPatternName("");
                 setIsOpen(false);
                 return;
             }
             return;
         }
-        createSearchpatterns(searchDataJSON, searchName, tablename);
+        createSearchpatterns(searchDataJSON, searchName, formName);
         setPatternName("");
         setIsOpen(false);
     }
 
     const saveAsDefault = () => {
         try {
-            const savedColumnState = JSON.parse(localStorage.getItem(`smartGrid_${tablename}`) || "{}");
+            const savedColumnState = JSON.parse(localStorage.getItem(`smartGrid_${formName}`) || "{}");
             const searchDataJSON = JSON.stringify({
                 filter: savedColumnState.filter,
                 sor: savedColumnState.sort
             })
-            updateSearchpatterns(searchDataJSON, "Default", tablename);
+            updateSearchpatterns(searchDataJSON, "Default", formName);
             setPatternName("");
             setIsOpen(false);
         } catch (error) {
@@ -83,7 +83,7 @@ function SmartSearchPattern({ tablename, gridRef }) {
             return;
         }
         if (window.confirm("Really want to delete this!")) {
-            deleteSearchpatterns(tablename, searchpatterns[selectedPatternIndex].id);
+            deleteSearchpatterns(formName, searchpatterns[selectedPatternIndex].id);
         }
     }
 
@@ -95,7 +95,7 @@ function SmartSearchPattern({ tablename, gridRef }) {
                 return;
             }
             const parsedPattern = JSON.parse(selectedPattern.data || "{}");
-            const savedColumnState = JSON.parse(localStorage.getItem(`smartGrid_${tablename}`));
+            const savedColumnState = JSON.parse(localStorage.getItem(`smartGrid_${formName}`));
             if (savedColumnState) {
                 savedColumnState.filter = parsedPattern.filter;
                 savedColumnState.sort = parsedPattern.sort;
@@ -130,7 +130,7 @@ function SmartSearchPattern({ tablename, gridRef }) {
     }, [searchpatterns])
 
     useEffect(() => {
-        getSearchpatterns(tablename);
+        getSearchpatterns(formName);
     }, [])
 
     return (

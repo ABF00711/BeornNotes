@@ -4,7 +4,8 @@ import { toast } from "react-toastify";
 import useDynamicData from "../../Hooks/useDynamicData";
 
 function SmartDelete(props) {
-    const { tablename, gridRef } = props;
+    const { formName, gridRef } = props;
+    const {tableNames} = useDynamicData();
     const {deleteDynamicData} = useDynamicData();
 
     const onDelete = () => {
@@ -17,7 +18,7 @@ function SmartDelete(props) {
                 return;
             }
             if(window.confirm("Really want to delete selected rows?") === true){
-                deleteDynamicData(tablename, selectedRows);
+                deleteDynamicData(tableNames[formName], selectedRows);
                 selectedIds.forEach(id => {
                     gridRef.current.deleteRow(id);
                 });

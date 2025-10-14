@@ -4,7 +4,7 @@ import services from "../Services";
 import { toast } from "react-toastify";
 
 function useDynamicData() {
-    const { dynamicData, setDynamicData, searchConfig, token } = useContext(MyContext);
+    const { dynamicData, setDynamicData, searchConfig, token, tableNames, setTableNames } = useContext(MyContext);
 
     const statusBar = useMemo(() => ({
             statusPanels: [
@@ -15,11 +15,15 @@ function useDynamicData() {
             ],
         }), []);
 
-    const getDynamicData = async (tableView) => {
+    const getDynamicData = async (formName) => {
         try {
-            const res = await services.getDynamicData(tableView, token);
+            const res = await services.getDynamicData(formName, token);
             if (res.message === "getDynamicData success") {
                 setDynamicData(res.dynamicData);
+                setTableNames((currentTableNames) => ({
+                    ...currentTableNames,
+                    [formName]: res.tablename,
+                }));
             }
         } catch (error) {
             console.log("getDynamicDataError: ", error);
@@ -268,9 +272,13 @@ function useDynamicData() {
         }
     };
 
-    return (
-        { dynamicData, setDynamicData, getDynamicData, getColumnDefs, createDynamicData, updateDynamicData, deleteDynamicData, statusBar }
-    );
+    return { 
+            tableNames, dynamicData, setDynamicData, 
+            getDynamicData, getColumnDefs, 
+            createDynamicData, updateDynamicData, 
+            deleteDynamicData, statusBar 
+        }
+    ;
 }
 
 export default useDynamicData;

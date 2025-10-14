@@ -6,7 +6,7 @@ import useLayouts from "../../Hooks/useLayouts";
 import { toast } from "react-toastify";
 
 function ResetBtn(props) {
-    const { gridRef, formName } = props;
+    const { gridRef } = props;
     const { searchpatterns } = useSearchpatterns();
     const { layouts } = useLayouts();
 

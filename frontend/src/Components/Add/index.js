@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import "./style.css";
 import useSearchConfig from "../../Hooks/useSearchConfig";
 import DynamicModal from "../DynamicModal";
+import useDynamicData from "../../Hooks/useDynamicData";
 
-function Add({ table_name }) {
+function Add({ formName }) {
+    const {tableNames} = useDynamicData();
     const { searchConfig } = useSearchConfig();
     const [fieldsData, setFieldsData] = useState([]);
     const [formData, setFormData] = useState({});
@@ -26,7 +28,7 @@ function Add({ table_name }) {
     }, [fieldsData])
     
     useEffect(() => {
-        setFieldsData(searchConfig.filter(item => item.table_name === table_name));
+        setFieldsData(searchConfig.filter(item => item.table_name === tableNames[formName]));
     }, [searchConfig])
 
     return (
@@ -36,7 +38,7 @@ function Add({ table_name }) {
                 <span className="btn-label">Add</span>
             </button>
             <DynamicModal
-                table_name={table_name}
+                table_name={tableNames?.[formName] ?? ""}
                 isOpen={isOpen}
                 setIsOpen={setIsOpen}
                 title={"Add"}

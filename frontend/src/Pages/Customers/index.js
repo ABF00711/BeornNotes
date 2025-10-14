@@ -11,11 +11,15 @@ import SmartLayouts from "../../Components/Layouts";
 import SmartSearchPattern from "../../Components/SearchPattern";
 import Update from "../../Components/Update";
 import ResetBtn from "../../Components/Reset";
+import useDynamicData from "../../Hooks/useDynamicData";
+import useSearchConfig from "../../Hooks/useSearchConfig";
 
 const formName = "Customers";
 
 function Customers() {
     const { isCollapsed } = useContext(MyContext);
+    const {getDynamicData} = useDynamicData();
+    const {getSearchConfigData} = useSearchConfig();
     const gridRef = useRef(null);
     const [isOpen, setIsOpen] = useState(false);
     const [updateData, setUpdateData] = useState({});
@@ -23,6 +27,11 @@ function Customers() {
     const openUpdateModal = useCallback((data) => {
         setUpdateData(data);
         setIsOpen(true);
+    }, [])
+
+    useEffect(() => {
+        getSearchConfigData();
+        getDynamicData(formName);
     }, [])
 
     return (
@@ -33,22 +42,22 @@ function Customers() {
                 <div className="customers">
                     <div className="customers-toolbar">
                         <div className="toolbar-left">
-                            <Add table_name={formName} />
-                            <SmartDelete tablename={formName} gridRef={gridRef} />
-                            <ResetBtn gridRef = {gridRef} tablename = {formName} />
+                            <Add formName={formName} />
+                            <SmartDelete formName={formName} gridRef={gridRef} />
+                            <ResetBtn gridRef = {gridRef} />
                         </div>
                         <div className="toolbar-right">
-                            <SmartLayouts tablename={formName} gridRef={gridRef} />
-                            <SmartSearchPattern tablename={formName} gridRef={gridRef} />
+                            <SmartLayouts formName={formName} gridRef={gridRef} />
+                            <SmartSearchPattern formName={formName} gridRef={gridRef} />
                         </div>
                     </div>
                     <SmartGrid
-                        tablename="customers"
+                        formName={formName}
                         gridRef={gridRef}
                         openUpdateModal = {openUpdateModal}
                         />
                     <Update
-                        tablename={"customers"}
+                        formName={formName}
                         isOpen={isOpen}
                         setIsOpen={setIsOpen}
                         updateData={updateData}

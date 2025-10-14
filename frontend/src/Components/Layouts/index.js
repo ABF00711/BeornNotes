@@ -6,7 +6,7 @@ import { MyContext } from "../../Context";
 import useLayouts from "../../Hooks/useLayouts";
 import { toast } from "react-toastify";
 
-function SmartLayouts({tablename, gridRef}) {
+function SmartLayouts({formName, gridRef}) {
     const { layouts } = useContext(MyContext);
     const { getLayouts, createLayouts, updateLayouts, deleteLayouts } = useLayouts();
     const [isOpen, setIsOpen] = useState(false);
@@ -37,7 +37,7 @@ function SmartLayouts({tablename, gridRef}) {
                 return;
             }
             const layoutState = JSON.parse(selected.layout_json);
-            const savedColumnState = JSON.parse(localStorage.getItem(`smartGrid_${tablename}`) || null);
+            const savedColumnState = JSON.parse(localStorage.getItem(`smartGrid_${formName}`) || null);
             if((savedColumnState !== null) && savedColumnState.columns){
                 savedColumnState.columns = layoutState;
             }
@@ -54,16 +54,16 @@ function SmartLayouts({tablename, gridRef}) {
                 toast.error("Please input name exactly!");
                 return;
             }
-            const columnState = JSON.parse(localStorage.getItem(`smartGrid_${tablename}`) || "{}");
+            const columnState = JSON.parse(localStorage.getItem(`smartGrid_${formName}`) || "{}");
             if(!columnState) return;
             const exists = layouts.find(l => l.layout_name === selectedName);
             if (exists) {
                 if (window.confirm("This layout name already exists, update it?")) {
-                    updateLayouts(tablename, selectedName, JSON.stringify(columnState.columns));
+                    updateLayouts(formName, selectedName, JSON.stringify(columnState.columns));
                 }
                 return;
             }
-            createLayouts(tablename, selectedName, JSON.stringify(columnState.columns));
+            createLayouts(formName, selectedName, JSON.stringify(columnState.columns));
             setIsOpen(false);
         }catch (error) {
             console.log("saveLayoutError: ", error);
@@ -71,9 +71,9 @@ function SmartLayouts({tablename, gridRef}) {
     }
     const saveDefault = () => {
         try {
-            const columnState = JSON.parse(localStorage.getItem(`smartGrid_${tablename}`) || "{}");
+            const columnState = JSON.parse(localStorage.getItem(`smartGrid_${formName}`) || "{}");
             const layoutJson = JSON.stringify(columnState.columns);
-            updateLayouts(tablename, "Default", layoutJson);
+            updateLayouts(formName, "Default", layoutJson);
             setIsOpen(false);
         }
         catch (error) {
@@ -87,7 +87,7 @@ function SmartLayouts({tablename, gridRef}) {
                 toast.error("Please select layout exactly!");
                 return;
             }
-            deleteLayouts(tablename, selected.id);
+            deleteLayouts(formName, selected.id);
             setIsOpen(false);
         }
         catch (error) {
@@ -108,7 +108,7 @@ function SmartLayouts({tablename, gridRef}) {
     },[layouts])
 
     useEffect(() => {
-        getLayouts(tablename);
+        getLayouts(formName);
     }, []);
 
     return (

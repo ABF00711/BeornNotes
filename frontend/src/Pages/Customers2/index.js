@@ -95,18 +95,18 @@ function Customers2() {
                             </button>
                         </div>
                         <div className="toolbar-right">
-                            <SmartLayouts tablename={formName} gridRef={gridRef} />
-                            <SmartSearchPattern tablename={formName} gridRef={gridRef} />
+                            <SmartLayouts formName={formName} gridRef={gridRef} />
+                            <SmartSearchPattern formName={formName} gridRef={gridRef} />
                         </div>
                     </div>
                     <SmartGrid
-                        tablename="customers"
+                        formName = {formName}
                         gridRef={gridRef}
                         openUpdateModal = {openUpdateModal}
                         customData={filteredData}
                         />
                     <Update
-                        tablename={"customers"}
+                        formName={formName}
                         isOpen={isOpen}
                         setIsOpen={setIsOpen}
                         updateData={updateData}
