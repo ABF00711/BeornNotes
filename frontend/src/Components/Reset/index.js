@@ -18,7 +18,6 @@ function ResetBtn(props) {
             const defaultPattern = searchpatterns.find((pattern) => pattern.name == "Default");
             const defaultLayout = layouts.find((layout) => layout.layout_name == "Default");
             if (defaultPattern) {
-                console.log("defaultPattern: ", defaultPattern);
                 const parsedPattern = JSON.parse(defaultPattern.data);
                 columnState.filter = parsedPattern.filter;
                 columnState.sort = parsedPattern.sort;
