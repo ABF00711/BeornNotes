@@ -29,16 +29,16 @@ function Customers() {
             <Header />
             <Navbar />
             <div className={`dashboard-container ${!isCollapsed ? 'M_L_280' : ''}`}> 
-                <div className="customers4">
-                    <div className="customers4-toolbar">
+                <div className="customers">
+                    <div className="customers-toolbar">
                         <div className="toolbar-left">
                             <Add table_name="customers" />
                             <SmartDelete tablename="customers" gridRef={gridRef} />
                             <ResetBtn gridRef = {gridRef} />
                         </div>
                         <div className="toolbar-right">
-                            <SmartLayouts tablename="customers4" gridRef={gridRef} />
-                            <SmartSearchPattern tablename="customers4" gridRef={gridRef} />
+                            <SmartLayouts tablename="customers" gridRef={gridRef} />
+                            <SmartSearchPattern tablename="customers" gridRef={gridRef} />
                         </div>
                     </div>
                     <SmartGrid

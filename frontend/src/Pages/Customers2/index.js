@@ -6,14 +6,15 @@ import Sidebar from "../Sidebar";
 import { MyContext } from "../../Context";
 import SmartGrid from "../../Components/SmartGrid";
 import Add from "../../Components/Add";
-import SmartDelete from "./Delete";
-import SmartLayouts from "./Layouts";
-import SmartSearchPattern from "./SearchPattern";
 import Update from "../../Components/Update";
 import InputGroup from "../../Components/InputGroup";
 import useDynamicData from "../../Hooks/useDynamicData";
 import useJob from "../../Hooks/useJob";
+import SmartDelete from "../../Components/Delete";
+import SmartLayouts from "../../Components/Layouts";
+import SmartSearchPattern from "../../Components/SearchPattern";
 
+const formName = "Customers2";
 
 function Customers2() {
     const { isCollapsed } = useContext(MyContext);
@@ -71,11 +72,11 @@ function Customers2() {
             <Header />
             <Navbar />
             <div className={`dashboard-container ${!isCollapsed ? 'M_L_280' : ''}`}>
-                <div className="customers4">
-                    <div className="customers4-toolbar">
+                <div className="customers">
+                    <div className="customers-toolbar">
                         <div className="toolbar-left">
-                            <Add table_name="customers" />
-                            <SmartDelete tablename="customers" gridRef={gridRef} />
+                            <Add table_name={formName} />
+                            <SmartDelete tablename={formName} gridRef={gridRef} />
                             <div>
                                 <InputGroup props={{
                                     fieldFormat: { id: "age", field_type: "number", field_label: "Age", field_name: "age" },
@@ -94,8 +95,8 @@ function Customers2() {
                             </button>
                         </div>
                         <div className="toolbar-right">
-                            <SmartLayouts tablename="customers4" gridRef={gridRef} />
-                            <SmartSearchPattern tablename="customers4" gridRef={gridRef} />
+                            <SmartLayouts tablename={formName} gridRef={gridRef} />
+                            <SmartSearchPattern tablename={formName} gridRef={gridRef} />
                         </div>
                     </div>
                     <SmartGrid

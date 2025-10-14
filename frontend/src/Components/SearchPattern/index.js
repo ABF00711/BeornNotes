@@ -46,7 +46,7 @@ function SmartSearchPattern({ tablename, gridRef }) {
         const searchDataJSON = JSON.stringify({
             filter: savedColumnState.filter,
             sort: savedColumnState.sort
-        })
+        });
         if (searchpatterns.find(pattern => pattern.name === searchName)) {
             if (window.confirm("This search name already exists, do you want to update it?") === true) {
                 updateSearchpatterns(searchDataJSON, searchName, tablename);
@@ -62,14 +62,18 @@ function SmartSearchPattern({ tablename, gridRef }) {
     }
 
     const saveAsDefault = () => {
-        const savedColumnState = JSON.parse(localStorage.getItem(`smartGrid_${tablename}`));
-        const searchDataJSON = JSON.stringify({
-            filter: savedColumnState.filter,
-            sort: savedColumnState.sort
-        })
-        updateSearchpatterns(searchDataJSON, "Default", tablename);
-        setPatternName("");
-        setIsOpen(false);
+        try {
+            const savedColumnState = JSON.parse(localStorage.getItem(`smartGrid_${tablename}`) || "{}");
+            const searchDataJSON = JSON.stringify({
+                filter: savedColumnState.filter,
+                sor: savedColumnState.sort
+            })
+            updateSearchpatterns(searchDataJSON, "Default", tablename);
+            setPatternName("");
+            setIsOpen(false);
+        } catch (error) {
+            console.log("saveAsDefaultError: ", error)
+        }
     }
 
     const onDelete = () => {
@@ -92,8 +96,10 @@ function SmartSearchPattern({ tablename, gridRef }) {
             }
             const parsedPattern = JSON.parse(selectedPattern.data || "{}");
             const savedColumnState = JSON.parse(localStorage.getItem(`smartGrid_${tablename}`));
-            savedColumnState.filter = parsedPattern.filter;
-            savedColumnState.sort = parsedPattern.sort;
+            if (savedColumnState) {
+                savedColumnState.filter = parsedPattern.filter;
+                savedColumnState.sort = parsedPattern.sort;
+            }
             gridRef.current.loadState(savedColumnState);
             toast.success("Applied");
         } catch (error) {
