@@ -13,11 +13,13 @@ import useJob from "../../Hooks/useJob";
 import SmartDelete from "../../Components/Delete";
 import SmartLayouts from "../../Components/Layouts";
 import SmartSearchPattern from "../../Components/SearchPattern";
+import useSearchConfig from "../../Hooks/useSearchConfig";
 
 const formName = "Customers2";
 
 function Customers2() {
     const { isCollapsed } = useContext(MyContext);
+    const {getSearchConfigData} = useSearchConfig();
     const gridRef = useRef(null);
     const [isOpen, setIsOpen] = useState(false);
     const [updateData, setUpdateData] = useState({});
@@ -59,7 +61,8 @@ function Customers2() {
     }
 
     useEffect(() => {
-        getDynamicData("customers");
+        getSearchConfigData();
+        getDynamicData(formName);
         getJobs();
     }, [])
 
