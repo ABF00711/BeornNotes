@@ -26,6 +26,15 @@ function useSmartGrid() {
             dataType
           };
 
+          if (column.dataField == "age") {
+            column.formatFunction = (settings) => {
+              const value = settings.value;
+              settings.value = (value === null || value === undefined || value === 0)
+                ? ''
+                : value;
+            };
+          }
+
           if (dataType === "date") {
             column.cellsFormat = "MM/dd/yyyy";
           }

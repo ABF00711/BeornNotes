@@ -16,6 +16,7 @@ function Update({formName, isOpen, setIsOpen, updateData}) {
                 setFormData({});
                 return;
             }
+            if(updateData.age == 0) updateData.age = null;
             setFormData(updateData);
         } catch (error) {
             console.log("getFormDataError: ", error);
