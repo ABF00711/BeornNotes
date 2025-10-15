@@ -67,7 +67,7 @@ function Profile() {
                             <div className="profile-section">
                                 <h2>Basic Information</h2>
                                 <form className="profile-form" onSubmit={handleSubmitProfile(handleUpdateProfile)}>
-                                    <div className={`field-container ${profileErrors.name ? 'has-error' : ''} ${isSubmittedProfile && !profileErrors.name ? 'has-success' : ''}`}>
+                                    <div className={` ${profileErrors.name ? 'has-error' : ''} ${isSubmittedProfile && !profileErrors.name ? 'has-success' : ''}`}>
                                         <Controller
                                             name="name"
                                             control={profileControl}
@@ -84,7 +84,7 @@ function Profile() {
                                         />
                                         {profileErrors.name && <p>{profileErrors.name.message}</p>}
                                     </div>
-                                    <div className={`field-container ${profileErrors.email ? 'has-error' : ''} ${isSubmittedProfile && !profileErrors.email ? 'has-success' : ''}`}>
+                                    <div className={` ${profileErrors.email ? 'has-error' : ''} ${isSubmittedProfile && !profileErrors.email ? 'has-success' : ''}`}>
                                         <Controller
                                             name="email"
                                             control={profileControl}
@@ -108,7 +108,7 @@ function Profile() {
                                 </form>
                                 <h2>Change Password</h2>
                                 <form className="profile-form" onSubmit={handleSubmitPassword(handlePasswordChange)}>
-                                    <div className={`field-container ${passwordErrors.currentPassword ? 'has-error' : ''} ${isSubmittedPassword && !passwordErrors.currentPassword ? 'has-success' : ''}`}>
+                                    <div className={` ${passwordErrors.currentPassword ? 'has-error' : ''} ${isSubmittedPassword && !passwordErrors.currentPassword ? 'has-success' : ''}`}>
                                         <Controller
                                             name="currentPassword"
                                             control={passwordControl}
@@ -125,7 +125,7 @@ function Profile() {
                                         />
                                         {passwordErrors.currentPassword && <p>{passwordErrors.currentPassword.message}</p>}
                                     </div>
-                                    <div className={`field-container ${passwordErrors.newPassword ? 'has-error' : ''} ${isSubmittedPassword && !passwordErrors.newPassword ? 'has-success' : ''}`}>
+                                    <div className={` ${passwordErrors.newPassword ? 'has-error' : ''} ${isSubmittedPassword && !passwordErrors.newPassword ? 'has-success' : ''}`}>
                                         <Controller
                                             name="newPassword"
                                             control={passwordControl}
@@ -142,7 +142,7 @@ function Profile() {
                                         />
                                         {passwordErrors.newPassword && <p>{passwordErrors.newPassword.message}</p>}
                                     </div>
-                                    <div className={`field-container ${passwordErrors.confirmPassword ? 'has-error' : ''} ${isSubmittedPassword && !passwordErrors.confirmPassword ? 'has-success' : ''}`}>
+                                    <div className={` ${passwordErrors.confirmPassword ? 'has-error' : ''} ${isSubmittedPassword && !passwordErrors.confirmPassword ? 'has-success' : ''}`}>
                                         <Controller
                                             name="confirmPassword"
                                             control={passwordControl}
