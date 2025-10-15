@@ -153,10 +153,11 @@ function DynamicModal({ table_name, isOpen, setIsOpen, role, initData = {} }) {
                                 <DateTimePicker
                                     {...field}
                                     value={field.value || ''}
-                                    formatString="yyyy-MM-dd"
+                                    formatString="MM-dd-yyyy"
                                     calendarButton
                                     onChange={(e) => field.onChange(e.detail.value.toString())}
                                     style={{ height: "40px" }}
+                                    
                                 />
                             )}
                         />

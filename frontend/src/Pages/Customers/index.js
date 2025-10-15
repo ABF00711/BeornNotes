@@ -29,9 +29,13 @@ function Customers() {
         setIsOpen(true);
     }, [])
 
+    const getInit = async() => {
+        await getSearchConfigData();
+        await getDynamicData(formName);
+    }
+
     useEffect(() => {
-        getSearchConfigData();
-        getDynamicData(formName);
+        getInit();
     }, [])
 
     return (
