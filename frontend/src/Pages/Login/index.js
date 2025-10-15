@@ -13,7 +13,7 @@ import { loginSchema } from "./userLoginSchema";
 function Login() {
     const navigate = useNavigate();
     const { login } = useAuth();
-    const { currentInterface } = useTabbedInterfaces();
+    const { getCurrentTabInterface } = useTabbedInterfaces();
 
     const [mfaRequired, setMfaRequired] = useState(false);
 
@@ -30,7 +30,7 @@ function Login() {
             toast.info("Please enter your 6-digit authentication code");
             setTimeout(() => setFocus("mfaCode"), 0);
         } else if (result === true) {
-            navigate(currentInterface.activeUrl);
+            getCurrentTabInterface();
         }
     };
 

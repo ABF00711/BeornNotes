@@ -98,12 +98,33 @@ function useTabbedInterfaces() {
         }
     }
 
+    const getCurrentTabInterface = async () => {
+        try {
+            const res = await services.getTabInterfaces(token);
+            if(res.message == "getTabInterfaces success"){
+                setTabbedInterfaces(res.tabInterfaces);
+                const defaultInterface = res.tabInterfaces.find((tInterface) => tInterface.tabs_name == "Default");
+                if(defaultInterface){
+                    setCurrentInterface(defaultInterface);
+                    localStorage.setItem("currentInterface", JSON.stringify(defaultInterface));
+                    navigate(currentInterface.activeUrl);
+                }
+            }
+            localStorage.setItem("currentInterface", JSON.stringify(currentInterface));
+            setCurrentInterface(currentInterface);
+            navigate("/");
+        } catch (error) {
+            console.log('getCurrentTabInterfaceError: ', error);
+        }
+    }
+
     return (
         {
             addTabbedInterface, 
             removeTabbedInterface, currentInterface,
             getTabInterfaces, createTabInterfaces,
-            updateTabInterfaces, deleteTabInterfaces
+            updateTabInterfaces, deleteTabInterfaces,
+            getCurrentTabInterface
         }
     );
 }

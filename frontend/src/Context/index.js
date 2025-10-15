@@ -32,10 +32,6 @@ function ContextProvider({ children }) {
     useEffect(() => {
         const savedUserData = JSON.parse(localStorage.getItem("userData") || null);
         const savedUserTime = JSON.parse(localStorage.getItem(`${savedUserData.name}`) || null);
-        const savedCurrentInterface = JSON.parse(localStorage.getItem("currentInterface") || null);
-        if(!!savedCurrentInterface){
-            setCurrentInterface(savedCurrentInterface);
-        }
         if(!!savedUserData){
             setUserData(savedUserData);
         }

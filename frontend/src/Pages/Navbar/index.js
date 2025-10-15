@@ -29,9 +29,9 @@ function Navbar() {
             const oldIndex = tabs.findIndex(t => (t?.id ?? t?.key ?? t?.path) === activeId);
             const newIndex = tabs.findIndex(t => (t?.id ?? t?.key ?? t?.path) === overId);
             if (oldIndex === -1 || newIndex === -1) return;
-    
+
             const nextTabs = arrayMove(tabs, oldIndex, newIndex);
-            localStorage.setItem("currentInterface", JSON.stringify({...currentInterface, tabbedBtns: nextTabs}));
+            localStorage.setItem("currentInterface", JSON.stringify({ ...currentInterface, tabbedBtns: nextTabs }));
             setCurrentInterface({ ...currentInterface, tabbedBtns: nextTabs });
         } catch (error) {
             console.log("onDropError: ", error);
@@ -57,6 +57,13 @@ function Navbar() {
         });
     };
 
+    useEffect(() => {
+        const savedCurrentInterface = JSON.parse(localStorage.getItem("currentInterface") || null);
+        if (!!savedCurrentInterface) {
+            setCurrentInterface(savedCurrentInterface);
+        }
+    }, [])
+
     return (
         <div className="navbar">
             <div className="navbar-container">
@@ -64,7 +71,7 @@ function Navbar() {
                     {renderTabs()}
                 </div>
                 <div className="navbar-actions">
-                    <TabInterfaces navigate = {navigate} />
+                    <TabInterfaces navigate={navigate} />
                 </div>
             </div>
         </div>
