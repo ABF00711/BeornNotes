@@ -20,26 +20,49 @@ function ContextProvider({ children }) {
     const [tabbedInterfaces, setTabbedInterfaces] = useState([]);
     const [currentInterface, setCurrentInterface] = useState({
         tabbedBtns: [],
-        activeUrl:"/"
+        activeUrl: "/"
     });
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [searchpatterns, setSearchpatterns] = useState([]);
     const [layouts, setLayouts] = useState([]);
-    
+
     const [jobs, setJobs] = useState([]);
     const [userTime, setUserTime] = useState(defaultUserTime);
 
     useEffect(() => {
         const savedUserData = JSON.parse(localStorage.getItem("userData") || null);
         const savedUserTime = JSON.parse(localStorage.getItem(`${savedUserData.name}`) || null);
-        if(!!savedUserData){
+        if (!!savedUserData) {
             setUserData(savedUserData);
         }
-        if(!savedUserTime) setUserTime(savedUserTime);
+        if (!savedUserTime) setUserTime(savedUserTime);
     }, [])
+
+    const initializeStateData = () => {
+        setUserData({
+            name: "",
+            email: ""
+        });
+        setToken("");
+        setSearchConfig([]);
+        setTableNames({});
+        setDynamicData([]);
+        setMenuItems([]);
+        setTabbedInterfaces([]);
+        setCurrentInterface({
+            tabbedBtns: [],
+            activeUrl: "/"
+        });
+        setIsCollapsed(false);
+        setSearchpatterns([]);
+        setLayouts([]);
+        setJobs([]);
+        setUserTime(defaultUserTime);
+    }
 
     return (
         <DataContext.Provider value={{
+            initializeStateData,
             userData, setUserData,
             token, setToken,
             tableNames, setTableNames,

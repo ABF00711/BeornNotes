@@ -30,7 +30,7 @@ function Login() {
             toast.info("Please enter your 6-digit authentication code");
             setTimeout(() => setFocus("mfaCode"), 0);
         } else if (result === true) {
-            getCurrentTabInterface();
+            await getCurrentTabInterface();
         }
     };
 

@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 function useAuth() {
-    const { userData, setUserData, token, setToken, searchConfig } = useContext(MyContext);
+    const { userData, setUserData, token, setToken, searchConfig, initializeStateData } = useContext(MyContext);
     const navigate = useNavigate();
 
     const register = async (formData) => {
@@ -81,10 +81,7 @@ function useAuth() {
 
     const logout = () => {
         try {
-            setUserData({ name: "", email: "" });
-            setToken("");
-            localStorage.setItem("jwtToken", "");
-            sessionStorage.setItem("jwtToken", "");
+            initializeStateData();
             navigate("/login");
         } catch (error) {
             console.log("logoutError: ", error);

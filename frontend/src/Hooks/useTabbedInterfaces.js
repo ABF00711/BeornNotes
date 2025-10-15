@@ -110,6 +110,7 @@ function useTabbedInterfaces() {
                     navigate(currentInterface.activeUrl);
                 }
             }
+            console.log("currentInterface: ", currentInterface);
             localStorage.setItem("currentInterface", JSON.stringify(currentInterface));
             setCurrentInterface(currentInterface);
             navigate("/");
