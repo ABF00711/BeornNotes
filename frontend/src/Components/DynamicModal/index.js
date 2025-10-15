@@ -34,7 +34,7 @@ function DynamicModal({ table_name, isOpen, setIsOpen, role, initData = {} }) {
         return formattedData;
     }, [initData]);
 
-    const { register, handleSubmit, control, reset, formState: { errors, isSubmitting }, trigger } = useForm({
+    const { handleSubmit, control, reset, formState: { errors, isSubmitting }, trigger } = useForm({
         resolver: zodResolver(customerSchema),
         defaultValues,
     });
@@ -49,6 +49,7 @@ function DynamicModal({ table_name, isOpen, setIsOpen, role, initData = {} }) {
                 await createDynamicData(table_name, data);
             }
             setIsOpen(false);
+            reset();
         } catch (error) {
             console.error("Error submitting form:", error);
         } finally {
