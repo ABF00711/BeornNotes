@@ -43,7 +43,7 @@ function Login() {
                 </div>
 
                 <form className="auth-form" onSubmit={handleSubmit(onSubmit)}>
-                    <div className={`field-container ${errors.email ? 'has-error' : ''} ${isSubmitted && !errors.email ? 'has-success' : ''}`}>
+                    <div className={`authField_container ${errors.email ? 'has-error' : ''} ${isSubmitted && !errors.email ? 'has-success' : ''}`}>
                         <Controller
                             name="email"
                             control={control}
@@ -61,7 +61,7 @@ function Login() {
                         {errors.email && <p>{errors.email.message}</p>}
                     </div>
 
-                    <div className={`field-container ${errors.password ? 'has-error' : ''} ${isSubmitted && !errors.password ? 'has-success' : ''}`}>
+                    <div className={`authField_container ${errors.password ? 'has-error' : ''} ${isSubmitted && !errors.password ? 'has-success' : ''}`}>
                         <Controller
                             name="password"
                             control={control}
@@ -81,7 +81,7 @@ function Login() {
 
                     {mfaRequired && (
                         <div className="mfa-section">
-                            <div className={`field-container ${errors.mfaCode ? 'has-error' : ''} ${isSubmitted && !errors.mfaCode ? 'has-success' : ''}`}>
+                            <div className={`authField_container ${errors.mfaCode ? 'has-error' : ''} ${isSubmitted && !errors.mfaCode ? 'has-success' : ''}`}>
                                 <Controller
                                     name="mfaCode"
                                     control={control}

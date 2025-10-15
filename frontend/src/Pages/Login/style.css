@@ -48,6 +48,10 @@
     gap: 20px;
 }
 
+.authField_container{
+    margin-bottom: 20px;
+}
+
 .input-group {
     position: relative;
 }

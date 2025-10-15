@@ -31,7 +31,7 @@ function Register() {
                     <p>Join BeornNotes and start managing your customers</p>
                 </div>
                 <form className="auth-form" onSubmit={handleSubmit(onSubmit)}>
-                    <div className={`field-container ${errors.name ? 'has-error' : ''} ${isSubmitted && !errors.name ? 'has-success' : ''}`}>
+                    <div className={`authField_container ${errors.name ? 'has-error' : ''} ${isSubmitted && !errors.name ? 'has-success' : ''}`}>
                         <Controller
                             name="name"
                             control={control}
@@ -49,7 +49,7 @@ function Register() {
                         {errors.name && <p>{errors.name.message}</p>}
                     </div>
 
-                    <div className={`field-container ${errors.email ? 'has-error' : ''} ${isSubmitted && !errors.email ? 'has-success' : ''}`}>
+                    <div className={`authField_container ${errors.email ? 'has-error' : ''} ${isSubmitted && !errors.email ? 'has-success' : ''}`}>
                         <Controller
                             name="email"
                             control={control}
@@ -67,7 +67,7 @@ function Register() {
                         {errors.email && <p>{errors.email.message}</p>}
                     </div>
 
-                    <div className={`field-container ${errors.password ? 'has-error' : ''} ${isSubmitted && !errors.password ? 'has-success' : ''}`}>
+                    <div className={`authField_container ${errors.password ? 'has-error' : ''} ${isSubmitted && !errors.password ? 'has-success' : ''}`}>
                         <Controller
                             name="password"
                             control={control}
@@ -85,7 +85,7 @@ function Register() {
                         {errors.password && <p>{errors.password.message}</p>}
                     </div>
 
-                    <div className={`field-container ${errors.confirmPassword ? 'has-error' : ''} ${isSubmitted && !errors.confirmPassword ? 'has-success' : ''}`}>
+                    <div className={`authField_container ${errors.confirmPassword ? 'has-error' : ''} ${isSubmitted && !errors.confirmPassword ? 'has-success' : ''}`}>
                         <Controller
                             name="confirmPassword"
                             control={control}
