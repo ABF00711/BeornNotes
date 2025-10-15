@@ -43,7 +43,8 @@ function SmartGrid(props) {
         enabled: true,
         checkBoxes: {
             enabled: true
-        }
+        },
+        action: "none"
     }), []);
 
     const header = useMemo(() => ({
