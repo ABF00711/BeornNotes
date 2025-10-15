@@ -60,8 +60,10 @@ function useAuth() {
                 setToken(res.token);
                 if(newUser.rememberMe){
                     localStorage.setItem("jwtToken", res.token);
-                    localStorage.setItem("userData", JSON.stringify(res.user));
+                }else{
+                    sessionStorage.setItem("jwtToken", res.token);
                 }
+                localStorage.setItem("userData", JSON.stringify(res.user));
                 toast.success(res.message, { position: "top-right" });
                 return true;
             } else if (res.message == "MFA required") {
@@ -82,6 +84,7 @@ function useAuth() {
             setUserData({ name: "", email: "" });
             setToken("");
             localStorage.setItem("jwtToken", "");
+            sessionStorage.setItem("jwtToken", "");
             navigate("/login");
         } catch (error) {
             console.log("logoutError: ", error);
@@ -90,10 +93,9 @@ function useAuth() {
 
     const isAuthenticated = async () => {
         try {
-            const jwtToken = localStorage.getItem("jwtToken");
-            const res = await services.isAuth({ token: jwtToken ? jwtToken : token });
+            const jwtToken = localStorage.getItem("jwtToken") || sessionStorage.getItem("jwtToken");
+            const res = await services.isAuth({ token: jwtToken });
             if (res.message == "isAuth success") return
-            // toast.error(res.message);
             navigate("/login");
             return false;
         } catch (error) {
@@ -137,8 +139,11 @@ function useAuth() {
                 toast.success("Profile updated successfully");
                 setUserData(res.userData);
                 setToken(res.token);
-                localStorage.setItem("jwtToken", token);
-                return;
+                if(userData.rememberMe){
+                    localStorage.setItem("jwtToken", res.token);
+                    return;
+                }
+                sessionStorage.setItem("jwtToken", res.token);
             }
             toast.error(res.message);
         } catch (error) {
