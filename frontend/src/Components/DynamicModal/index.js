@@ -3,13 +3,16 @@ import { Modal } from "antd";
 import "./style.css";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import useDynamicData from "../../Hooks/useDynamicData";
 import useJob from "../../Hooks/useJob";
 import useCustomers3 from "../../Hooks/useCustomers3";
-import InputableSelectField from "../InputableSelect/InputableSelectField";
+import { ComboBox } from "smart-webcomponents-react/combobox";
+import { Input } from "smart-webcomponents-react/input";
+import { DateTimePicker } from "smart-webcomponents-react/datetimepicker";
+import 'smart-webcomponents-react/source/styles/smart.default.css';
+import {getCustomerSchema} from "./customerSchema";
 
-function DynamicModal({ table_name, isOpen, setIsOpen, title, role, initData = {} }) {
+function DynamicModal({ table_name, isOpen, setIsOpen, role, initData = {} }) {
     const [isLoading, setIsLoading] = useState(false);
     const { jobs, getJobs } = useJob();
     const { formatDateForInput, getLabels, labels, mandatoryFields, getMandatoryFields } = useCustomers3();
@@ -17,62 +20,13 @@ function DynamicModal({ table_name, isOpen, setIsOpen, title, role, initData = {
 
     // Dynamic schema for the 5 specific fields based on mandatory fields from database
     const customerSchema = useMemo(() => {
-        const schemaFields = {
-            fullname: mandatoryFields.fullname 
-                ? z.string().min(1, "Fullname is required")
-                : z.union([z.string(), z.null(), z.undefined()])
-                    .optional()
-                    .transform((val) => val === null || val === undefined ? undefined : val),
-            displayname: mandatoryFields.displayname 
-                ? z.string().min(1, "Displayname is required")
-                : z.union([z.string(), z.null(), z.undefined()])
-                    .optional()
-                    .transform((val) => val === null || val === undefined ? undefined : val),
-            birthday: mandatoryFields.birthday 
-                ? z.string().min(1, "Birthday is required").transform((str) => new Date(str))
-                : z.union([z.string(), z.null(), z.undefined()])
-                    .optional()
-                    .transform((val) => {
-                        if (val === null || val === undefined) return undefined;
-                        return val ? new Date(val) : undefined;
-                    }),
-            age: mandatoryFields.age 
-                ? z.union([z.string(), z.number()])
-                    .refine((val) => {
-                        if (typeof val === 'string') {
-                            return val.trim() !== '' && !isNaN(parseInt(val, 10)) && parseInt(val, 10) > 0;
-                        }
-                        return val !== null && val !== undefined && val > 0;
-                    }, "Age is required")
-                    .transform((val) => {
-                        if (typeof val === 'string') {
-                            return parseInt(val, 10);
-                        }
-                        return val;
-                    })
-                : z.union([z.string(), z.number(), z.null(), z.undefined()])
-                    .optional()
-                    .transform((val) => {
-                        if (val === null || val === undefined) return undefined;
-                        if (typeof val === 'string' && val.trim() !== '') {
-                            return parseInt(val, 10);
-                        }
-                        return val;
-                    }),
-            job: mandatoryFields.job 
-                ? z.string().min(1, "Job is required")
-                : z.union([z.string(), z.null(), z.undefined(), z.number()])
-                    .optional()
-                    .transform((val) => val === null || val === undefined ? undefined : val)
-        };
-
-        return z.object(schemaFields);
+        return getCustomerSchema(mandatoryFields);
     }, [mandatoryFields]);
 
     // Prepare default values with formatted date
     const defaultValues = useMemo(() => {
-        if (!initData || Object.keys(initData).length === 0) return {};
-        
+        if (!initData || Object.keys(initData).length === 0) return {fullname: "", displayname: "", age: "", birthday: "", job: ""};
+
         const formattedData = { ...initData };
         if (formattedData.birthday) {
             formattedData.birthday = formatDateForInput(formattedData.birthday);
@@ -80,13 +34,13 @@ function DynamicModal({ table_name, isOpen, setIsOpen, title, role, initData = {
         return formattedData;
     }, [initData]);
 
-    const { register, handleSubmit, control, reset, formState: { errors, isSubmitting, isSubmitted }, trigger } = useForm({
+    const { register, handleSubmit, control, reset, formState: { errors, isSubmitting }, trigger } = useForm({
         resolver: zodResolver(customerSchema),
         defaultValues,
     });
 
     useEffect(() => {
-        if(isOpen){
+        if (isOpen) {
             trigger();
         }
     }, [isOpen])
@@ -135,86 +89,115 @@ function DynamicModal({ table_name, isOpen, setIsOpen, title, role, initData = {
 
 
     return (
-        <Modal 
-            open={isOpen} 
-            onCancel={onCancel} 
+        <Modal
+            open={isOpen}
+            onCancel={onCancel}
             onOk={handleSubmit(onSubmit)}
-            title={title}
             okText={isLoading ? (role === "update" ? "Updating..." : "Creating...") : (role === "update" ? "Update" : "Create")}
             cancelText="Cancel"
             okButtonProps={{ disabled: isSubmitting || isLoading }}
         >
             <form onSubmit={handleSubmit(onSubmit)}>
-                <div className="title" onClick={() => {trigger()}}>{role === "update" ? 'Update Customer' : 'Add New Customer'}</div>
-                
-                {/* Fullname Field */}
-                <div className={`field-container ${errors.fullname ? 'has-error' : ''} ${isSubmitted && !errors.fullname ? 'has-success' : ''}`}>
+                <div className="title">
+                    {role === "update" ? 'Update Customer' : 'Add New Customer'}
+                </div>
+
+                {/* Fullname */}
+                <div className={`field-container ${errors.fullname ? 'has-error' : ''}`}>
                     <label>{labels.fullname}</label>
-                    <div className="input-wrapper">
-                        <input
-                            type="text"
-                            {...register("fullname")}
-                            className={`inputable-select-input ${errors.fullname ? 'error' : ''}`}
+                    <div style={{width: "60%"}}>
+                        <Controller
+                            name="fullname"
+                            control={control}
+                            render={({ field }) => (
+                                <Input
+                                    {...field}
+                                    value={field.value || ''}
+                                    onChange={(e) => field.onChange(e.target.value)}
+                                    style={{ height: "40px" }}
+                                />
+                            )}
                         />
                         {errors.fullname && <p>{errors.fullname.message}</p>}
                     </div>
                 </div>
 
-                {/* Displayname Field */}
-                <div className={`field-container ${errors.displayname ? 'has-error' : ''} ${isSubmitted && !errors.displayname ? 'has-success' : ''}`}>
+                {/* Displayname */}
+                <div className={`field-container ${errors.displayname ? 'has-error' : ''}`}>
                     <label>{labels.displayname}</label>
-                    <div className="input-wrapper">
-                        <input
-                            type="text"
-                            {...register("displayname")}
-                            className={`inputable-select-input ${errors.displayname ? 'error' : ''}`}
+                    <div style={{width: "60%"}}>
+                        <Controller
+                            name="displayname"
+                            control={control}
+                            render={({ field }) => (
+                                <Input
+                                    {...field}
+                                    value={field.value || ''}
+                                    onChange={(e) => field.onChange(e.target.value)}
+                                    style={{ height: "40px" }}
+                                />
+                            )}
                         />
                         {errors.displayname && <p>{errors.displayname.message}</p>}
                     </div>
                 </div>
 
-                {/* Birthday Field */}
-                <div className={`field-container ${errors.birthday ? 'has-error' : ''} ${isSubmitted && !errors.birthday ? 'has-success' : ''}`}>
+                {/* Birthday (Date Picker) */}
+                <div className={`field-container ${errors.birthday ? 'has-error' : ''}`}>
                     <label>{labels.birthday}</label>
-                    <div className="input-wrapper">
-                        <input
-                            type="date"
-                            {...register("birthday")}
-                            className={`inputable-select-input ${errors.birthday ? 'error' : ''}`}
+                    <div style={{width: "60%"}}>
+                        <Controller
+                            name="birthday"
+                            control={control}
+                            render={({ field }) => (
+                                <DateTimePicker
+                                    {...field}
+                                    value={field.value || ''}
+                                    formatString="yyyy-MM-dd"
+                                    calendarButton
+                                    onChange={(e) => field.onChange(e.detail.value.toString())}
+                                    style={{ height: "40px" }}
+                                />
+                            )}
                         />
                         {errors.birthday && <p>{errors.birthday.message}</p>}
                     </div>
                 </div>
 
-                {/* Age Field */}
-                <div className={`field-container ${errors.age ? 'has-error' : ''} ${isSubmitted && !errors.age ? 'has-success' : ''}`}>
+                {/* Age (Numeric Input) */}
+                <div className={`field-container ${errors.age ? 'has-error' : ''}`}>
                     <label>{labels.age}</label>
-                    <div className="input-wrapper">
-                        <input
-                            type="number"
-                            {...register("age")}
-                            min="1"
-                            max="120"
-                            className={`inputable-select-input ${errors.age ? 'error' : ''}`}
+                    <div style={{width: "60%"}}>
+                        <Controller
+                            name="age"
+                            control={control}
+                            render={({ field }) => (
+                                <Input
+                                    value={field.value != null ? String(field.value) : ''}
+                                    onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value, 10) : undefined)}
+                                    style={{ height: "40px" }}
+                                />
+                            )}
                         />
                         {errors.age && <p>{errors.age.message}</p>}
                     </div>
                 </div>
 
-                {/* Job Field */}
-                <div className={`field-container ${errors.job ? 'has-error' : ''} ${isSubmitted && !errors.job ? 'has-success' : ''}`}>
+                {/* Job (ComboBox) */}
+                <div className={`field-container ${errors.job ? 'has-error' : ''}`}>
                     <label>{labels.job}</label>
-                    <div className="input-wrapper">
+                    <div style={{width: "60%"}}>
                         <Controller
                             name="job"
                             control={control}
                             render={({ field }) => (
-                                <InputableSelectField
-                                    {...field}
-                                    options={jobs}
-                                    submitted={false}
-                                    error={!!errors.job}
-                                    className={errors.job ? 'error' : ''}
+                                <ComboBox
+                                    dataSource={jobs}
+                                    displayMember="name"   // what user sees
+                                    valueMember="name"     // what the ComboBox uses as actual value
+                                    value={field.value ?? initData?.job ?? ''}
+                                    onChange={(event) => field.onChange(event.detail.value)}
+                                    style={{ height: "40px" }}
                                 />
                             )}
                         />
@@ -222,6 +205,7 @@ function DynamicModal({ table_name, isOpen, setIsOpen, title, role, initData = {
                     </div>
                 </div>
             </form>
+
         </Modal>
     );
 }

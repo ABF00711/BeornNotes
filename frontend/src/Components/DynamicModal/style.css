@@ -12,13 +12,15 @@
 	left: 50%;
 	transform: translate(-50%, -50%);
 	background-color: white;
-	padding: 20px;
+	padding: 50px;
 	border-radius: 10px;
 }
 
 /* Field Container Styling */
 .field-container {
 	margin-bottom: 20px;
+	display: flex;
+	justify-content: space-between;
 }
 
 .field-container label {
