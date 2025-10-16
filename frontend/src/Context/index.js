@@ -31,11 +31,9 @@ function ContextProvider({ children }) {
 
     useEffect(() => {
         const savedUserData = JSON.parse(localStorage.getItem("userData") || null);
-        const savedUserTime = JSON.parse(localStorage.getItem(`${savedUserData.name}`) || null);
         if (!!savedUserData) {
             setUserData(savedUserData);
         }
-        if (!savedUserTime) setUserTime(savedUserTime);
     }, [])
 
     const initializeStateData = () => {
