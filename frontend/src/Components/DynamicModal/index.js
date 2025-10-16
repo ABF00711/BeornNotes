@@ -12,11 +12,12 @@ import { DateTimePicker } from "smart-webcomponents-react/datetimepicker";
 import 'smart-webcomponents-react/source/styles/smart.default.css';
 import { getCustomerSchema } from "./customerSchema";
 import useSearchConfig from "../../Hooks/useSearchConfig";
+import dynamicService from "../../Services/dynamicService";
 
 function DynamicModal({ table_name, isOpen, setIsOpen, role, initData = {} }) {
     const [isLoading, setIsLoading] = useState(false);
     const { jobs, getJobs } = useJob();
-    const {searchConfig} = useSearchConfig();
+    const { searchConfig } = useSearchConfig();
     const { formatDateForInput, getLabels, labels, mandatoryFields, getMandatoryFields } = useCustomers3();
     const { createDynamicData, updateDynamicData } = useDynamicData();
 
@@ -39,7 +40,7 @@ function DynamicModal({ table_name, isOpen, setIsOpen, role, initData = {} }) {
         defaultValues,
     });
 
-     const onSubmit = async (data) => {
+    const onSubmit = async (data) => {
         setIsLoading(true);
         try {
             if (role === "update") {
@@ -68,8 +69,8 @@ function DynamicModal({ table_name, isOpen, setIsOpen, role, initData = {} }) {
             trigger();
         }
     }, [isOpen])
-    
-    useEffect(() => {        
+
+    useEffect(() => {
         getLabels();
         getMandatoryFields();
     }, [searchConfig])
@@ -148,12 +149,16 @@ function DynamicModal({ table_name, isOpen, setIsOpen, role, initData = {} }) {
                             render={({ field }) => (
                                 <DateTimePicker
                                     {...field}
-                                    value={field.value || ''}
+                                    value={field.value || null}
                                     formatString="MM-dd-yyyy"
                                     calendarButton
-                                    onChange={(e) => field.onChange(e.detail.value.toString())}
-                                    style={{ height: "40px" }}
+                                    onChange={(e) => {
+                                        const date = new Date(e.detail.value.toString());
+                                        field.onChange(date.toISOString());
 
+                                    }}
+                                    style={{ height: "40px" }}
+                                    nullable={true}
                                 />
                             )}
                         />
