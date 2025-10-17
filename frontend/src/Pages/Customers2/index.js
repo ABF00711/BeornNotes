@@ -26,7 +26,7 @@ function Customers2() {
     const [searchKey, setSearchKey] = useState({ age: "", job: "" });
     const [filteredData, setFilteredData] = useState([]);
     const { dynamicData, getDynamicData } = useDynamicData();
-    const { jobs, getJobs } = useJob();
+    const { getJobs } = useJob();
 
     const openUpdateModal = useCallback((data) => {
         setUpdateData(data);
@@ -78,8 +78,8 @@ function Customers2() {
                 <div className="customers">
                     <div className="customers-toolbar">
                         <div className="toolbar-left">
-                            <Add table_name={formName} />
-                            <SmartDelete tablename={formName} gridRef={gridRef} />
+                            <Add formName={formName} />
+                            <SmartDelete formName={formName} gridRef={gridRef} />
                             <div>
                                 <InputGroup props={{
                                     fieldFormat: { id: "age", field_type: "number", field_label: "Age", field_name: "age" },

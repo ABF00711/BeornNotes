@@ -12,7 +12,6 @@ import { DateTimePicker } from "smart-webcomponents-react/datetimepicker";
 import 'smart-webcomponents-react/source/styles/smart.default.css';
 import { getCustomerSchema } from "./customerSchema";
 import useSearchConfig from "../../Hooks/useSearchConfig";
-import dynamicService from "../../Services/dynamicService";
 
 function DynamicModal({ table_name, isOpen, setIsOpen, role, initData = {} }) {
     const [isLoading, setIsLoading] = useState(false);
@@ -26,7 +25,8 @@ function DynamicModal({ table_name, isOpen, setIsOpen, role, initData = {} }) {
     }, [mandatoryFields]);
 
     const defaultValues = useMemo(() => {
-        if (!initData || Object.keys(initData).length === 0) return { fullname: "", displayname: "", age: "", birthday: "", job: "" };
+        console.log("initData: ", initData);
+        if (!initData || Object.keys(initData).length === 0) return {};
 
         const formattedData = { ...initData };
         if (formattedData.birthday) {
@@ -147,18 +147,16 @@ function DynamicModal({ table_name, isOpen, setIsOpen, role, initData = {} }) {
                             name="birthday"
                             control={control}
                             render={({ field }) => (
-                                <DateTimePicker
-                                    {...field}
-                                    value={field.value || null}
-                                    formatString="MM-dd-yyyy"
-                                    calendarButton
+                                <input
+                                    type="date"
+                                    className="dateTimePicker"
+                                    value={field.value ? field.value.split('T')[0] : ''}
                                     onChange={(e) => {
-                                        const date = new Date(e.detail.value.toString());
-                                        field.onChange(date.toISOString());
-
+                                        const dateValue = e.target.value
+                                            ? new Date(e.target.value).toISOString()
+                                            : null;
+                                        field.onChange(dateValue);
                                     }}
-                                    style={{ height: "40px" }}
-                                    nullable={true}
                                 />
                             )}
                         />
@@ -199,7 +197,9 @@ function DynamicModal({ table_name, isOpen, setIsOpen, role, initData = {} }) {
                                     displayMember="name"   // what user sees
                                     valueMember="name"     // what the ComboBox uses as actual value
                                     value={field.value ?? initData?.job ?? ''}
-                                    onChange={(event) => field.onChange(event.detail.value)}
+                                    onChange={(event) => {
+                                        field.onChange(event.detail.value);
+                                    }}
                                     style={{ height: "40px" }}
                                 />
                             )}
