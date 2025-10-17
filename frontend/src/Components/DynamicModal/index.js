@@ -25,7 +25,6 @@ function DynamicModal({ table_name, isOpen, setIsOpen, role, initData = {} }) {
     }, [mandatoryFields]);
 
     const defaultValues = useMemo(() => {
-        console.log("initData: ", initData);
         if (!initData || Object.keys(initData).length === 0) return {};
 
         const formattedData = { ...initData };
@@ -46,6 +45,9 @@ function DynamicModal({ table_name, isOpen, setIsOpen, role, initData = {} }) {
             const selectedJob = jobs.find((job) => job.name == data.job);
             if(selectedJob){
                 data.job = selectedJob.id;
+            }
+            for (const key in data) {
+                if(typeof(data[key]) == "string") data[key] = data[key].trim();
             }
             if (role === "update") {
                 data.id = initData.id;
