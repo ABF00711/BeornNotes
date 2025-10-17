@@ -103,24 +103,27 @@ function useTabbedInterfaces() {
             const res = await services.getTabInterfaces(token);
             if (res.message == "getTabInterfaces success") {
                 setTabbedInterfaces(res.tabInterfaces);
+                const savedCurrentInterface = JSON.parse(localStorage.getItem("currentInterface") || null);
+                if (!!savedCurrentInterface) {
+                    setCurrentInterface(savedCurrentInterface);
+                    navigate(savedCurrentInterface.activeUrl);
+                    return;
+                }   
                 const defaultInterface = res.tabInterfaces.find((tInterface) => tInterface.tabs_name == "Default");
                 if (defaultInterface) {
-                    setCurrentInterface(defaultInterface);
-                    navigate(currentInterface.activeUrl);
-                } else {
-                    const savedCurrentInterface = JSON.parse(localStorage.getItem("currentInterface") || null);
-                    if (!!savedCurrentInterface) {
-                        setCurrentInterface(savedCurrentInterface);
-                        navigate(savedCurrentInterface.activeUrl);
-                    }
+                    const interfaceData = JSON.parse(defaultInterface.tabs_json);
+                    setCurrentInterface(interfaceData);
+                    navigate(interfaceData.activeUrl);
+                    localStorage.setItem("currentInterface", defaultInterface.tabs_json);
+                    return;
                 }
-                return;
             }
             localStorage.setItem("currentInterface", JSON.stringify(currentInterface));
-            setCurrentInterface(currentInterface);
             navigate("/");
         } catch (error) {
             console.log('getCurrentTabInterfaceError: ', error);
+            localStorage.setItem("currentInterface", "");
+            navigate("/");
         }
     }
 
