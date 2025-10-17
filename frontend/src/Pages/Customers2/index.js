@@ -14,19 +14,21 @@ import SmartDelete from "../../Components/Delete";
 import SmartLayouts from "../../Components/Layouts";
 import SmartSearchPattern from "../../Components/SearchPattern";
 import useSearchConfig from "../../Hooks/useSearchConfig";
+import { ComboBox } from "smart-webcomponents-react/combobox";
+import { Input } from "smart-webcomponents-react/input";
 
 const formName = "Customers2";
 
 function Customers2() {
     const { isCollapsed } = useContext(MyContext);
-    const {getSearchConfigData} = useSearchConfig();
+    const { getSearchConfigData } = useSearchConfig();
     const gridRef = useRef(null);
     const [isOpen, setIsOpen] = useState(false);
     const [updateData, setUpdateData] = useState({});
     const [searchKey, setSearchKey] = useState({ age: "", job: "" });
     const [filteredData, setFilteredData] = useState([]);
     const { dynamicData, getDynamicData } = useDynamicData();
-    const { getJobs } = useJob();
+    const { jobs, getJobs } = useJob();
 
     const openUpdateModal = useCallback((data) => {
         setUpdateData(data);
@@ -35,31 +37,23 @@ function Customers2() {
 
     const onSearch = () => {
         const trimmedAge = searchKey.age.trim();
-        const trimmedJob = searchKey.job.trim();
 
-        if (!trimmedAge && !trimmedJob) {
+        if (!trimmedAge && !searchKey.job) {
             setFilteredData(dynamicData);
             return;
         }
-
+        
         setFilteredData(dynamicData.filter((oneData) => {
             if (!trimmedAge) {
-                return oneData.job == trimmedJob;
+                return oneData.job == searchKey.job;
             }
-            if (!trimmedJob) {
+            if (!searchKey.job) {
                 return oneData.age == trimmedAge;
             }
-            return (oneData.age == trimmedAge) && (oneData.job == trimmedJob);
+            return (oneData.age == trimmedAge) && (oneData.job == searchKey.job);
         }));
     }
 
-    const updateSearchKey = (e) => {
-        setSearchKey({
-            ...searchKey,
-            [e.target.name]: e.target.value
-        })
-    }
-    
     useEffect(() => {
         setFilteredData(dynamicData);
     }, [dynamicData])
@@ -82,16 +76,13 @@ function Customers2() {
                             <Add formName={formName} />
                             <SmartDelete formName={formName} gridRef={gridRef} />
                             <div>
-                                <InputGroup props={{
-                                    fieldFormat: { id: "age", field_type: "number", field_label: "Age", field_name: "age" },
-                                    handleChange: updateSearchKey,
-                                    value: searchKey.age
-                                }} />
-                                <InputGroup props={{
-                                    fieldFormat: { id: "job", field_type: "combobox", field_label: "Job", field_name: "job", lookup_sql: "Select name from job Order By name" },
-                                    handleChange: updateSearchKey,
-                                    value: searchKey.job
-                                }} />
+                                <Input type="number" onChange={(e) => { setSearchKey({ ...searchKey, age: e.target.value }) }}></Input>
+                                <ComboBox
+                                    dataSource={jobs} 
+                                    displayMember="name"
+                                    valueMember="id"
+                                    onChange={(e) => {setSearchKey({...searchKey, job: e.detail.value})}}
+                                ></ComboBox>
                             </div>
                             <button onClick={onSearch} type="button" className="btn btn-primary">
                                 <span className="btn-icon">⌕</span>
@@ -104,11 +95,11 @@ function Customers2() {
                         </div>
                     </div>
                     <SmartGrid
-                        formName = {formName}
+                        formName={formName}
                         gridRef={gridRef}
-                        openUpdateModal = {openUpdateModal}
+                        openUpdateModal={openUpdateModal}
                         customData={filteredData}
-                        />
+                    />
                     <Update
                         formName={formName}
                         isOpen={isOpen}

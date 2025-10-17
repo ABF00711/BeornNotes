@@ -8,7 +8,6 @@ import useJob from "../../Hooks/useJob";
 import useCustomers3 from "../../Hooks/useCustomers3";
 import { ComboBox } from "smart-webcomponents-react/combobox";
 import { Input } from "smart-webcomponents-react/input";
-import { DateTimePicker } from "smart-webcomponents-react/datetimepicker";
 import 'smart-webcomponents-react/source/styles/smart.default.css';
 import { getCustomerSchema } from "./customerSchema";
 import useSearchConfig from "../../Hooks/useSearchConfig";
