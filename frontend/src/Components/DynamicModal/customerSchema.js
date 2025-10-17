@@ -1,19 +1,19 @@
 import { z } from "zod";
 
-export const getCustomerSchema = (mandatoryFields) => {
+export const getCustomerSchema = (mandatoryFields, labels) => {
     const schemaFields = {
         fullname: mandatoryFields.fullname
-            ? z.string().min(1, "Fullname is required")
+            ? z.string().min(1, `${labels.fullname} is required`)
             : z.union([z.string(), z.null(), z.undefined()])
                 .optional()
                 .transform((val) => val === null || val === undefined ? undefined : val),
         displayname: mandatoryFields.displayname
-            ? z.string().min(1, "Displayname is required")
+            ? z.string().min(1, `${labels.displayname} is required`)
             : z.union([z.string(), z.null(), z.undefined()])
                 .optional()
                 .transform((val) => val === null || val === undefined ? undefined : val),
         birthday: mandatoryFields.birthday
-            ? z.string().min(1, "Birthday is required").transform((str) => new Date(str))
+            ? z.string().min(1, `${labels.birthday} is required`).transform((str) => new Date(str))
             : z.union([z.string(), z.null(), z.undefined()])
                 .optional()
                 .transform((val) => {
@@ -27,7 +27,7 @@ export const getCustomerSchema = (mandatoryFields) => {
                         return val.trim() !== '' && !isNaN(parseInt(val, 10)) && parseInt(val, 10) > 0;
                     }
                     return val !== null && val !== undefined && val > 0;
-                }, "Age is required")
+                }, `${labels.age} is required`)
                 .transform((val) => {
                     if (typeof val === 'string') {
                         return parseInt(val, 10);
@@ -44,7 +44,7 @@ export const getCustomerSchema = (mandatoryFields) => {
                     return val;
                 }),
         job: mandatoryFields.job
-            ? z.string().min(1, "Job is required")
+            ? z.string().min(1, `${labels.job} is required`)
             : z.union([z.string(), z.null(), z.undefined(), z.number()])
                 .optional()
                 .transform((val) => val === null || val === undefined ? undefined : val)

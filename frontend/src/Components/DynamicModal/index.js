@@ -21,7 +21,7 @@ function DynamicModal({ table_name, isOpen, setIsOpen, role, initData = {} }) {
     const { createDynamicData, updateDynamicData } = useDynamicData();
 
     const customerSchema = useMemo(() => {
-        return getCustomerSchema(mandatoryFields);
+        return getCustomerSchema(mandatoryFields, labels);
     }, [mandatoryFields]);
 
     const defaultValues = useMemo(() => {
