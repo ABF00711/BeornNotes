@@ -79,21 +79,13 @@ function SmartGrid(props) {
         }
     }
 
-    const initializeData = async () => {
-        try {
-            await getJobs();
-        } catch (error) {
-            console.log('Data initialization error:', error);
-        }
-    }
-
     useEffect(() => {
         setColumns(getSmartColumns(openUpdateModal, gridRef));
         getDataSourceSettings();
     }, [searchConfig])
-
+    
     useEffect(() => {
-        initializeData();
+        getJobs();
     }, [])
 
     // Map job id -> name for display
@@ -123,13 +115,10 @@ function SmartGrid(props) {
         dataSourseSettings.dataFields?.length > 0;
 
     if (gridRef.current) {
-        console.log("storateId: ", gridRef.current.stateSettings.current)
         gridRef.current.stateSettings.current = `smartGrid_${formName}`;
     }
 
-    // One-time nudge to ensure autoLoad applies after grid is ready
     if (isDataReady && gridRef.current) {
-        // Small delay to ensure grid is fully bound
         setTimeout(() => {
             gridRef.current?.loadState(JSON.parse(localStorage.getItem(`smartGrid_${formName}`) || null));
         }, 100);
