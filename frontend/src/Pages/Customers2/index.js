@@ -42,7 +42,7 @@ function Customers2() {
             setFilteredData(dynamicData);
             return;
         }
-        
+
         setFilteredData(dynamicData.filter((oneData) => {
             if (!trimmedAge) {
                 return oneData.job == searchKey.job;
@@ -70,19 +70,27 @@ function Customers2() {
             <Header />
             <Navbar />
             <div className={`dashboard-container ${!isCollapsed ? 'M_L_280' : ''}`}>
-                <div className="customers">
+                <div className="customers2">
                     <div className="customers-toolbar">
                         <div className="toolbar-left">
                             <Add formName={formName} />
                             <SmartDelete formName={formName} gridRef={gridRef} />
-                            <div>
-                                <Input type="number" onChange={(e) => { setSearchKey({ ...searchKey, age: e.target.value }) }}></Input>
-                                <ComboBox
-                                    dataSource={jobs} 
-                                    displayMember="name"
-                                    valueMember="id"
-                                    onChange={(e) => {setSearchKey({...searchKey, job: e.detail.value})}}
-                                ></ComboBox>
+                        </div>
+                        <div className="searchbox">
+                            <div className="searchField">
+                                <div className="searchField_container">
+                                    <label>Age</label>
+                                    <Input type="number" onChange={(e) => { setSearchKey({ ...searchKey, age: e.target.value }) }}></Input>
+                                </div>
+                                <div className="searchField_container">
+                                    <label>Job</label>
+                                    <ComboBox
+                                        dataSource={jobs}
+                                        displayMember="name"
+                                        valueMember="id"
+                                        onChange={(e) => { setSearchKey({ ...searchKey, job: e.detail.value }) }}
+                                    ></ComboBox>
+                                </div>
                             </div>
                             <button onClick={onSearch} type="button" className="btn btn-primary">
                                 <span className="btn-icon">⌕</span>
