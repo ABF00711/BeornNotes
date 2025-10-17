@@ -111,7 +111,6 @@ function SmartGrid(props) {
 
 
     const isDataReady = columns.length > 0 &&
-        displayData.length > 0 &&
         dataSourseSettings.dataFields?.length > 0;
 
     if (gridRef.current) {
@@ -126,6 +125,10 @@ function SmartGrid(props) {
 
     if (!isDataReady) {
         return <div className="smartGridTable">Loading...</div>;
+    }
+
+    if(displayData.length == 0){
+        return <div className="smartGridTable">There is no data!</div>;
     }
 
     return (
