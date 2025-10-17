@@ -60,3 +60,22 @@
 	margin-bottom: 24px;
 	text-align: center;
 }
+
+.dateTimePicker{
+	color: #2d3748;
+	width: 248px;
+	height: 40px;
+	box-sizing: border-box;
+	border: 1px solid #d9d9d9;
+	border-radius: 6px;
+	padding: 0 11px;
+	font-size: 14px;
+	background-color: #fff;
+	outline: none;
+	appearance: none;
+}
+
+.dateTimePicker:focus{
+	border-color: #1677ff;
+	box-shadow: 0 0 0 2px rgba(5, 145, 255, 0.1);
+}

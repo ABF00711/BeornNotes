@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "./style.css";
 import useAuth from "../../Hooks/useAuth";
-import { useNavigate } from "react-router-dom";
 import PasswordField from "../../Components/PasswordField";
 import TextField from "../../Components/TextField"
 import useTabbedInterfaces from "../../Hooks/useTabbedInterfaces";
@@ -11,7 +10,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "./userLoginSchema";
 
 function Login() {
-    const navigate = useNavigate();
     const { login } = useAuth();
     const { getCurrentTabInterface } = useTabbedInterfaces();
 

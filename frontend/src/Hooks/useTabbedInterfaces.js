@@ -26,7 +26,7 @@ function useTabbedInterfaces() {
             const currentTabIndex = currentInterface.tabbedBtns.findIndex(btns => btns.title == btnInfo.title);
             const nextTabBtn = currentInterface.tabbedBtns[currentTabIndex - 1];
             let nextActiveUrl = "/";
-            if(nextTabBtn){
+            if (nextTabBtn) {
                 nextActiveUrl = nextTabBtn.path;
             }
             const tabbedInterface = {
@@ -101,14 +101,20 @@ function useTabbedInterfaces() {
     const getCurrentTabInterface = async () => {
         try {
             const res = await services.getTabInterfaces(token);
-            if(res.message == "getTabInterfaces success"){
+            if (res.message == "getTabInterfaces success") {
                 setTabbedInterfaces(res.tabInterfaces);
                 const defaultInterface = res.tabInterfaces.find((tInterface) => tInterface.tabs_name == "Default");
-                if(defaultInterface){
+                if (defaultInterface) {
                     setCurrentInterface(defaultInterface);
-                    localStorage.setItem("currentInterface", JSON.stringify(defaultInterface));
                     navigate(currentInterface.activeUrl);
+                } else {
+                    const savedCurrentInterface = JSON.parse(localStorage.getItem("currentInterface") || null);
+                    if (!!savedCurrentInterface) {
+                        setCurrentInterface(savedCurrentInterface);
+                        navigate(savedCurrentInterface.activeUrl);
+                    }
                 }
+                return;
             }
             localStorage.setItem("currentInterface", JSON.stringify(currentInterface));
             setCurrentInterface(currentInterface);
@@ -120,7 +126,7 @@ function useTabbedInterfaces() {
 
     return (
         {
-            addTabbedInterface, 
+            addTabbedInterface,
             removeTabbedInterface, currentInterface,
             getTabInterfaces, createTabInterfaces,
             updateTabInterfaces, deleteTabInterfaces,

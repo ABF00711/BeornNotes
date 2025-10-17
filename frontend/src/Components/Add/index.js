@@ -28,6 +28,7 @@ function Add({ formName }) {
     }, [fieldsData])
     
     useEffect(() => {
+        if(!searchConfig) return;
         setFieldsData(searchConfig.filter(item => item.table_name === tableNames[formName]));
     }, [searchConfig])
 
@@ -41,9 +42,7 @@ function Add({ formName }) {
                 table_name={tableNames?.[formName] ?? ""}
                 isOpen={isOpen}
                 setIsOpen={setIsOpen}
-                title={"Add"}
                 role={"create"}
-                fieldsData={fieldsData}
                 initData={formData}
             />
         </>

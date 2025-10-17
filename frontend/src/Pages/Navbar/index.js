@@ -57,13 +57,6 @@ function Navbar() {
         });
     };
 
-    useEffect(() => {
-        const savedCurrentInterface = JSON.parse(localStorage.getItem("currentInterface") || null);
-        if (!!savedCurrentInterface) {
-            setCurrentInterface(savedCurrentInterface);
-        }
-    }, [])
-
     return (
         <div className="navbar">
             <div className="navbar-container">
