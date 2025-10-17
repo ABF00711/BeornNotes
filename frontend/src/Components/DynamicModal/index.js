@@ -43,6 +43,10 @@ function DynamicModal({ table_name, isOpen, setIsOpen, role, initData = {} }) {
     const onSubmit = async (data) => {
         setIsLoading(true);
         try {
+            const selectedJob = jobs.find((job) => job.name == data.job);
+            if(selectedJob){
+                data.job = selectedJob.id;
+            }
             if (role === "update") {
                 data.id = initData.id;
                 await updateDynamicData(table_name, data);
