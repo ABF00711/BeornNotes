@@ -45,7 +45,7 @@ function useTabbedInterfaces() {
     const getTabInterfaces = async () => {
         try {
             const res = await services.getTabInterfaces(token);
-            if (res.message == "getLayouts success") {
+            if (res.message == "getTabInterfaces success") {
                 setTabbedInterfaces(res.tabInterfaces);
                 return;
             }
@@ -59,8 +59,8 @@ function useTabbedInterfaces() {
         try {
             const res = await services.createTabInterface(tabInterfaceName, tabInterfaceJson, token);
             if (res.message == "createTabInterface success") {
-                getTabInterfaces();
                 toast.success("Created a new tab interface successfully");
+                await getTabInterfaces();
                 return;
             }
             toast.error(res.message);

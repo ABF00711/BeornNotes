@@ -59,6 +59,10 @@ function Customers2() {
             [e.target.name]: e.target.value
         })
     }
+    
+    useEffect(() => {
+        setFilteredData(dynamicData);
+    }, [dynamicData])
 
     useEffect(() => {
         getSearchConfigData();
@@ -66,9 +70,6 @@ function Customers2() {
         getJobs();
     }, [])
 
-    useEffect(() => {
-        setFilteredData(dynamicData);
-    }, [dynamicData])
 
     return (
         <div className="dashboard">

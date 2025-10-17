@@ -66,14 +66,16 @@ function TabInterfaces(props) {
         setIsOpen(false);
     }
 
-    useEffect(() => { buildOptions(); }, [tabbedInterfaces]);
-    useEffect(() => { getTabInterfaces(); }, []);
-
     useEffect(() => {
         const onDocClick = (e) => { if (!isOpen) return; if (containerRef.current && !containerRef.current.contains(e.target)) setIsOpen(false); };
         document.addEventListener("mousedown", onDocClick);
         return () => document.removeEventListener("mousedown", onDocClick);
     }, [isOpen]);
+
+    useEffect(() => { buildOptions(); }, [tabbedInterfaces]);
+    
+    useEffect(() => { getTabInterfaces(); }, []);
+
 
     return (
         <div className="tabInterfaces" ref={containerRef}>
