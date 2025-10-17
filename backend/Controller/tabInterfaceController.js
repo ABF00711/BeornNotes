@@ -12,7 +12,7 @@ const tabInterfaceController = {
                 return;
             }
             const tabInterfaces = await mysqlDA.getData("tab_interfaces", {user_id: userData.id});
-            res.json({message: "getLayouts success", tabInterfaces});
+            res.json({message: "getTabInterfaces success", tabInterfaces});
         } catch (error) {
             console.log("getTabInterfacesError: ", error);
             res.json({message: "getTabInterfaces failed"});
