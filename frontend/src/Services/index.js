@@ -4,7 +4,7 @@ const services = {
     serverURL: "http://localhost:5000/api",
 
     setAuthToken: (token) => {
-        const jwtToken = localStorage.getItem("jwtToken");
+        const jwtToken = localStorage.getItem("jwtToken")||sessionStorage.getItem("jwtToken");
         axios.defaults.headers.common['Authorization'] = `Bearer ${jwtToken ? jwtToken : token}`;
     },
 
