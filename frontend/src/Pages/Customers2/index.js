@@ -25,7 +25,18 @@ function Customers2() {
     const gridRef = useRef(null);
     const [isOpen, setIsOpen] = useState(false);
     const [updateData, setUpdateData] = useState({});
-    const [searchKey, setSearchKey] = useState({ age: "", job: "" });
+    const [searchKey, setSearchKey] = useState(() => {
+        try {
+            const stored = JSON.parse(localStorage.getItem("customers2SearchKey") || "{}");
+            return {
+                age: stored && stored.age !== undefined && stored.age !== null ? String(stored.age) : "",
+                job: stored && stored.job !== undefined && stored.job !== null ? stored.job : "",
+            };
+        } catch (error) {
+            console.log("initSearchKeyError: ", error);
+            return { age: "", job: "" };
+        }
+    });
     const [filteredData, setFilteredData] = useState([]);
     const { dynamicData, getDynamicData } = useDynamicData();
     const { jobs, getJobs } = useJob();
@@ -36,34 +47,42 @@ function Customers2() {
     }, [])
 
     const onSearch = () => {
-        const trimmedAge = searchKey.age.trim();
+        try {
+            const trimmedJob = searchKey.job?.trim();
+            const jobId = jobs.find((job) => job.name == trimmedJob)?.id;
+            if (!searchKey.age && !jobId) {
+                setFilteredData(dynamicData);
+                return;
+            }
 
-        if (!trimmedAge && !searchKey.job) {
-            setFilteredData(dynamicData);
-            return;
+            setFilteredData(dynamicData.filter((oneData) => {
+                if (!searchKey.age) {
+                    return oneData.job == jobId;
+                }
+                if (!jobId) {
+                    return oneData.age == searchKey.age;
+                }
+                return (oneData.age == searchKey.age) && (oneData.job == jobId);
+            }));
+            localStorage.setItem("customers2SearchKey", JSON.stringify(searchKey));
+        } catch (error) {
+            console.log("onSearchError: ", error);
         }
+    }
 
-        setFilteredData(dynamicData.filter((oneData) => {
-            if (!trimmedAge) {
-                return oneData.job == searchKey.job;
-            }
-            if (!searchKey.job) {
-                return oneData.age == trimmedAge;
-            }
-            return (oneData.age == trimmedAge) && (oneData.job == searchKey.job);
-        }));
+    const getInitdata = async () => {
+        await getSearchConfigData();
+        await getDynamicData(formName);
+        await getJobs();
     }
 
     useEffect(() => {
-        setFilteredData(dynamicData);
+        onSearch();
     }, [dynamicData])
 
     useEffect(() => {
-        getSearchConfigData();
-        getDynamicData(formName);
-        getJobs();
+        getInitdata();
     }, [])
-
 
     return (
         <div className="dashboard">
@@ -80,16 +99,25 @@ function Customers2() {
                             <div className="searchField">
                                 <div className="searchField_container">
                                     <label>Age</label>
-                                    <Input type="number" onChange={(e) => { setSearchKey({ ...searchKey, age: e.target.value }) }}></Input>
+                                    <Input
+                                        type="number"
+                                        value={searchKey.age || ""}
+                                        onChange={(e) => {
+                                            setSearchKey({ ...searchKey, age: e.target.value })
+                                        }}
+                                    ></Input>
                                 </div>
                                 <div className="searchField_container">
                                     <label>Job</label>
                                     <ComboBox
                                         dataSource={jobs}
                                         displayMember="name"
-                                        valueMember="id"
-                                        onChange={(e) => { setSearchKey({ ...searchKey, job: e.detail.value }) }}
-                                    ></ComboBox>
+                                        valueMember="name"
+                                        allowCustomValue={true}
+                                        onChange={(e) =>
+                                            setSearchKey((prev) => ({ ...prev, job: e.detail.value }))
+                                        }
+                                    />
                                 </div>
                             </div>
                             <button onClick={onSearch} type="button" className="btn btn-primary">
