@@ -61,6 +61,7 @@ function useAuth() {
                 if(newUser.rememberMe){
                     localStorage.setItem("jwtToken", res.token);
                 }else{
+                    localStorage.setItem("jwtToken", "");
                     sessionStorage.setItem("jwtToken", res.token);
                 }
                 localStorage.setItem("userData", JSON.stringify(res.user));

@@ -1,8 +1,5 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
 import "./style.css";
-import Header from "../../Components/Header";
-import Navbar from "../Navbar";
-import Sidebar from "../Sidebar";
 import { MyContext } from "../../Context";
 import SmartGrid from "../../Components/SmartGrid";
 import Add from "../../Components/Add";

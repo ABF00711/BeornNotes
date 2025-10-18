@@ -1,9 +1,6 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import "./style.css";
 import useAuth from "../../Hooks/useAuth";
-import Header from "../../Components/Header";
-import Sidebar from "../Sidebar";
-import Navbar from "../Navbar";
 import { MyContext } from "../../Context";
 import TextField from "../../Components/TextField";
 import EmailField from "../../Components/EmailField";
@@ -16,7 +13,6 @@ import { passwordSchema } from "./passwordSchema";
 
 function Profile() {
     const { updateProfile, changePassword, userData } = useAuth();
-    const { isCollapsed } = useContext(MyContext);
     const [isLoading, setIsLoading] = useState(false);
 
     const { control: profileControl, handleSubmit: handleSubmitProfile, formState: { errors: profileErrors, isSubmitting: isSubmittingProfile, isSubmitted: isSubmittedProfile } } = useForm({
