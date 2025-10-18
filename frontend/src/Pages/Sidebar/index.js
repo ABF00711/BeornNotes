@@ -26,7 +26,9 @@ function Sidebar() {
         if (isCollapsed) {
             setSidebarWidth(70);
         } else {
-            setSidebarWidth(280);
+            const stored = localStorage.getItem("sidebarWidth");
+            const parsed = stored ? parseInt(stored, 10) : 280;
+            setSidebarWidth(isNaN(parsed) ? 280 : parsed);
         }
     }, [isCollapsed]);
 
@@ -95,9 +97,7 @@ function Sidebar() {
 
     const toggleSidebar = () => {
         setIsCollapsed(!isCollapsed);
-        // Track if user manually collapsed/expanded
         localStorage.setItem('sidebarManuallyCollapsed', (!isCollapsed).toString());
-        console.log("!isCollapsed: ", (!isCollapsed).toString())
     };
 
     const toggleSubmenu = (parentId) => {

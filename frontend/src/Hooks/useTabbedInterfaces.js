@@ -34,7 +34,7 @@ function useTabbedInterfaces() {
                 tabbedBtns: currentInterface.tabbedBtns.filter((btn) => btn.title !== btnInfo.title),
                 activeUrl: nextActiveUrl
             };
-            localStorage.setItem("tabbedInterface", JSON.stringify(tabbedInterface));
+            localStorage.setItem("currentInterface", JSON.stringify(tabbedInterface));
             setCurrentInterface(tabbedInterface);
             navigate(nextActiveUrl);
         } catch (error) {
@@ -45,7 +45,7 @@ function useTabbedInterfaces() {
     const getTabInterfaces = async () => {
         try {
             const res = await services.getTabInterfaces(token);
-            if (res.message == "getLayouts success") {
+            if (res.message == "getTabInterfaces success") {
                 setTabbedInterfaces(res.tabInterfaces);
                 return;
             }
@@ -59,8 +59,8 @@ function useTabbedInterfaces() {
         try {
             const res = await services.createTabInterface(tabInterfaceName, tabInterfaceJson, token);
             if (res.message == "createTabInterface success") {
-                getTabInterfaces();
                 toast.success("Created a new tab interface successfully");
+                await getTabInterfaces();
                 return;
             }
             toast.error(res.message);
@@ -103,24 +103,27 @@ function useTabbedInterfaces() {
             const res = await services.getTabInterfaces(token);
             if (res.message == "getTabInterfaces success") {
                 setTabbedInterfaces(res.tabInterfaces);
+                const savedCurrentInterface = JSON.parse(localStorage.getItem("currentInterface") || null);
+                if (!!savedCurrentInterface) {
+                    setCurrentInterface(savedCurrentInterface);
+                    navigate(savedCurrentInterface.activeUrl);
+                    return;
+                }   
                 const defaultInterface = res.tabInterfaces.find((tInterface) => tInterface.tabs_name == "Default");
                 if (defaultInterface) {
-                    setCurrentInterface(defaultInterface);
-                    navigate(currentInterface.activeUrl);
-                } else {
-                    const savedCurrentInterface = JSON.parse(localStorage.getItem("currentInterface") || null);
-                    if (!!savedCurrentInterface) {
-                        setCurrentInterface(savedCurrentInterface);
-                        navigate(savedCurrentInterface.activeUrl);
-                    }
+                    const interfaceData = JSON.parse(defaultInterface.tabs_json);
+                    setCurrentInterface(interfaceData);
+                    navigate(interfaceData.activeUrl);
+                    localStorage.setItem("currentInterface", defaultInterface.tabs_json);
+                    return;
                 }
-                return;
             }
             localStorage.setItem("currentInterface", JSON.stringify(currentInterface));
-            setCurrentInterface(currentInterface);
             navigate("/");
         } catch (error) {
             console.log('getCurrentTabInterfaceError: ', error);
+            localStorage.setItem("currentInterface", "");
+            navigate("/");
         }
     }
 

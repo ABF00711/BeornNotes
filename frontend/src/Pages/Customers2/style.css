@@ -1,4 +1,4 @@
-.customers4 {
+.customers2 {
     width: 100%;
     height: 100%;
     display: flex;
@@ -6,6 +6,8 @@
     align-items: center;
     justify-content: center;
     padding: 25px;
+    padding-bottom: 0px;
+    padding-top: 20px;
 }
 .grid-toolbar{
     width: 90%;
@@ -103,4 +105,20 @@
 }
 .table .ag-root-wrapper{
     height: 100% !important;
+}
+.searchbox{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.searchField{
+    width: 300px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.searchField_container{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    margin-bottom: 5px;
 }

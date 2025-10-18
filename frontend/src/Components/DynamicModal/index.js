@@ -8,7 +8,6 @@ import useJob from "../../Hooks/useJob";
 import useCustomers3 from "../../Hooks/useCustomers3";
 import { ComboBox } from "smart-webcomponents-react/combobox";
 import { Input } from "smart-webcomponents-react/input";
-import { DateTimePicker } from "smart-webcomponents-react/datetimepicker";
 import 'smart-webcomponents-react/source/styles/smart.default.css';
 import { getCustomerSchema } from "./customerSchema";
 import useSearchConfig from "../../Hooks/useSearchConfig";
@@ -21,11 +20,10 @@ function DynamicModal({ table_name, isOpen, setIsOpen, role, initData = {} }) {
     const { createDynamicData, updateDynamicData } = useDynamicData();
 
     const customerSchema = useMemo(() => {
-        return getCustomerSchema(mandatoryFields);
+        return getCustomerSchema(mandatoryFields, labels);
     }, [mandatoryFields]);
 
     const defaultValues = useMemo(() => {
-        console.log("initData: ", initData);
         if (!initData || Object.keys(initData).length === 0) return {};
 
         const formattedData = { ...initData };
@@ -46,6 +44,9 @@ function DynamicModal({ table_name, isOpen, setIsOpen, role, initData = {} }) {
             const selectedJob = jobs.find((job) => job.name == data.job);
             if(selectedJob){
                 data.job = selectedJob.id;
+            }
+            for (const key in data) {
+                if(typeof(data[key]) == "string") data[key] = data[key].trim();
             }
             if (role === "update") {
                 data.id = initData.id;
