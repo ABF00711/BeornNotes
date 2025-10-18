@@ -104,7 +104,7 @@ function useTabbedInterfaces() {
             if (res.message == "getTabInterfaces success") {
                 setTabbedInterfaces(res.tabInterfaces);
                 const savedCurrentInterface = JSON.parse(localStorage.getItem("currentInterface") || null);
-                if (!!savedCurrentInterface) {
+                if (savedCurrentInterface) {
                     setCurrentInterface(savedCurrentInterface);
                     navigate(savedCurrentInterface.activeUrl);
                     return;
@@ -117,9 +117,9 @@ function useTabbedInterfaces() {
                     localStorage.setItem("currentInterface", defaultInterface.tabs_json);
                     return;
                 }
+                navigate("/");
             }
-            localStorage.setItem("currentInterface", JSON.stringify(currentInterface));
-            navigate("/");
+            navigate("/login");
         } catch (error) {
             console.log('getCurrentTabInterfaceError: ', error);
             localStorage.setItem("currentInterface", "");

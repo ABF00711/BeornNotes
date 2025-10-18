@@ -1,14 +1,16 @@
-import React, { useContext, useRef } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "./style.css";
 import TabbedBtn from "../../Components/TabbedBtn";
 import TabInterfaces from "../../Components/TabInterfaces";
 import { MyContext } from "../../Context";
+import useTabbedInterfaces from "../../Hooks/useTabbedInterfaces";
 
 function Navbar() {
     const { isCollapsed, currentInterface, setCurrentInterface } = useContext(MyContext);
     const navigate = useNavigate();
     const draggedIdRef = useRef(null);
+    const {getCurrentTabInterface} = useTabbedInterfaces();
 
     const arrayMove = (arr, fromIndex, toIndex) => {
         const copy = [...arr];
@@ -57,6 +59,10 @@ function Navbar() {
         });
     };
 
+    useEffect(() => {
+        getCurrentTabInterface();
+    }, [])
+
     return (
         <div className="navbar">
             <div className="navbar-container">
@@ -71,4 +77,4 @@ function Navbar() {
     );
 }
 
-export default Navbar;
+export default Navbar; 
