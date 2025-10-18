@@ -8,12 +8,10 @@ import { toast } from "react-toastify";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "./userLoginSchema";
-import { useNavigate } from "react-router-dom";
 
 function Login() {
-    const navigate = useNavigate();
     const { login } = useAuth();
-    const { currentInterface } = useTabbedInterfaces();
+    const { getCurrentTabInterface } = useTabbedInterfaces();
 
     const [mfaRequired, setMfaRequired] = useState(false);
 
@@ -30,7 +28,7 @@ function Login() {
             toast.info("Please enter your 6-digit authentication code");
             setTimeout(() => setFocus("mfaCode"), 0);
         } else if (result === true) {
-            navigate(currentInterface.activeUrl);
+            await getCurrentTabInterface();
         }
     };
 

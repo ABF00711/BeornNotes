@@ -83,6 +83,8 @@ function useAuth() {
     const logout = () => {
         try {
             initializeStateData();
+            localStorage.setItem("jwtToken", "");
+            sessionStorage.setItem("jwtToken", "");
             navigate("/login");
         } catch (error) {
             console.log("logoutError: ", error);
@@ -91,11 +93,14 @@ function useAuth() {
 
     const isAuthenticated = async () => {
         try {
-            const jwtToken = localStorage.getItem("jwtToken") || sessionStorage.getItem("jwtToken");
+            const jwtToken = localStorage.getItem("jwtToken") || sessionStorage.getItem("jwtToken") || null;
+            if(!jwtToken){
+                navigate("/login");
+                return;
+            }
             const res = await services.isAuth({ token: jwtToken });
-            if (res.message == "isAuth success") return
+            if (res.message == "isAuth success") return;
             navigate("/login");
-            return false;
         } catch (error) {
             console.log("isAuthenticatedError: ", error);
         }
