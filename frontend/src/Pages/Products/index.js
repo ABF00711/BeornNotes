@@ -9,19 +9,12 @@ import Navbar from "../Navbar";
 import { MyContext } from "../../Context";
 
 function Products() {
-    const {isCollapsed} = useContext(MyContext);
+    const { isCollapsed } = useContext(MyContext);
 
-   
+
     return (
-        <div className="dashboard">
-            <Header />
-            <Navbar />
-            <div className={`dashboard-container ${!isCollapsed ? 'M_L_280' : ''}`}>
-                <div className="main">
-                    <h1>This is Products</h1>
-                </div>
-            </div>
-            <Sidebar />
+        <div className="main">
+            <h1>This is Products</h1>
         </div>
     );
 }

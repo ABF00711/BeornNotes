@@ -18,8 +18,8 @@ const formName = "Customers";
 
 function Customers() {
     const { isCollapsed } = useContext(MyContext);
-    const {getDynamicData} = useDynamicData();
-    const {getSearchConfigData} = useSearchConfig();
+    const { getDynamicData } = useDynamicData();
+    const { getSearchConfigData } = useSearchConfig();
     const gridRef = useRef(null);
     const [isOpen, setIsOpen] = useState(false);
     const [updateData, setUpdateData] = useState({});
@@ -29,7 +29,7 @@ function Customers() {
         setIsOpen(true);
     }, [])
 
-    const getInit = async() => {
+    const getInit = async () => {
         await getSearchConfigData();
         await getDynamicData(formName);
     }
@@ -39,37 +39,30 @@ function Customers() {
     }, [])
 
     return (
-        <div className="dashboard">
-            <Header />
-            <Navbar />
-            <div className={`dashboard-container ${!isCollapsed ? 'M_L_280' : ''}`}> 
-                <div className="customers">
-                    <div className="customers-toolbar">
-                        <div className="toolbar-left">
-                            <Add formName={formName} />
-                            <SmartDelete formName={formName} gridRef={gridRef} />
-                            <ResetBtn gridRef = {gridRef} />
-                        </div>
-                        <div className="toolbar-right">
-                            <SmartLayouts formName={formName} gridRef={gridRef} />
-                            <SmartSearchPattern formName={formName} gridRef={gridRef} />
-                        </div>
-                    </div>
-                    <SmartGrid
-                        formName={formName}
-                        gridRef={gridRef}
-                        openUpdateModal = {openUpdateModal}
-                        />
-                    <Update
-                        formName={formName}
-                        isOpen={isOpen}
-                        setIsOpen={setIsOpen}
-                        updateData={updateData}
-                        setUpdateData={setUpdateData}
-                    />
+        <div className="customers">
+            <div className="customers-toolbar">
+                <div className="toolbar-left">
+                    <Add formName={formName} />
+                    <SmartDelete formName={formName} gridRef={gridRef} />
+                    <ResetBtn gridRef={gridRef} />
+                </div>
+                <div className="toolbar-right">
+                    <SmartLayouts formName={formName} gridRef={gridRef} />
+                    <SmartSearchPattern formName={formName} gridRef={gridRef} />
                 </div>
             </div>
-            <Sidebar />
+            <SmartGrid
+                formName={formName}
+                gridRef={gridRef}
+                openUpdateModal={openUpdateModal}
+            />
+            <Update
+                formName={formName}
+                isOpen={isOpen}
+                setIsOpen={setIsOpen}
+                updateData={updateData}
+                setUpdateData={setUpdateData}
+            />
         </div>
     );
 }
