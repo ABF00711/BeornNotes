@@ -41,6 +41,8 @@ function Customers2() {
     const { dynamicData, getDynamicData } = useDynamicData();
     const { jobs, getJobs } = useJob();
 
+    const jobComboBoxRef = useRef(null);
+
     const openUpdateModal = useCallback((data) => {
         setUpdateData(data);
         setIsOpen(true);
@@ -84,6 +86,22 @@ function Customers2() {
         getInitdata();
     }, [])
 
+    // Set initial value for ComboBox using ref
+    useEffect(() => {
+        if (jobComboBoxRef.current && searchKey.job && jobs.length > 0) {
+            try {
+                // Try to set the value using the component's API
+                if (jobComboBoxRef.current.setValue) {
+                    jobComboBoxRef.current.setValue(searchKey.job);
+                } else if (jobComboBoxRef.current.value !== undefined) {
+                    jobComboBoxRef.current.value = searchKey.job;
+                }
+            } catch (error) {
+                console.log("Error setting ComboBox initial value:", error);
+            }
+        }
+    }, [searchKey.job, jobs]);
+
     return (
         <div className="dashboard">
             <Header />
@@ -110,6 +128,7 @@ function Customers2() {
                                 <div className="searchField_container">
                                     <label>Job</label>
                                     <ComboBox
+                                        ref={jobComboBoxRef}
                                         dataSource={jobs}
                                         displayMember="name"
                                         valueMember="name"
