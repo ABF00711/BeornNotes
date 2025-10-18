@@ -1,13 +1,9 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
 import "./style.css";
-import Header from "../../Components/Header";
-import Navbar from "../Navbar";
-import Sidebar from "../Sidebar";
 import { MyContext } from "../../Context";
 import SmartGrid from "../../Components/SmartGrid";
 import Add from "../../Components/Add";
 import Update from "../../Components/Update";
-import InputGroup from "../../Components/InputGroup";
 import useDynamicData from "../../Hooks/useDynamicData";
 import useJob from "../../Hooks/useJob";
 import SmartDelete from "../../Components/Delete";
@@ -103,68 +99,61 @@ function Customers2() {
     }, [searchKey.job, jobs]);
 
     return (
-        <div className="dashboard">
-            <Header />
-            <Navbar />
-            <div className={`dashboard-container ${!isCollapsed ? 'M_L_280' : ''}`}>
-                <div className="customers2">
-                    <div className="customers-toolbar">
-                        <div className="toolbar-left">
-                            <Add formName={formName} />
-                            <SmartDelete formName={formName} gridRef={gridRef} />
+        <div className="customers2">
+            <div className="customers-toolbar">
+                <div className="toolbar-left">
+                    <Add formName={formName} />
+                    <SmartDelete formName={formName} gridRef={gridRef} />
+                </div>
+                <div className="searchbox">
+                    <div className="searchField">
+                        <div className="searchField_container">
+                            <label>Age</label>
+                            <Input
+                                type="number"
+                                value={searchKey.age || ""}
+                                onChange={(e) => {
+                                    setSearchKey({ ...searchKey, age: e.target.value })
+                                }}
+                            ></Input>
                         </div>
-                        <div className="searchbox">
-                            <div className="searchField">
-                                <div className="searchField_container">
-                                    <label>Age</label>
-                                    <Input
-                                        type="number"
-                                        value={searchKey.age || ""}
-                                        onChange={(e) => {
-                                            setSearchKey({ ...searchKey, age: e.target.value })
-                                        }}
-                                    ></Input>
-                                </div>
-                                <div className="searchField_container">
-                                    <label>Job</label>
-                                    <ComboBox
-                                        ref={jobComboBoxRef}
-                                        dataSource={jobs}
-                                        displayMember="name"
-                                        valueMember="name"
-                                        allowCustomValue={true}
-                                        onChange={(e) =>
-                                            setSearchKey((prev) => ({ ...prev, job: e.detail.value }))
-                                        }
-                                    />
-                                </div>
-                            </div>
-                            <button onClick={onSearch} type="button" className="btn btn-primary">
-                                <span className="btn-icon">⌕</span>
-                                <span className="btn-label">Search</span>
-                            </button>
-                        </div>
-                        <div className="toolbar-right">
-                            <SmartLayouts formName={formName} gridRef={gridRef} />
-                            <SmartSearchPattern formName={formName} gridRef={gridRef} />
+                        <div className="searchField_container">
+                            <label>Job</label>
+                            <ComboBox
+                                ref={jobComboBoxRef}
+                                dataSource={jobs}
+                                displayMember="name"
+                                valueMember="name"
+                                allowCustomValue={true}
+                                onChange={(e) =>
+                                    setSearchKey((prev) => ({ ...prev, job: e.detail.value }))
+                                }
+                            />
                         </div>
                     </div>
-                    <SmartGrid
-                        formName={formName}
-                        gridRef={gridRef}
-                        openUpdateModal={openUpdateModal}
-                        customData={filteredData}
-                    />
-                    <Update
-                        formName={formName}
-                        isOpen={isOpen}
-                        setIsOpen={setIsOpen}
-                        updateData={updateData}
-                        setUpdateData={setUpdateData}
-                    />
+                    <button onClick={onSearch} type="button" className="btn btn-primary">
+                        <span className="btn-icon">⌕</span>
+                        <span className="btn-label">Search</span>
+                    </button>
+                </div>
+                <div className="toolbar-right">
+                    <SmartLayouts formName={formName} gridRef={gridRef} />
+                    <SmartSearchPattern formName={formName} gridRef={gridRef} />
                 </div>
             </div>
-            <Sidebar />
+            <SmartGrid
+                formName={formName}
+                gridRef={gridRef}
+                openUpdateModal={openUpdateModal}
+                customData={filteredData}
+            />
+            <Update
+                formName={formName}
+                isOpen={isOpen}
+                setIsOpen={setIsOpen}
+                updateData={updateData}
+                setUpdateData={setUpdateData}
+            />
         </div>
     );
 }

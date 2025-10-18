@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useContext, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "./style.css";
 import TabbedBtn from "../../Components/TabbedBtn";

@@ -8,9 +8,12 @@
     flex: 1;
     flex-direction: column;
     transition: margin-left 0.3s ease;
+    min-height: calc(100vh - 130px);
+    width: 100%;
+    box-sizing: border-box;
 }
 .M_L_280{
-    margin-left: var(--sidebar-width, 280px);
+    /* margin-left is now handled dynamically via inline styles */
 }
 
 .main {

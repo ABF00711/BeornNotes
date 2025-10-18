@@ -23,9 +23,9 @@ function SmartGrid(props) {
         columnResizeMode: 'growAndShrink'
     }), []);
 
-    const appearance = {
+    const appearance = useMemo(() => ({
         alternationCount: 2
-    };
+    }), []);
 
     const sorting = useMemo(() => ({
         enabled: true,

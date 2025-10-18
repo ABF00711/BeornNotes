@@ -6,6 +6,8 @@
     align-items: center;
     justify-content: center;
     padding: 25px;
+    box-sizing: border-box;
+    min-height: calc(100vh - 130px);
 }
 .customers-toolbar {
     width: 90%;

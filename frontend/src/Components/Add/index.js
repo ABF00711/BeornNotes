@@ -30,7 +30,7 @@ function Add({ formName }) {
     useEffect(() => {
         if(!searchConfig) return;
         setFieldsData(searchConfig.filter(item => item.table_name === tableNames[formName]));
-    }, [searchConfig])
+    }, [searchConfig, tableNames])
 
     return (
         <>
