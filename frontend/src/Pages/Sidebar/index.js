@@ -32,6 +32,11 @@ function Sidebar() {
         }
     }, [isCollapsed]);
 
+    // Update CSS custom property when sidebar width changes
+    useEffect(() => {
+        document.documentElement.style.setProperty('--sidebar-width', `${sidebarWidth}px`);
+    }, [sidebarWidth]);
+
     useEffect(() => {
         const handleResize = () => {
             const isSmallScreen = window.innerWidth < 768;
@@ -58,6 +63,11 @@ function Sidebar() {
             const max = 480;
             const newWidth = Math.min(Math.max(e.clientX, min), max);
             setSidebarWidth(newWidth);
+            
+            // Dispatch custom event for layout to listen
+            window.dispatchEvent(new CustomEvent('sidebarResize', {
+                detail: { width: newWidth }
+            }));
         };
         const handleMouseUp = () => {
             if (!isDraggingRef.current) return;

@@ -1,0 +1,38 @@
+.dashboard {
+    min-height: 100vh;
+    background-color: #f8f9fa;
+    display: flex;
+    flex-direction: column;
+}
+
+.dashboard-container {
+    padding-top: 130px;
+    flex: 1;
+    flex-direction: column;
+    transition: margin-left 0.3s ease, width 0.3s ease;
+    min-height: calc(100vh - 130px);
+    box-sizing: border-box;
+    overflow-x: auto; /* Allow horizontal scroll if content is too wide */
+    overflow-y: auto; /* Allow vertical scroll if content is too tall */
+}
+
+/* Ensure content inside dashboard-container is responsive */
+.dashboard-container > * {
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .dashboard-container {
+        margin-left: 70px !important;
+        width: calc(100vw - 70px) !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .dashboard-container {
+        margin-left: 60px !important;
+        width: calc(100vw - 60px) !important;
+    }
+}
