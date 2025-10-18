@@ -61,7 +61,7 @@ function TabInterfaces(props) {
             return;
         }
         setCurrentInterface(JSON.parse(selected.tabs_json));
-        localStorage.setItem("tabbedInterface", selected.tabs_json);
+        localStorage.setItem("currentInterface", selected.tabs_json);
         navigate(JSON.parse(selected.tabs_json).activeUrl);
         setIsOpen(false);
     }
@@ -73,7 +73,7 @@ function TabInterfaces(props) {
     }, [isOpen]);
 
     useEffect(() => { buildOptions(); }, [tabbedInterfaces]);
-    
+
     useEffect(() => { getTabInterfaces(); }, []);
 
 

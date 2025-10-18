@@ -34,7 +34,7 @@ function useTabbedInterfaces() {
                 tabbedBtns: currentInterface.tabbedBtns.filter((btn) => btn.title !== btnInfo.title),
                 activeUrl: nextActiveUrl
             };
-            localStorage.setItem("tabbedInterface", JSON.stringify(tabbedInterface));
+            localStorage.setItem("currentInterface", JSON.stringify(tabbedInterface));
             setCurrentInterface(tabbedInterface);
             navigate(nextActiveUrl);
         } catch (error) {
