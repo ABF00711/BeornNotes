@@ -4,10 +4,12 @@ import "./style.css";
 import TabbedBtn from "../../Components/TabbedBtn";
 import TabInterfaces from "../../Components/TabInterfaces";
 import { MyContext } from "../../Context";
+import useTabbedInterfaces from "../../Hooks/useTabbedInterfaces";
 
 function Navbar() {
     const { isCollapsed, currentInterface, setCurrentInterface } = useContext(MyContext);
     const navigate = useNavigate();
+    const {getCurrentTabInterface} = useTabbedInterfaces();
     const draggedIdRef = useRef(null);
 
     const arrayMove = (arr, fromIndex, toIndex) => {
@@ -56,6 +58,10 @@ function Navbar() {
             );
         });
     };
+
+    useEffect(() => {
+        getCurrentTabInterface();
+    }, [])
 
     return (
         <div className="navbar">
