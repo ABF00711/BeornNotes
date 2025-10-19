@@ -1,6 +1,5 @@
-import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import "./style.css";
-import { MyContext } from "../../Context";
 import SmartGrid from "../../Components/SmartGrid";
 import Add from "../../Components/Add";
 import SmartDelete from "../../Components/Delete";
@@ -14,7 +13,6 @@ import useSearchConfig from "../../Hooks/useSearchConfig";
 const formName = "Customers";
 
 function Customers() {
-    const { isCollapsed } = useContext(MyContext);
     const { getDynamicData } = useDynamicData();
     const { getSearchConfigData } = useSearchConfig();
     const gridRef = useRef(null);
