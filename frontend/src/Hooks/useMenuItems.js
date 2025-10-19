@@ -8,7 +8,7 @@ function useMenuItems() {
 
     const getMenuItems = async () => {
         try {
-            const res = await services.getMenuItems(token);
+            const res = await services.getMenuItems();
             if (res.message == "getMenuItems success") {
                 let _menuItems = [{
                     id: 0,

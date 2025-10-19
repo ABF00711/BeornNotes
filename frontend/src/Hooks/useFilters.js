@@ -8,7 +8,7 @@ function useSearchpatterns() {
 
     const getSearchpatterns = async (tablename) => {
         try {
-            const res = await services.getSearchpatterns(tablename, token);
+            const res = await services.getSearchpatterns(tablename);
             if (res.message == "getSearchpatterns success") {
                 setSearchpatterns(res.searchpatterns);
             }
@@ -19,7 +19,7 @@ function useSearchpatterns() {
 
     const updateSearchpatterns = async (searchData, searchName, tablename) => {
         try {
-            const res = await services.updateSearchpatterns(searchData, searchName, tablename, token);
+            const res = await services.updateSearchpatterns(searchData, searchName, tablename);
             if (res.message == "updateSearchpatterns success") {
                 toast.success("Update searchpatterns success");
                 getSearchpatterns(tablename);
@@ -31,7 +31,7 @@ function useSearchpatterns() {
 
     const createSearchpatterns = async (searchData, searchName, tablename) => {
         try {
-            const res = await services.createSearchpatterns(searchData, searchName, tablename, token);
+            const res = await services.createSearchpatterns(searchData, searchName, tablename);
             if (res.message == "createSearchpatterns success") {
                 toast.success("Create searchpatterns success");
                 getSearchpatterns(tablename);
@@ -43,7 +43,7 @@ function useSearchpatterns() {
 
     const deleteSearchpatterns = async (tablename, patternId) => {
         try {
-            const res = await services.deleteSearchpatterns(patternId, token);
+            const res = await services.deleteSearchpatterns(patternId);
             if (res.message == "deleteSearchpatterns success") {
                 toast.success("Delete searchpatterns success");
                 getSearchpatterns(tablename);

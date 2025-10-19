@@ -137,7 +137,7 @@ function useAuth() {
             updatedUserData.name = formData.name;
             updatedUserData.email = formData.email;
             if (!window.confirm("Really want update profile?")) return;
-            const res = await services.updateProfile(updatedUserData, userData.id, token);
+            const res = await services.updateProfile(updatedUserData, userData.id);
             if (res.message == "updateProfile success") {
                 toast.success("Profile updated successfully");
                 setUserData(res.userData);
@@ -163,7 +163,7 @@ function useAuth() {
                 throw new Error("Confirm passwod is wrong!");
             };
             if (!window.confirm("Really want to change password?")) return;
-            const res = await services.changePassword(formData.currentPassword, formData.newPassword, token);
+            const res = await services.changePassword(formData.currentPassword, formData.newPassword);
             if (res.message === "changePassword success") {
                 toast.success("Password changed successfully");
                 toast.info("Please log in again.");
@@ -182,7 +182,7 @@ function useAuth() {
 
     const getQRCode = async () => {
         try {
-            const res = await services.getQRCode(token);
+            const res = await services.getQRCode();
             if (res.message == "getQRCode success") {
                 return res.QRCode;
             }
@@ -195,7 +195,7 @@ function useAuth() {
 
     const enableMFA = async (verificationCode) => {
         try {
-            const res = await services.enableMFA(verificationCode, token);
+            const res = await services.enableMFA(verificationCode);
             if (res.message === "enableMFA success") {
                 setUserData({ ...userData, mfa: 1 });
                 return true;
@@ -209,7 +209,7 @@ function useAuth() {
 
     const disableMFA = async () => {
         try {
-            const res = await services.disableMFA(token);
+            const res = await services.disableMFA();
             if (res.message === "disableMFA success") {
                 setUserData({ ...userData, mfa: 0 });
                 return true;

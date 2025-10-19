@@ -8,7 +8,7 @@ function useLayouts () {
 
     const getLayouts = async (tablename) => {
         try {
-            const res = await services.getLayouts(tablename, token);
+            const res = await services.getLayouts(tablename);
             if(res.message === "getLayouts success"){
                 setLayouts(res.layouts);
                 return;
@@ -21,7 +21,7 @@ function useLayouts () {
 
     const createLayouts = async (tablename, layoutName, layoutJson) => {
         try {
-            const res = await services.createLayouts(tablename, layoutName, layoutJson, token);
+            const res = await services.createLayouts(tablename, layoutName, layoutJson);
             if(res.message === "createLayouts success"){
                 toast.success(res.message);
                 getLayouts(tablename);
@@ -35,7 +35,7 @@ function useLayouts () {
 
     const updateLayouts = async (tablename, layoutName, layoutJson) => {
         try {
-            const res = await services.updateLayouts(tablename, layoutName, layoutJson, token);
+            const res = await services.updateLayouts(tablename, layoutName, layoutJson);
             if(res.message === "updateLayouts success"){
                 toast.success(res.message);
                 getLayouts(tablename);
@@ -49,7 +49,7 @@ function useLayouts () {
 
     const deleteLayouts = async(tablename, layoutId) => {
         try {
-            const res = await services.deleteLayouts(layoutId, token);
+            const res = await services.deleteLayouts(layoutId);
             if(res.message == "deleteLayouts success"){
                 getLayouts(tablename);
                 toast.success("Delete layout success");

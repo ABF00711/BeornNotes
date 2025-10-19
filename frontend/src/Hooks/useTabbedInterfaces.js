@@ -44,7 +44,7 @@ function useTabbedInterfaces() {
 
     const getTabInterfaces = async () => {
         try {
-            const res = await services.getTabInterfaces(token);
+            const res = await services.getTabInterfaces();
             if (res.message == "getTabInterfaces success") {
                 setTabbedInterfaces(res.tabInterfaces);
                 return;
@@ -57,7 +57,7 @@ function useTabbedInterfaces() {
 
     const createTabInterfaces = async (tabInterfaceName, tabInterfaceJson) => {
         try {
-            const res = await services.createTabInterface(tabInterfaceName, tabInterfaceJson, token);
+            const res = await services.createTabInterface(tabInterfaceName, tabInterfaceJson);
             if (res.message == "createTabInterface success") {
                 toast.success("Created a new tab interface successfully");
                 await getTabInterfaces();
@@ -72,7 +72,7 @@ function useTabbedInterfaces() {
 
     const updateTabInterfaces = async (tabInterfaceName, tabInterfaceJson) => {
         try {
-            const res = await services.updateTabInterface(tabInterfaceName, tabInterfaceJson, token);
+            const res = await services.updateTabInterface(tabInterfaceName, tabInterfaceJson);
             if (res.message == "updateTabInterface success") {
                 getTabInterfaces();
                 toast.success("Updated the tab interface successfully");
@@ -86,7 +86,7 @@ function useTabbedInterfaces() {
 
     const deleteTabInterfaces = async (tabInterfaceId) => {
         try {
-            const res = await services.deleteTabInterface(tabInterfaceId, token);
+            const res = await services.deleteTabInterface(tabInterfaceId);
             if (res.message == "deleteTabInterface success") {
                 getTabInterfaces();
                 toast.success("Deleted the tab interface successfully");
@@ -100,7 +100,7 @@ function useTabbedInterfaces() {
 
     const getCurrentTabInterface = async () => {
         try {
-            const res = await services.getTabInterfaces(token);
+            const res = await services.getTabInterfaces();
             if (res.message == "getTabInterfaces success") {
                 setTabbedInterfaces(res.tabInterfaces);
                 const savedCurrentInterface = JSON.parse(localStorage.getItem("currentInterface") || null);

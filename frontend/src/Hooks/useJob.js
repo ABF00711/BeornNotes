@@ -7,7 +7,7 @@ function useJob (){
 
     const getJobs = async() => {
         try {
-            const res = await services.getJobs(token);
+            const res = await services.getJobs();
             if(res.message == "getJobs success"){
                 setJobs(res.jobs);
             }

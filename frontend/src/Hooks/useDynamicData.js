@@ -17,7 +17,7 @@ function useDynamicData() {
 
     const getDynamicData = async (formName) => {
         try {
-            const res = await services.getDynamicData(formName, token);
+            const res = await services.getDynamicData(formName);
             if (res.message === "getDynamicData success") {
                 setDynamicData(res.dynamicData);
                 setTableNames((currentTableNames) => ({
@@ -37,7 +37,7 @@ function useDynamicData() {
                     newData[key] = null;
                 }
             }
-            const res = await services.createDynamicData(tablename, newData, token);
+            const res = await services.createDynamicData(tablename, newData);
 
             if (res.message === "createDynamicData success") {
                 toast.success(`Created a new ${tablename} data successfully`);
@@ -58,7 +58,7 @@ function useDynamicData() {
                     newData[key] = null;
                 }
             }
-            const res = await services.updateDynamicData(tablename, newData, token);
+            const res = await services.updateDynamicData(tablename, newData);
             if (res.message == "updateDynamicData success") {
                 toast.success(`Updated ${tablename} data successfully.`);
                 getDynamicData(tablename);
@@ -72,7 +72,7 @@ function useDynamicData() {
 
     const deleteDynamicData = async (tablename, selectedRows) => {
         try {
-            const res = await services.deleteDynamicData(tablename, selectedRows, token);
+            const res = await services.deleteDynamicData(tablename, selectedRows);
             if (res.message === "deleteDynamicData success") {
                 toast.success("Deleted rows selected successfully");
                 // getDynamicData(tablename);
