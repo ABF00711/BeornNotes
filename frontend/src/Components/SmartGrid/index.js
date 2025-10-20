@@ -6,10 +6,11 @@ import useDynamicData from "../../Hooks/useDynamicData";
 import useSearchConfig from "../../Hooks/useSearchConfig";
 import useSmartGrid from "../../Hooks/useSmartGrid";
 import useJob from "../../Hooks/useJob";
+import { gridState } from "./gridState";
 
 function SmartGrid(props) {
     const { formName, gridRef, openUpdateModal, customData } = props;
-    const {tableNames} = useDynamicData();
+    const { tableNames } = useDynamicData();
     const [columns, setColumns] = useState([]);
     const { searchConfig } = useSearchConfig();
     const { dynamicData } = useDynamicData();
@@ -17,47 +18,6 @@ function SmartGrid(props) {
     const [dataSourseSettings, setDataSourseSettings] = useState({ dataFields: [] });
     const [displayData, setDisplayData] = useState([]);
     const { jobs, getJobs } = useJob();
-
-    const behavior = useMemo(() => ({
-        allowColumnReorder: true,
-        columnResizeMode: 'growAndShrink'
-    }), []);
-
-    const appearance = useMemo(() => ({
-        alternationCount: 2
-    }), []);
-
-    const sorting = useMemo(() => ({
-        enabled: true,
-        mode: 'one'
-    }), []);
-
-    const filtering = useMemo(() => ({
-        enabled: true,
-        filterRow: {
-            visible: true
-        }
-    }), []);
-
-    const selection = useMemo(() => ({
-        enabled: true,
-        checkBoxes: {
-            enabled: true
-        },
-        action: "none"
-    }), []);
-
-    const header = useMemo(() => ({
-        visible: true,
-        buttons: ['columns']
-    }), []);
-
-    const stateSettings = useMemo(() => ({
-        autoSave: true,
-        autoLoad: true,
-        autoSaveTimeout: 100,
-        stateMethods: ['sorting', 'filtering', 'columns', 'grouping'],
-    }), []);
 
     const getDataSourceSettings = () => {
         try {
@@ -83,7 +43,7 @@ function SmartGrid(props) {
         setColumns(getSmartColumns(openUpdateModal, gridRef));
         getDataSourceSettings();
     }, [searchConfig])
-    
+
     useEffect(() => {
         getJobs();
     }, [])
@@ -127,7 +87,7 @@ function SmartGrid(props) {
         return <div className="smartGridTable">Loading...</div>;
     }
 
-    if(displayData.length == 0){
+    if (displayData.length == 0) {
         return <div className="smartGridTable">There is no data!</div>;
     }
 
@@ -135,15 +95,15 @@ function SmartGrid(props) {
         <div className="smartGridTable">
             <Grid id={tableNames[formName]}
                 ref={gridRef}
-                appearance={appearance}
+                appearance={gridState.appearance}
                 dataSource={dataAdapter}
                 columns={columns}
-                behavior={behavior}
-                sorting={sorting}
-                filtering={filtering}
-                selection={selection}
-                header={header}
-                stateSettings={stateSettings}
+                behavior={gridState.behavior}
+                sorting={gridState.sorting}
+                filtering={gridState.filtering}
+                selection={gridState.selection}
+                header={gridState.header}
+                stateSettings={gridState.stateSettings}
                 summaryRow={{
                     visible: true
                 }}
