@@ -10,13 +10,12 @@ import { gridState } from "./gridState";
 
 function SmartGrid(props) {
     const { formName, gridRef, openUpdateModal, customData } = props;
-    const { tableNames } = useDynamicData();
     const [columns, setColumns] = useState([]);
-    const { searchConfig } = useSearchConfig();
-    const { dynamicData } = useDynamicData();
-    const { getSmartColumns } = useSmartGrid();
-    const [dataSourseSettings, setDataSourseSettings] = useState({ dataFields: [] });
     const [displayData, setDisplayData] = useState([]);
+    const [dataSourseSettings, setDataSourseSettings] = useState({ dataFields: [] });
+    const { dynamicData, tableNames } = useDynamicData();
+    const { searchConfig } = useSearchConfig();
+    const { getSmartColumns } = useSmartGrid();
     const { jobs, getJobs } = useJob();
 
     const getDataSourceSettings = () => {
