@@ -1,30 +1,26 @@
-import React, { useEffect, useState, useMemo, memo } from "react";
+import React, { useMemo, memo, useState, useEffect } from "react";
 import "./style.css";
 import { Grid } from "smart-webcomponents-react/grid";
 import 'smart-webcomponents-react/source/styles/smart.default.css';
 import useDynamicData from "../../Hooks/useDynamicData";
 import useSearchConfig from "../../Hooks/useSearchConfig";
 import useSmartGrid from "../../Hooks/useSmartGrid";
-import useJob from "../../Hooks/useJob";
 import { gridState } from "./gridState";
 
 function SmartGrid(props) {
     const { formName, gridRef, openUpdateModal, customData } = props;
-    const [columns, setColumns] = useState([]);
-    const [displayData, setDisplayData] = useState([]);
-    const [dataSourseSettings, setDataSourseSettings] = useState({ dataFields: [] });
     const { dynamicData, tableNames } = useDynamicData();
     const { searchConfig } = useSearchConfig();
     const { getSmartColumns } = useSmartGrid();
-    const { jobs, getJobs } = useJob();
+    const [isGridInitialized, setIsGridInitialized] = useState(false);
 
-    const getDataSourceSettings = () => {
+    const dataSourseSettings = useMemo(() => {
         try {
-            if (!searchConfig) return;
+            if (!searchConfig) return { dataFields: [] };
             const dataFields = ['id: number'];
             searchConfig.forEach(config => {
                 if (config.table_name !== "customers") return;
-                let dataType = '';
+                let dataType;
                 if (config.field_type == "text") dataType = "string";
                 if (config.field_type == "combobox") dataType = "string";
                 if (config.field_type == "number") dataType = "number";
@@ -32,67 +28,65 @@ function SmartGrid(props) {
 
                 dataFields.push(`${config.field_name}: ${dataType}`);
             });
-            setDataSourseSettings({ dataFields });
+            return { dataFields };
         } catch (error) {
             console.log("getDataSourceSettingsError: ", error);
+            return { dataFields: [] };
         }
-    }
+    }, [searchConfig]);
 
-    useEffect(() => {
-        setColumns(getSmartColumns(openUpdateModal, gridRef));
-        getDataSourceSettings();
-    }, [searchConfig])
+    const columns = useMemo(() => {
+        return getSmartColumns(openUpdateModal, gridRef);
+    }, [searchConfig, openUpdateModal, gridRef]);
 
-    useEffect(() => {
-        getJobs();
-    }, [])
-
-    // Map job id -> name for display
-    useEffect(() => {
-        const dataToUse = customData || dynamicData;
-        if (!Array.isArray(dataToUse)) { setDisplayData([]); return; }
-        const idToName = new Map((jobs || []).map(j => [String(j.id), j.name]));
-        const mapped = dataToUse.map(row => {
-            const jobId = row?.job;
-            const jobName = jobId != null ? idToName.get(String(jobId)) : undefined;
-            return jobName ? { ...row, job: jobName } : row;
-        });
-        setDisplayData(mapped);
-    }, [customData, dynamicData, jobs])
+    const isDataReady = useMemo(() => {
+        return columns.length > 0 &&
+            dataSourseSettings.dataFields?.length > 0 &&
+            tableNames[formName] &&
+            (dynamicData?.length > 0 || customData?.length > 0);
+    }, [columns.length, dataSourseSettings.dataFields?.length, tableNames, formName, dynamicData?.length, customData?.length]);
 
     const dataAdapter = useMemo(() => {
-        if (!displayData || !dataSourseSettings.dataFields) return [];
+        if (!isDataReady) return null;
+
+        const dataToUse = customData || dynamicData;
+        if (!dataToUse?.length) return null;
+
         return new window.Smart.DataAdapter({
-            dataSource: displayData,
+            dataSource: dataToUse,
             dataFields: dataSourseSettings.dataFields
         });
-    }, [displayData, dataSourseSettings.dataFields?.length]);
+    }, [isDataReady, dynamicData, customData, dataSourseSettings.dataFields]);
 
-
-    const isDataReady = columns.length > 0 &&
-        dataSourseSettings.dataFields?.length > 0;
-
-    if (gridRef.current) {
-        gridRef.current.stateSettings.current = `smartGrid_${formName}`;
-    }
-
-    if (isDataReady && gridRef.current) {
-        setTimeout(() => {
-            gridRef.current?.loadState(JSON.parse(localStorage.getItem(`smartGrid_${formName}`) || null));
-        }, 100);
-    }
+    // Track grid initialization
+    useEffect(() => {
+        if (isDataReady && !isGridInitialized) {
+            setIsGridInitialized(true);
+        }
+    }, [isDataReady, isGridInitialized]);
 
     if (!isDataReady) {
         return <div className="smartGridTable">Loading...</div>;
     }
 
-    if (displayData.length == 0) {
+    if (!dataAdapter) {
         return <div className="smartGridTable">There is no data!</div>;
+    }
+
+    if (!isGridInitialized) {
+        return <div className="smartGridTable">Initializing...</div>;
+    }
+    
+    if (gridRef.current) {
+        gridRef.current.stateSettings.current = `smartGrid${formName}`;
+        setTimeout(() => {
+            gridRef.current.loadState(JSON.parse(localStorage.getItem(`smartGrid${formName}`) || null));
+        }, 10);
     }
 
     return (
         <div className="smartGridTable">
-            <Grid id={tableNames[formName]}
+            <Grid id={`smartGrid${formName}`}
                 ref={gridRef}
                 appearance={gridState.appearance}
                 dataSource={dataAdapter}
