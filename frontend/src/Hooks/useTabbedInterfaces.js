@@ -1,11 +1,11 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { MyContext } from "../Context";
 import services from "../Services";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 function useTabbedInterfaces() {
-    const { tabbedInterfaces, setTabbedInterfaces, currentInterface, setCurrentInterface, token } = useContext(MyContext);
+    const { setTabbedInterfaces, currentInterface, setCurrentInterface } = useContext(MyContext);
     const navigate = useNavigate();
 
     const addTabbedInterface = (newItem) => {
@@ -118,6 +118,7 @@ function useTabbedInterfaces() {
                     return;
                 }
                 navigate("/");
+                return;
             }
             navigate("/login");
         } catch (error) {
