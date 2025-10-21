@@ -36,8 +36,8 @@ function SmartGrid(props) {
     }, [searchConfig]);
 
     const columns = useMemo(() => {
-        return getSmartColumns(openUpdateModal, gridRef);
-    }, [searchConfig, openUpdateModal, gridRef]);
+        return getSmartColumns(openUpdateModal);
+    }, [searchConfig, openUpdateModal]);
 
     const isDataReady = useMemo(() => {
         return columns.length > 0 &&
@@ -76,12 +76,12 @@ function SmartGrid(props) {
     if (!isGridInitialized) {
         return <div className="smartGridTable">Initializing...</div>;
     }
-    
+
     if (gridRef.current) {
         gridRef.current.stateSettings.current = `smartGrid${formName}`;
         setTimeout(() => {
             gridRef.current.loadState(JSON.parse(localStorage.getItem(`smartGrid${formName}`) || null));
-        }, 10);
+        }, 100);
     }
 
     return (
@@ -100,6 +100,7 @@ function SmartGrid(props) {
                 summaryRow={{
                     visible: true
                 }}
+                
             ></Grid>
         </div>
     );
