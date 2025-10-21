@@ -93,7 +93,7 @@ function useAuth() {
 
     const isAuthenticated = async () => {
         try {
-            const jwtToken = localStorage.getItem("jwtToken") || sessionStorage.getItem("jwtToken") || null;
+            const jwtToken = JSON.parse(localStorage.getItem("jwtToken") || sessionStorage.getItem("jwtToken"));
             if(!jwtToken){
                 navigate("/login");
                 return;

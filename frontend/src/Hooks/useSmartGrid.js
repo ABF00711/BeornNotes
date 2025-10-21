@@ -10,6 +10,31 @@ function useSmartGrid() {
       if (!searchConfig) return [];
       const columns = [];
 
+      columns.push({
+        label: "Actions",
+        dataField: "actions",
+        icon: 'fa-pencil',
+        showIcon: true,
+        formatFunction(settings) {
+          const button = document.createElement("button");
+          button.className = "btn btn-primary btn-icon";
+          button.innerHTML = "✎";
+
+          button.addEventListener("click", () => {
+            const unProxiedData = _.cloneDeep(settings.row.data);
+            openUpdateModal(unProxiedData)
+          });
+
+          // Assign the actual DOM node
+          settings.cell.element.innerHTML = ""; // Clear existing content
+          settings.cell.element.style.pointerEvents = 'none';
+          button.style.pointerEvents = 'auto';
+          settings.cell.element.appendChild(button);
+        },
+        summary: ['count'],
+        allowReorder: false,
+      });
+
       searchConfig.forEach((configData) => {
         if (configData.table_name === "customers") {
           let dataType = configData.field_type;
@@ -40,31 +65,6 @@ function useSmartGrid() {
           }
           columns.push(column);
         }
-      });
-
-      columns.push({
-        label: "Actions",
-        dataField: "actions",
-        icon: 'fa-pencil',
-        showIcon: true,
-        formatFunction(settings) {
-          const button = document.createElement("button");
-          button.className = "btn btn-primary btn-icon";
-          button.innerHTML = "✎";
-
-          button.addEventListener("click", () => {
-            const unProxiedData = _.cloneDeep(settings.row.data);
-            openUpdateModal(unProxiedData)
-          });
-
-          // Assign the actual DOM node
-          settings.cell.element.innerHTML = ""; // Clear existing content
-          settings.cell.element.style.pointerEvents = 'none';
-          button.style.pointerEvents = 'auto';
-          settings.cell.element.appendChild(button);
-        },
-        summary: ['count'],
-        allowReorder: false,
       });
 
       return columns;
