@@ -5,7 +5,7 @@ import _ from "lodash"
 function useSmartGrid() {
   const { searchConfig } = useContext(MyContext);
 
-  const getSmartColumns = (openUpdateModal, gridRef) => {
+  const getSmartColumns = (openUpdateModal) => {
     try {
       if (!searchConfig) return [];
       const columns = [];

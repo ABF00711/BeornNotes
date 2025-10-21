@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 function useAuth() {
-    const { userData, setUserData, token, setToken, searchConfig, initializeStateData } = useContext(MyContext);
+    const { userData, setUserData, setToken, searchConfig, initializeStateData } = useContext(MyContext);
     const navigate = useNavigate();
 
     const register = async (formData) => {
