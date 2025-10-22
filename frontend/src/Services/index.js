@@ -281,6 +281,16 @@ const services = {
         } catch (error) {
             console.log("servicesGetJobsError: ", error);
         }
+    },
+    
+    searchDynamicData: async (formname, searchKey) => {
+        try {
+            services.setAuthToken();
+            const res = await axios.post(services.serverURL + '/dynamicData/search', {formname, searchKey});
+            return res.data;
+        } catch (error) {
+            console.log("searchDynamicDataError: ", error);
+        }
     }
 }
 
