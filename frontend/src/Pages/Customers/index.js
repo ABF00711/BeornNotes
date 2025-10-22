@@ -32,7 +32,7 @@ function Customers() {
 
     const onNavigate = useCallback((data) => {
         setUpdateData(data);
-        navigate(tabBtnData.path);
+        navigate(tabBtnData.path, {state: updateData});
         setCurrentInterface(prev => {
             const exists = prev.tabbedBtns.find(item => item.id === tabBtnData.id);
             prev.tabbedBtns = exists ? prev.tabbedBtns : [...prev.tabbedBtns, tabBtnData];
