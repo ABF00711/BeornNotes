@@ -8,7 +8,7 @@ import useSmartGrid from "../../Hooks/useSmartGrid";
 import { gridState } from "./gridState";
 
 function SmartGrid(props) {
-    const { formName, gridRef, openUpdateModal, customData } = props;
+    const { formName, gridRef, onFunc, customData } = props;
     const { dynamicData, tableNames } = useDynamicData();
     const { searchConfig } = useSearchConfig();
     const { getSmartColumns } = useSmartGrid();
@@ -36,8 +36,8 @@ function SmartGrid(props) {
     }, [searchConfig]);
 
     const columns = useMemo(() => {
-        return getSmartColumns(openUpdateModal);
-    }, [searchConfig, openUpdateModal]);
+        return getSmartColumns(onFunc);
+    }, [searchConfig, onFunc]);
 
     const isDataReady = useMemo(() => {
         return columns.length > 0 &&

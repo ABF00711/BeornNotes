@@ -5,7 +5,7 @@ import _ from "lodash"
 function useSmartGrid() {
   const { searchConfig } = useContext(MyContext);
 
-  const getSmartColumns = (openUpdateModal) => {
+  const getSmartColumns = (onFunc) => {
     try {
       if (!searchConfig) return [];
       const columns = [];
@@ -22,7 +22,7 @@ function useSmartGrid() {
 
           button.addEventListener("click", () => {
             const unProxiedData = _.cloneDeep(settings.row.data);
-            openUpdateModal(unProxiedData)
+            onFunc(unProxiedData)
           });
 
           // Assign the actual DOM node

@@ -14,6 +14,7 @@ import Products from './Pages/Products';
 import Customers2 from './Pages/Customers2';
 import Customers from './Pages/Customers';
 import Layout from './Pages/Layout';
+import UpdatePage from './Pages/UpdatePage';
 
 // Register all Community features
 if (window.Smart) {
@@ -40,6 +41,7 @@ function App() {
               <Route path="/orders" element={<Orders />} />
               <Route path="/summary_report" element={<SummaryReport />} />
               <Route path="/inventory_report" element={<InventoryReport />} />
+              <Route path="/updateCustomer" element={<UpdatePage />} />
             </Route>
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />

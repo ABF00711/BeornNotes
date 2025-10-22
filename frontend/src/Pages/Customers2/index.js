@@ -144,7 +144,7 @@ function Customers2() {
             <SmartGrid
                 formName={formName}
                 gridRef={gridRef}
-                openUpdateModal={openUpdateModal}
+                onFunc={openUpdateModal}
                 customData={filteredData}
             />
             <Update
