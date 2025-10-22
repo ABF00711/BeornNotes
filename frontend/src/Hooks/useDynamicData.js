@@ -83,6 +83,23 @@ function useDynamicData() {
             console.log("deleteDynamicData: ", error);
         }
     }
+    
+    const searchDynamicData = async (formName, searchKey) => {
+        try {
+            const res = await services.searchDynamicData(formName, searchKey);
+            if(res.message === "searchDynamicData success"){
+                setDynamicData(res.dynamicData);
+                setTableNames((current) => ({
+                    ...current,
+                    [formName]: res.tablename
+                }));
+                return;
+            }
+            console.log("searchDynamicDataError!");
+        } catch (error) {
+            console.log("deleteDynamicData: ", error);
+        }
+    }
 
     // Helper function to get filter type based on field type
     const getFilterType = (fieldType) => {
@@ -276,7 +293,8 @@ function useDynamicData() {
             tableNames, dynamicData, setDynamicData, 
             getDynamicData, getColumnDefs, 
             createDynamicData, updateDynamicData, 
-            deleteDynamicData, statusBar 
+            deleteDynamicData, statusBar,
+            searchDynamicData 
         }
     ;
 }
