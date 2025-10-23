@@ -33,9 +33,8 @@ const dynamicDataController = {
                 return;
             }
 
-            const sql = `${formData.Select} 
-            ${'Where ' + field_name + '=' + field_value} 
-            ${formData.OrderBy ? 'Order By ' + formData.OrderBy : ''}`;
+
+            const sql = `${formData.Select} ${'Where ' + field_name + '=' + field_value} ${formData.OrderBy ? 'Order By ' + formData.OrderBy : ''}`;
             const dynamicData = await mysqlDA.excuteSql(sql);
             res.json({message: "searchDynamicData success", dynamicData, tablename: formData.TableView});
         } catch (error) {
