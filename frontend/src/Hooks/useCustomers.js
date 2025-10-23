@@ -18,7 +18,7 @@ function useCustomers () {
     }
 
     return (
-        getCustomers, customers, setCustomers
+        {getCustomers, customers, setCustomers}
     );
 }
 
