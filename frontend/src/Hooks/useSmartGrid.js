@@ -5,7 +5,7 @@ import _ from "lodash"
 function useSmartGrid() {
   const { searchConfig } = useContext(MyContext);
 
-  const getSmartColumns = (onFunc) => {
+  const getSmartColumns = (onFunc, tableName) => {
     try {
       if (!searchConfig) return [];
       const columns = [];
@@ -36,7 +36,7 @@ function useSmartGrid() {
       });
 
       searchConfig.forEach((configData) => {
-        if (configData.table_name === "customers") {
+        if (configData.table_name == tableName) {
           let dataType = configData.field_type;
 
           // 🔹 Fix mappings
