@@ -283,10 +283,10 @@ const services = {
         }
     },
     
-    searchDynamicData: async (formname, searchKey) => {
+    searchDynamicData: async (formName, searchKey) => {
         try {
             services.setAuthToken();
-            const res = await axios.post(services.serverURL + '/dynamicData/search', {formname, searchKey});
+            const res = await axios.post(services.serverURL + '/dynamicData/search', {formName, searchKey});
             return res.data;
         } catch (error) {
             console.log("searchDynamicDataError: ", error);
