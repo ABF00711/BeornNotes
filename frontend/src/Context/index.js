@@ -1,5 +1,4 @@
-import { createContext, useState, useContext, useMemo, useEffect } from "react";
-import { json, useLocation } from "react-router-dom";
+import { createContext, useState, useEffect } from "react";
 
 const DataContext = createContext([]);
 
@@ -27,6 +26,7 @@ function ContextProvider({ children }) {
     const [layouts, setLayouts] = useState([]);
 
     const [jobs, setJobs] = useState([]);
+    const [customers, setCustomers] = useState([]);
     const [userTime, setUserTime] = useState(defaultUserTime);
 
     useEffect(() => {
@@ -55,6 +55,7 @@ function ContextProvider({ children }) {
         setSearchpatterns([]);
         setLayouts([]);
         setJobs([]);
+        setCustomers([]);
         setUserTime(defaultUserTime);
     }
 
@@ -73,7 +74,8 @@ function ContextProvider({ children }) {
             layouts, setLayouts,
             currentInterface, setCurrentInterface,
             jobs, setJobs,
-            userTime, setUserTime
+            userTime, setUserTime,
+            customers, setCustomers
         }}>
             {children}
         </DataContext.Provider>

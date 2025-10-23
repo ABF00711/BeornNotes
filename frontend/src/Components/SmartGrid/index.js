@@ -40,10 +40,10 @@ function SmartGrid(props) {
     }, [searchConfig, onFunc, tableNames]);
 
     const isDataReady = useMemo(() => {
-        return columns.length > 0 &&
-            dataSourseSettings.dataFields?.length > 0 &&
-            tableNames[formName] &&
-            (dynamicData?.length > 0 || customData?.length > 0);
+        return columns.length > 0
+            && dataSourseSettings.dataFields?.length > 0
+            && tableNames[formName]
+            // && (dynamicData?.length > 0 || customData?.length > 0);
     }, [columns.length, dataSourseSettings.dataFields?.length, tableNames, formName, dynamicData?.length, customData?.length]);
 
     const dataAdapter = useMemo(() => {
@@ -100,7 +100,7 @@ function SmartGrid(props) {
                 summaryRow={{
                     visible: true
                 }}
-                
+
             ></Grid>
         </div>
     );
