@@ -28,11 +28,9 @@ function Customers() {
     const { getDynamicData } = useDynamicData();
     const { getSearchConfigData } = useSearchConfig();
     const gridRef = useRef(null);
-    const [updateData, setUpdateData] = useState({});
 
     const onNavigate = useCallback((data) => {
-        setUpdateData(data);
-        navigate(tabBtnData.path, {state: updateData});
+        navigate(tabBtnData.path, {state: data});
         setCurrentInterface(prev => {
             const exists = prev.tabbedBtns.find(item => item.id === tabBtnData.id);
             prev.tabbedBtns = exists ? prev.tabbedBtns : [...prev.tabbedBtns, tabBtnData];
