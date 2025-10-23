@@ -36,7 +36,7 @@ function SmartGrid(props) {
     }, [searchConfig]);
 
     const columns = useMemo(() => {
-        return getSmartColumns(onFunc);
+        return getSmartColumns(onFunc, tableNames[formName]);
     }, [searchConfig, onFunc]);
 
     const isDataReady = useMemo(() => {
