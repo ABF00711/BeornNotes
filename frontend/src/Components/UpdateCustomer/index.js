@@ -6,7 +6,7 @@ import { Controller, useForm } from "react-hook-form";
 import Input from "smart-webcomponents-react/input";
 import ComboBox from "smart-webcomponents-react/combobox";
 import useJob from "../../Hooks/useJob";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { getCustomerSchema } from "../DynamicModal/customerSchema";
 
 function UpdateCustomer({ updateData, customerData }) {
@@ -18,23 +18,33 @@ function UpdateCustomer({ updateData, customerData }) {
         return getCustomerSchema(customerData.labels, customerData.mandatories);
     }, [updateData]);
 
-    const defaultValues = useMemo(() => {
-        if (!updateData || Object.keys(updateData).length === 0) return {};
+    const getDefaultValue = (initData) => {
+        try {
+            if (!initData || Object.keys(initData).length === 0) return {};
 
-        const formattedData = { ...updateData };
-        if (formattedData.birthday) {
-            formattedData.birthday = formatDateForInput(formattedData.birthday);
+            const formattedData = { ...initData };
+            if (formattedData.birthday) {
+                formattedData.birthday = formatDateForInput(formattedData.birthday);
+            }
+            return formattedData;
+        } catch (error) {
+            console.log("getDefaultValue: ", error);
         }
-        return formattedData;
-    }, [updateData]);
+    }
+
+    const [defaultValues, setDefaultValues] = useState(getDefaultValue(updateData));
 
     const { handleSubmit, control, reset, formState: { errors }, trigger } = useForm({
         resolver: zodResolver(customerSchema),
         defaultValues,
     });
 
+
     const onSubmit = async (data) => {
         try {
+            data.id = updateData.id;
+            setDefaultValues(getDefaultValue(data));
+
             const selectedJob = jobs.find((job) => job.name == data.job);
             if (selectedJob) {
                 data.job = selectedJob.id;
@@ -42,17 +52,12 @@ function UpdateCustomer({ updateData, customerData }) {
             for (const key in data) {
                 if (typeof (data[key]) == "string") data[key] = data[key].trim();
             }
-            data.id = updateData.id;
-
+            
             await updateDynamicData("customers", data);
         } catch (error) {
             console.error("Error submitting form:", error);
         } finally {
         }
-    };
-
-    const onCancel = () => {
-        reset(defaultValues);
     };
 
     useEffect(() => {
@@ -159,8 +164,8 @@ function UpdateCustomer({ updateData, customerData }) {
                                 render={({ field }) => (
                                     <ComboBox
                                         dataSource={jobs}
-                                        displayMember="name"   // what user sees
-                                        valueMember="name"     // what the ComboBox uses as actual value
+                                        displayMember="name"
+                                        valueMember="name"
                                         value={field.value ?? updateData?.job ?? ''}
                                         onChange={(event) => {
                                             field.onChange(event.detail.value);
@@ -172,11 +177,11 @@ function UpdateCustomer({ updateData, customerData }) {
                             {errors.job && <p>{errors.job.message}</p>}
                         </div>
                     </div>
-                    <div className="updateCustomer-btns">
-                        <button className="btn btn-primary" onClick={handleSubmit(onSubmit)} >Save</button>
-                        <button className="btn  btn-dangerous" onClick={onCancel}>Cancel</button>
-                    </div>
                 </form>
+                <div className="updateCustomer-btns">
+                    <button className="btn btn-primary" onClick={handleSubmit(onSubmit)} >Save</button>
+                    <button className="btn btn-dangerous" onClick={() => { reset(defaultValues) }}>Cancel</button>
+                </div>
             </div>
         </div>
     );
