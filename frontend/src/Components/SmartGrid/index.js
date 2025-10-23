@@ -19,7 +19,7 @@ function SmartGrid(props) {
             if (!searchConfig) return { dataFields: [] };
             const dataFields = ['id: number'];
             searchConfig.forEach(config => {
-                if (config.table_name !== "customers") return;
+                if (config.table_name !== tableNames[formName]) return;
                 let dataType;
                 if (config.field_type == "text") dataType = "string";
                 if (config.field_type == "combobox") dataType = "string";
@@ -33,11 +33,11 @@ function SmartGrid(props) {
             console.log("getDataSourceSettingsError: ", error);
             return { dataFields: [] };
         }
-    }, [searchConfig]);
+    }, [searchConfig, tableNames]);
 
     const columns = useMemo(() => {
         return getSmartColumns(onFunc, tableNames[formName]);
-    }, [searchConfig, onFunc]);
+    }, [searchConfig, onFunc, tableNames]);
 
     const isDataReady = useMemo(() => {
         return columns.length > 0 &&
