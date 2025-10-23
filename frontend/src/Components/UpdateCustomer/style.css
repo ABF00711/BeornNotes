@@ -1,0 +1,16 @@
+.updateCustomer{
+    width: 25%;
+    height: 100%;
+}
+
+.updateCustomer-main{
+    width: 100%;
+    padding: 100px 0px;
+}
+
+.updateCustomer-btns{
+    width: 100%;
+    padding: 0px 30px;
+    display: flex;
+    justify-content: space-around;
+}
