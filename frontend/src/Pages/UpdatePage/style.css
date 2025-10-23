@@ -1,0 +1,11 @@
+.updatePage{
+    width: 100%;
+    height: 100%;
+    padding: 30px;
+}
+
+.updatePage-main{
+    width: 100%;
+    display:  flex;
+    justify-content: space-between;
+}
