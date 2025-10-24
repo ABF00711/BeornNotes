@@ -21,31 +21,10 @@ const dynamicDataController = {
         }
     },
 
-    searchDynamicData: async (req, res) => {
-        try {
-            const {formName, searchKey} = req.body;
-            const field_name = Object.keys(searchKey)[0];
-            const field_value = searchKey[field_name];
-
-            const formData = await mysqlDA.getOneData("forms", {FormName: formName});
-            if (!formData) {
-                res.json({ message: "No existing form data" });
-                return;
-            }
-
-
-            const sql = `${formData.Select} ${'Where ' + field_name + '=' + field_value} ${formData.OrderBy ? 'Order By ' + formData.OrderBy : ''}`;
-            const dynamicData = await mysqlDA.excuteSql(sql);
-            res.json({message: "searchDynamicData success", dynamicData, tablename: formData.TableView});
-        } catch (error) {
-            console.log("searchDynamicDataError: ", error);
-        }
-    },
-
     createDynamicData: async (req, res) => {
         try {
             const { tablename, newData } = req.body;
-            newData.active = 1;
+            if(tablename == "customers")newData.active = 1;
             const newDataId = await mysqlDA.create(tablename, newData);
             res.json({ message: "createDynamicData success", newDataId });
         } catch (error) {
