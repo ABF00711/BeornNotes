@@ -31,8 +31,6 @@ function UpdatePage() {
                 mandatories[sc.field_name] = sc.mandatory;
             }
         })
-        labels.file = "File";
-        mandatories.file = 1;
         return { labels, mandatories };
     }, [searchConfig]);
 
