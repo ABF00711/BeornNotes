@@ -283,15 +283,45 @@ const services = {
         }
     },
     
-    searchDynamicData: async (formName, searchKey) => {
+     getDocuments: async (customerId) => {
         try {
             services.setAuthToken();
-            const res = await axios.post(services.serverURL + '/dynamicData/search', {formName, searchKey});
+            const res = await axios.post(services.serverURL + "/documents/get", {customerId});
             return res.data;
         } catch (error) {
-            console.log("searchDynamicDataError: ", error);
+            console.log("getDocumentsError: ", error);
         }
-    }
+    },
+
+    createDocument: async (document, documentInfo) => {
+        try {
+            services.setAuthToken();
+            const res = await axios.post(services.serverURL + "/documents/create", {document, documentInfo});
+            return res.data;
+        } catch (error) {
+            console.log("createDocumentError: ", error);
+        }
+    },
+
+    updateDocument: async (documentInfo) => {
+        try {
+            services.setAuthToken();
+            const res = await axios.post(services.serverURL + "/documents/update", {documentInfo});
+            return res.data;
+        } catch (error) {
+            console.log("updateDocumentError: ", error);
+        }
+    },
+
+    deletedocument: async (id) => {
+        try {
+            services.setAuthToken();
+            const res = await axios.post(services.serverURL + "/documents/delete", {id});
+            return res.data;
+        } catch (error) {
+            console.log("deletedocumentError: ", error);
+        }
+    },
 }
 
 export default services
