@@ -26,7 +26,7 @@ function ContextProvider({ children }) {
     const [layouts, setLayouts] = useState([]);
 
     const [jobs, setJobs] = useState([]);
-    const [customers, setCustomers] = useState([]);
+    const [documents, setDocuments] = useState([]);
     const [userTime, setUserTime] = useState(defaultUserTime);
 
     useEffect(() => {
@@ -55,7 +55,7 @@ function ContextProvider({ children }) {
         setSearchpatterns([]);
         setLayouts([]);
         setJobs([]);
-        setCustomers([]);
+        setDocuments([]);
         setUserTime(defaultUserTime);
     }
 
@@ -75,7 +75,7 @@ function ContextProvider({ children }) {
             currentInterface, setCurrentInterface,
             jobs, setJobs,
             userTime, setUserTime,
-            customers, setCustomers
+            documents, setDocuments
         }}>
             {children}
         </DataContext.Provider>
