@@ -9,6 +9,7 @@ const filterController = require("../Controller/filterController.js");
 const layoutsController = require("../Controller/layoutsController.js");
 const tabInterfaceController = require("../Controller/tabInterfaceController.js");
 const jobController = require("../Controller/jobController.js");
+const documentController = require("../Controller/documentController.js");
 const router = express.Router();
 
 router.get('/searchConfigData', searchConfigController.getAll);
@@ -30,7 +31,6 @@ router.post('/dynamicData/get', authMiddleware, dynamicDataController.getDynamic
 router.post('/dynamicData/create', authMiddleware, dynamicDataController.createDynamicData);
 router.post('/dynamicData/update', authMiddleware, dynamicDataController.updateDynamicData);
 router.post('/dynamicData/delete', authMiddleware, dynamicDataController.deleteDynamicData);
-router.post('/dynamicData/search', authMiddleware, dynamicDataController.searchDynamicData);
 
 router.post('/searchpatterns/get', authMiddleware, filterController.getSearchpatterns);
 router.post('/searchpatterns/create', authMiddleware, filterController.createSearchpatterns);
@@ -46,6 +46,11 @@ router.get('/tabInterfaces/get', authMiddleware, tabInterfaceController.getTabIn
 router.post('/tabInterfaces/create', authMiddleware, tabInterfaceController.createTabInterface);
 router.post('/tabInterfaces/update', authMiddleware, tabInterfaceController.updateTabInterface);
 router.post('/tabInterfaces/delete', authMiddleware, tabInterfaceController.deleteTabInterface);
+
+router.get('/document/get', authMiddleware, documentController.getDocuments);
+router.post('/document/create', authMiddleware, documentController.createDocument);
+router.post('/document/update', authMiddleware, documentController.updateDocument);
+router.post('/document/delete', authMiddleware, documentController.deleteDocument);
 
 router.get('/job/get', authMiddleware, jobController.getJobs)
 module.exports = router;
