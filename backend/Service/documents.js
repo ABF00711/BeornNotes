@@ -4,13 +4,14 @@ const s3 = require("./s3");
 const documentService = {
     uploadDocument: async (document, id) => {
         try {
-            const fileContent = fs.readFileSync(document);
-
+            console.log("document: ", document, ": ", id);
+            const fileExtension = document.mimetype.split("/")[1];
             const params = {
                 Bucket: "beornnotes",
-                Key: id,
-                Body: fileContent,
-                ContentType: "application/pdf"
+                Key: `${String(id)}.${fileExtension}`,
+                Body: document.buffer,
+                ContentType: document.mimetype,
+                ACL: "public-read"
             }
 
             const result = await s3.upload(params).promise();

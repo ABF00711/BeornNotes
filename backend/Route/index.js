@@ -10,6 +10,7 @@ const layoutsController = require("../Controller/layoutsController.js");
 const tabInterfaceController = require("../Controller/tabInterfaceController.js");
 const jobController = require("../Controller/jobController.js");
 const documentController = require("../Controller/documentController.js");
+const upload = require("../middleware/upload.js");
 const router = express.Router();
 
 router.get('/searchConfigData', searchConfigController.getAll);
@@ -48,7 +49,7 @@ router.post('/tabInterfaces/update', authMiddleware, tabInterfaceController.upda
 router.post('/tabInterfaces/delete', authMiddleware, tabInterfaceController.deleteTabInterface);
 
 router.post('/documents/get', authMiddleware, documentController.getDocuments);
-router.post('/documents/create', authMiddleware, documentController.createDocument);
+router.post('/documents/create', authMiddleware, upload.single("file"), documentController.createDocument );
 router.post('/documents/update', authMiddleware, documentController.updateDocument);
 router.post('/documents/delete', authMiddleware, documentController.deleteDocument);
 

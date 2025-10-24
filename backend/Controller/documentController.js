@@ -5,7 +5,7 @@ const documentController = {
     getDocuments: async(req, res) => {
         try {
             const {customerId} = req.body;
-            const formData = await mysqlDA.getData("forms", {table_name: "documents"});
+            const formData = await mysqlDA.getOneData("forms", {TableView: "documents"})
             const sql = `${formData.Select} Where customer = ${customerId} Order by ${formData.OrderBy}`;
             const documents = await mysqlDA.excuteSql(sql);
             res.json({message: "getDocuments success", documents});
@@ -17,7 +17,8 @@ const documentController = {
 
     createDocument: async(req, res) => {
         try {
-            const {document, documentInfo} = req.body;
+            const document = req.file;
+            const documentInfo = JSON.parse(req.body.fileInfo);
 
             const id = await mysqlDA.create("documents", documentInfo);
 
