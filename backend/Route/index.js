@@ -47,10 +47,10 @@ router.post('/tabInterfaces/create', authMiddleware, tabInterfaceController.crea
 router.post('/tabInterfaces/update', authMiddleware, tabInterfaceController.updateTabInterface);
 router.post('/tabInterfaces/delete', authMiddleware, tabInterfaceController.deleteTabInterface);
 
-router.get('/document/get', authMiddleware, documentController.getDocuments);
-router.post('/document/create', authMiddleware, documentController.createDocument);
-router.post('/document/update', authMiddleware, documentController.updateDocument);
-router.post('/document/delete', authMiddleware, documentController.deleteDocument);
+router.post('/documents/get', authMiddleware, documentController.getDocuments);
+router.post('/documents/create', authMiddleware, documentController.createDocument);
+router.post('/documents/update', authMiddleware, documentController.updateDocument);
+router.post('/documents/delete', authMiddleware, documentController.deleteDocument);
 
 router.get('/job/get', authMiddleware, jobController.getJobs)
 module.exports = router;
