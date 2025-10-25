@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useSearchConfig from "../../Hooks/useSearchConfig";
 import useDynamicData from "../../Hooks/useDynamicData";
+import DocumentModal from "./DocumentModal";
 
-function AddDocument ({formName, customerData}) {
+function AddDocument ({formName, documentData, customer}) {
      const {tableNames} = useDynamicData();
     const { searchConfig } = useSearchConfig();
     const [fieldsData, setFieldsData] = useState([]);
@@ -36,13 +37,14 @@ function AddDocument ({formName, customerData}) {
                 <span className="btn-icon">＋</span>
                 <span className="btn-label">Add</span>
             </button>
-            <DynamicModal
+            <DocumentModal
                 table_name={tableNames?.[formName] ?? ""}
                 isOpen={isOpen}
                 setIsOpen={setIsOpen}
                 role={"create"}
                 initData={formData}
-                customerData = {customerData}
+                documentData = {documentData}
+                customer = {customer}
             />
         </>
     );

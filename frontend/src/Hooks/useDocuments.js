@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import services from "../Services";
 
 const { useContext } = require("react");
@@ -18,20 +19,45 @@ function useDocuments () {
         }
     }
     
+    const getOneDocument = async (documentInfo) => {
+        try {
+            const key = documentInfo.documentUrl.split("com/")[1];
+            const res = await services.getOneDocument(key);
+            if(res.message == "getUrl success"){
+                return res.signedUrl;
+            }
+        } catch (error) {
+            console.log("getOneDocumentError: ", error);
+        }
+    }
+
     const createDocument = async (document, documentInfo) => {
         try {
-            const res = await services.createDocument(document, documentInfo);
+            const formData = new FormData();
+            formData.append("file", document);
+            formData.append("fileInfo", JSON.stringify(documentInfo));
+            const res = await services.createDocument(formData);
             if(res.message == "createDocument success"){
                 setDocuments(prev => [...prev, res.document]);
+                toast(res.message);
                 return;
             }
         } catch (error) {
             console.log("createDocumentError: ", error);
         }
     }
-    const updateDocument = (customer) => {
+    const updateDocument = async(documentFile, documentInfo) => {
         try {
-            
+            const formData = new FormData();
+            formData.append("file", documentFile);
+            formData.append("fileInfo", JSON.stringify(documentInfo));
+            const res = await services.updateDocument(formData);
+            if(res.message == "updateDocument success"){
+                setDocuments(documents.map(document => 
+                    document.id === documentInfo.id ? {...document, name: documentInfo.name, description: documentInfo.description} : document
+                ));
+                toast.success("Document updated successfully!");
+            }
         } catch (error) {
             console.log("updateDocumentError: ", error);
         }
@@ -49,7 +75,8 @@ function useDocuments () {
         getDocuments,
         createDocument,
         updateDocument,
-        deleteDocument
+        deleteDocument,
+        getOneDocument
     });
 }
 

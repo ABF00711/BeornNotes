@@ -4,7 +4,6 @@ const s3 = require("./s3");
 const documentService = {
     uploadDocument: async (document, id) => {
         try {
-            console.log("document: ", document, ": ", id);
             const fileExtension = document.mimetype.split("/")[1];
             const params = {
                 Bucket: "beornnotes",
@@ -22,21 +21,35 @@ const documentService = {
         }
     },
 
-    // getDocument: async (id) => {
-    //     try {
-    //         const params = {
-    //             Bucket: "beornnotes",
-    //             Key: id
-    //         };
+    updateDocument: async (document, key) => {
+        try {
+            const params = {
+                Bucket: "beornnotes",
+                Key: String(key),
+                Body: document.buffer,
+                ContentType: document.mimetype,
+                ACL: "public-read"
+            }
 
-    //         const data = await s3.getObject(params).promise();
+            const result = await s3.upload(params).promise();
+            console.log("Uploaded Successfully: ", result.Location);
+        } catch (error) {
+            console.log("updateDocumentError: ", error)
+        }
+    },
 
-    //         console.log('File retrieved successfully!');
-    //         console.log("File content: ", data.Body.toString(utf-8));
-    //     } catch (error) {
-    //         console.log("getDocumentError: ", error);
-    //     }
-    // }
+    getSignedUrl: async (key) => {
+        try {
+            const signedUrl = s3.getSignedUrl("getObject", {
+                Bucket: "beornnotes",
+                Key: key,
+                Expires: 60 * 10,
+            })
+            return signedUrl;
+        } catch (error) {
+            console.log("getDocumentError: ", error);
+        }
+    }
 }
 
 module.exports = documentService;

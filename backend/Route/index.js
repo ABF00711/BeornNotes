@@ -49,8 +49,9 @@ router.post('/tabInterfaces/update', authMiddleware, tabInterfaceController.upda
 router.post('/tabInterfaces/delete', authMiddleware, tabInterfaceController.deleteTabInterface);
 
 router.post('/documents/get', authMiddleware, documentController.getDocuments);
+router.post('/documents/getOne', authMiddleware, documentController.getUrl);
 router.post('/documents/create', authMiddleware, upload.single("file"), documentController.createDocument );
-router.post('/documents/update', authMiddleware, documentController.updateDocument);
+router.post('/documents/update', authMiddleware, upload.single("file"), documentController.updateDocument);
 router.post('/documents/delete', authMiddleware, documentController.deleteDocument);
 
 router.get('/job/get', authMiddleware, jobController.getJobs)

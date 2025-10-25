@@ -283,30 +283,30 @@ const services = {
         }
     },
     
-     getDocuments: async (customerId) => {
+     getDocuments: async (customer) => {
         try {
             services.setAuthToken();
-            const res = await axios.post(services.serverURL + "/documents/get", {customerId});
+            const res = await axios.post(services.serverURL + "/documents/get", {customerId: customer});
             return res.data;
         } catch (error) {
             console.log("getDocumentsError: ", error);
         }
     },
 
-    createDocument: async (document, documentInfo) => {
+    createDocument: async (formData) => {
         try {
             services.setAuthToken();
-            const res = await axios.post(services.serverURL + "/documents/create", {document, documentInfo});
+            const res = await axios.post(services.serverURL + "/documents/create", formData, {headers:{"Content-Type": "multipart/form-data"}});
             return res.data;
         } catch (error) {
             console.log("createDocumentError: ", error);
         }
     },
 
-    updateDocument: async (documentInfo) => {
+    updateDocument: async (formData) => {
         try {
             services.setAuthToken();
-            const res = await axios.post(services.serverURL + "/documents/update", {documentInfo});
+            const res = await axios.post(services.serverURL + "/documents/update", formData, {headers:{"Content-Type": "multipart/form-data"}});
             return res.data;
         } catch (error) {
             console.log("updateDocumentError: ", error);
@@ -322,6 +322,16 @@ const services = {
             console.log("deletedocumentError: ", error);
         }
     },
+
+    getOneDocument: async (key) => {
+        try {
+            services.setAuthToken();
+            const res = await axios.post(services.serverURL + "/documents/getOne", {key});
+            return res.data;
+        } catch (error) {
+            console.log("getOneDocumentError: ", error);
+        }
+    }
 }
 
 export default services

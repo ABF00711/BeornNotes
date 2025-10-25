@@ -36,7 +36,16 @@ const documentController = {
 
     updateDocument: async (req, res) => {
         try {
-            
+            const document = req.file;
+            const documentInfo = JSON.parse(req.body.fileInfo);
+            await mysqlDA.update("documents", documentInfo);
+
+            console.log("documentUrl: ", documentInfo.documentUrl);
+            const key = documentInfo.documentUrl.split("com/")[1];
+
+            await documentService.updateDocument(document, key);
+
+            res.json({message: "updateDocument success"});
         } catch (error) {
             console.log("updateDocumentError: ", error);
         }
@@ -49,6 +58,16 @@ const documentController = {
             console.log("deleteDocumentError: ", error);
         }
     },
+
+    getUrl: async (req, res) => {
+        try {
+            const {key} = req.body;
+            const signedUrl = await documentService.getSignedUrl(key);
+            res.json({message: "getUrl success", signedUrl});
+        } catch (error) {
+            console.log("getUrlError: ", error);
+        }
+    }
 }
 
 module.exports = documentController;

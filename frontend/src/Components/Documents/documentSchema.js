@@ -9,9 +9,9 @@ export const getDocumentSchema = (mandatoryFields, labels) => {
                 .transform((val) => val === null || val === undefined ? undefined : val),
         file: mandatoryFields.file
             ? z.file().min(1, `${labels.file} is required`)
-            : z.union([z.null(), z.undefined()])
+            : z.union([z.null(), z.undefined(), z.string()])
                 .optional()
-                .transform((val) => val === null || val === undefined ? undefined : val)
+                .transform((val) => val === null || val === undefined ? null : val)
     };
 
     return z.object(schemaFields);

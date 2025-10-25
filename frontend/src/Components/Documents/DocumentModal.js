@@ -1,47 +1,58 @@
 import { Modal } from "antd";
-import useDynamicData from "../../Hooks/useDynamicData";
 import { getDocumentSchema } from "./documentSchema";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import useCustomers from "../../Hooks/useCustomers";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Input from "smart-webcomponents-react/input";
+import useDocuments from "../../Hooks/useDocuments";
 
-function DocumentModal ({ table_name, isOpen, setIsOpen, role, initData = {}, documentData }) {
+function DocumentModal({ isOpen, setIsOpen, role, initData = {}, documentData, customer }) {
     const [isLoading, setLoading] = useState(false);
-    const {customers, getCustomers} = useCustomers();
-    const { createDynamicData, updateDynamicData } = useDynamicData();
+    const {createDocument, updateDocument} = useDocuments();
+    const [defaultValues, setDefaultValues] = useState(initData);
 
     const customerSchema = useMemo(() => {
-        return getDocumentSchema(documentData.labels, documentData.mandatories);
+        return getDocumentSchema(documentData.mandatories, documentData.labels);
     }, [documentData]);
 
     const { handleSubmit, control, reset, formState: { errors, isSubmitting }, trigger } = useForm({
         resolver: zodResolver(customerSchema),
-        defaultValues: initData,
+        defaultValues
     });
+
+    useEffect(() => {
+        setDefaultValues(initData);
+        if(role == "update"){
+            reset(initData);
+        }
+    }, [initData])
 
     const onSubmit = async (data) => {
         setLoading(true);
         try {
-            const selectedCustomer = customers.find((customer) => customer.displayname == data.customer);
-            if(selectedCustomer){
-                data.customer = selectedCustomer.id;
+            const documentInfo = {
+                name: data.file.name,
+                description: data.description,
             }
-            for (const key in data) {
-                if(typeof(data[key]) == "string") data[key] = data[key].trim();
+
+            const documentFile = data.file;
+
+            documentInfo.customer = customer;
+            for (const key in documentInfo) {
+                if (typeof (documentInfo[key]) == "string") documentInfo[key] = documentInfo[key].trim();
             }
             if (role === "update") {
-                data.id = initData.id;
-                await updateDynamicData(table_name, data);
+                documentInfo.id = initData.id;
+                documentInfo.documentUrl = initData.documentUrl
+                await updateDocument(documentFile, documentInfo);
             } else {
-                await createDynamicData(table_name, data);
+                await createDocument(documentFile, documentInfo);
             }
             setIsOpen(false);
             reset();
         } catch (error) {
             console.error("Error submitting form:", error);
-        }finally{
+        } finally {
             setLoading(false);
         }
     };
@@ -53,7 +64,6 @@ function DocumentModal ({ table_name, isOpen, setIsOpen, role, initData = {}, do
 
     useEffect(() => {
         if (isOpen) {
-            getCustomers();
             trigger();
         }
     }, [isOpen])
@@ -72,27 +82,8 @@ function DocumentModal ({ table_name, isOpen, setIsOpen, role, initData = {}, do
                     {role === "update" ? 'Update Customer' : 'Add New Customer'}
                 </div>
 
-                <div className={`field-container ${errors.name ? 'has-error' : ''}`}>
-                    <label>{labels.name}</label>
-                    <div style={{ width: "60%" }}>
-                        <Controller
-                            name="name"
-                            control={control}
-                            render={({ field }) => (
-                                <Input
-                                    {...field}
-                                    value={field.value || ''}
-                                    onChange={(e) => field.onChange(e.target.value)}
-                                    style={{ height: "40px" }}
-                                />
-                            )}
-                        />
-                        {errors.name && <p>{errors.name.message}</p>}
-                    </div>
-                </div>
-
                 <div className={`field-container ${errors.description ? 'has-error' : ''}`}>
-                    <label>{labels.description}</label>
+                    <label>{documentData.labels.description}</label>
                     <div style={{ width: "60%" }}>
                         <Controller
                             name="description"
@@ -111,7 +102,7 @@ function DocumentModal ({ table_name, isOpen, setIsOpen, role, initData = {}, do
                 </div>
 
                 <div className={`field-container ${errors.file ? 'has-error' : ''}`}>
-                    <label>{labels.file}</label>
+                    <label>{documentData.labels.file}</label>
                     <div style={{ width: "60%" }}>
                         <Controller
                             name="file"
@@ -119,36 +110,12 @@ function DocumentModal ({ table_name, isOpen, setIsOpen, role, initData = {}, do
                             render={({ field }) => (
                                 <Input
                                     type="file"
-                                    value={field.value != null ? String(field.value) : ''}
-                                    onChange={(e) => field.onChange(e.target.value)}
+                                    onChange={(e) => { field.onChange(e.target.files[0]) }}
                                     style={{ height: "40px" }}
                                 />
                             )}
                         />
-                        {errors.file && <p>{errors.age.message}</p>}
-                    </div>
-                </div>
-
-                <div className={`field-container ${errors.customer ? 'has-error' : ''}`}>
-                    <label>{labels.customer}</label>
-                    <div style={{ width: "60%" }}>
-                        <Controller
-                            name="customer"
-                            control={control}
-                            render={({ field }) => (
-                                <ComboBox
-                                    dataSource={customers}
-                                    displayMember="name"   // what user sees
-                                    valueMember="name"     // what the ComboBox uses as actual value
-                                    value={field.value ?? initData?.customer ?? ''}
-                                    onChange={(event) => {
-                                        field.onChange(event.detail.value);
-                                    }}
-                                    style={{ height: "40px" }}
-                                />
-                            )}
-                        />
-                        {errors.customer && <p>{errors.customer.message}</p>}
+                        {errors.file && <p>{errors.file.message}</p>}
                     </div>
                 </div>
             </form>
