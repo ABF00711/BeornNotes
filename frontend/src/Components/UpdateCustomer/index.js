@@ -16,7 +16,7 @@ function UpdateCustomer({ updateData, customerData }) {
 
     const customerSchema = useMemo(() => {
         return getCustomerSchema(customerData.labels, customerData.mandatories);
-    }, [updateData]);
+    }, [customerData]);
 
     const getDefaultValue = (initData) => {
         try {
@@ -26,6 +26,7 @@ function UpdateCustomer({ updateData, customerData }) {
             if (formattedData.birthday) {
                 formattedData.birthday = formatDateForInput(formattedData.birthday);
             }
+            if(initData.age == 0) formattedData.age = null;
             return formattedData;
         } catch (error) {
             console.log("getDefaultValue: ", error);
