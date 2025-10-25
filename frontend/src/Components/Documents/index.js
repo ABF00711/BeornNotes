@@ -7,16 +7,11 @@ import SmartGrid from "../SmartGrid";
 import AddDocument from "./AddDocument";
 import useDocuments from "../../Hooks/useDocuments";
 import DocumentGrid from "./DocumentGrid";
+import DeleteDocument from "./DeleteDocument";
 
 function Documents({ documentData, customer }) {
+    const gridRef = useRef(null);
     const {documents, getDocuments} = useDocuments();
-    const openUpdateModal = (data) => {
-        try {
-            console.log("PDFData: ", data);
-        } catch (error) {
-            console.log("openUpdateModal: ", error);
-        }
-    }
 
     useEffect(() => {
         getDocuments(customer);
@@ -25,16 +20,13 @@ function Documents({ documentData, customer }) {
     return (
         <div className="documents">
             <div className="documents-main">
-                <Tabs style={{ width: "100%" }}>
+                <Tabs className="documents-tabs">
                     <TabItem label={`Document(${documents?.length})`}>
                         <div className="table-header">
                             <AddDocument formName={"Documents"} documentData={documentData} customer = {customer} />
-                            <button type="button" className="btn btn-dangerous">
-                                <span className="btn-icon">🗑</span>
-                                <span className="btn-label">Delete</span>
-                            </button>
+                            <DeleteDocument gridRef = {gridRef} />
                         </div>
-                        <DocumentGrid customer = {customer} documentData = {documentData} documents={documents} />
+                        <DocumentGrid gridRef = {gridRef} customer = {customer} documentData = {documentData} documents={documents} />
                     </TabItem>
                     <TabItem label="Address"></TabItem>
                 </Tabs>

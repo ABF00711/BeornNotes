@@ -52,7 +52,7 @@ router.post('/documents/get', authMiddleware, documentController.getDocuments);
 router.post('/documents/getOne', authMiddleware, documentController.getUrl);
 router.post('/documents/create', authMiddleware, upload.single("file"), documentController.createDocument );
 router.post('/documents/update', authMiddleware, upload.single("file"), documentController.updateDocument);
-router.post('/documents/delete', authMiddleware, documentController.deleteDocument);
+router.post('/documents/delete', authMiddleware, documentController.deleteDocuments);
 
 router.get('/job/get', authMiddleware, jobController.getJobs)
 module.exports = router;

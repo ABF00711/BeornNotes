@@ -9,3 +9,8 @@
     display: flex;
     justify-content: space-around;
 }
+
+.documents-tabs{
+    width: 100%;
+    height: calc(100vh - 300px);
+}

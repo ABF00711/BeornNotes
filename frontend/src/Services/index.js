@@ -313,10 +313,10 @@ const services = {
         }
     },
 
-    deletedocument: async (id) => {
+    deleteDocuments: async (selectedRows) => {
         try {
             services.setAuthToken();
-            const res = await axios.post(services.serverURL + "/documents/delete", {id});
+            const res = await axios.post(services.serverURL + "/documents/delete", {selectedRows});
             return res.data;
         } catch (error) {
             console.log("deletedocumentError: ", error);

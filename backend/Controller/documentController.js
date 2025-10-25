@@ -51,9 +51,22 @@ const documentController = {
         }
     },
 
-    deleteDocument: async (req, res) => {
+    deleteDocuments: async (req, res) => {
         try {
+            const {selectedRows} = req.body;
+
+            const ids = selectedRows.map((row) => row.id);
+            const keys = selectedRows.map((row) => {return {Key: row.documentUrl?.split("com/")[1]}});
+
+            const sql = `Delete From documents Where id In (${ids.join(", ")})`;
+            await mysqlDA.excuteSql(sql);
             
+            const result = documentService.deleteDocuments(keys);
+            if(result){
+                res.json({ message: "deleteDocuments success" });
+            } else {
+                res.json({ message: "deleteDocuments failed" });
+            }
         } catch (error) {
             console.log("deleteDocumentError: ", error);
         }

@@ -49,6 +49,30 @@ const documentService = {
         } catch (error) {
             console.log("getDocumentError: ", error);
         }
+    },
+
+    deleteDocuments: (keys) => {
+        try {
+            const params = {
+                Bucket: "beornnotes",
+                Delete: {
+                    Objects: keys,
+                    Quiet: false,
+                }
+            };
+
+            s3.deleteObjects(params, (err, data) => {
+                if(err){
+                    console.log("Error deleting documents: ", err);
+                    return false;
+                } else{
+                    console.log("Documents deleted successfully: ", data);
+                    return true;
+                }
+            })
+        } catch (error) {
+            console.log("deleteDocuments: ", error);
+        }
     }
 }
 

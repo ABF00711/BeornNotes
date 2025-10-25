@@ -62,9 +62,13 @@ function useDocuments () {
             console.log("updateDocumentError: ", error);
         }
     }
-    const deleteDocument = (customer) => {
+    const deleteDocuments = async (selectedRows) => {
         try {
-            
+            const res = await services.deleteDocuments(selectedRows);
+            if(res.message == "deleteDocuments success"){
+                setDocuments(documents.filter((document) => document.id !== selectedRows.id));
+                toast.success("Deleted documents successfully");
+            }
         } catch (error) {
             console.log("deleteDocumentError: ", error);
         }
@@ -75,7 +79,7 @@ function useDocuments () {
         getDocuments,
         createDocument,
         updateDocument,
-        deleteDocument,
+        deleteDocuments,
         getOneDocument
     });
 }

@@ -5,18 +5,19 @@ import { gridState } from '../../SmartGrid/gridState';
 import _ from "lodash"
 import DocumentModal from '../DocumentModal';
 import useDocuments from '../../../Hooks/useDocuments';
+import "./style.css";
 
-function DocumentGrid({ customer, documentData, documents }) {
+function DocumentGrid({ gridRef, customer, documentData, documents }) {
     const [isOpen, setIsOpen] = useState(false);
     const [initData, setInitData] = useState(null);
     const { getOneDocument } = useDocuments();
-    const gridRef = useRef();
     const dataSourceSettings = {
         dataFields: [
             'id: number',
             'name: string',
             'description: string',
             'customer: string',
+            'documentUrl: string'
         ]
     }
 
@@ -94,6 +95,7 @@ function DocumentGrid({ customer, documentData, documents }) {
                 }}
                 columns={columns}
                 onCellClick={(event) => {handleCellClick(event)}}
+                className='documentGrid'
             >
             </Grid>
             <DocumentModal
