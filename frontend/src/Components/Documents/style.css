@@ -15,8 +15,20 @@
     height: calc(100vh - 300px);
 }
 
-@media (max-width: 1600px){
+@media (max-width: 1590px){
     .documents {
-        width: 50%;
+        width: 65%;
+    }
+}
+
+@media (max-width: 1320px){
+    .documents {
+        width: 55%;
+    }
+}
+
+@media (max-width: 1050px){
+    .documents{
+        width: 100%;
     }
 }

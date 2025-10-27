@@ -14,3 +14,9 @@
     display: flex;
     justify-content: space-around;
 }
+
+@media (max-width: 1050px){
+    .updateCustomer{
+        width: 60%;
+    }
+}
