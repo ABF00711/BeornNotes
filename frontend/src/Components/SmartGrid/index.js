@@ -11,7 +11,8 @@ function SmartGrid(props) {
     const { formName, gridRef, onFunc, customData } = props;
     const { dynamicData, tableNames } = useDynamicData();
     const { searchConfig } = useSearchConfig();
-    const { getSmartColumns } = useSmartGrid();
+    const [columns, setColumns] = useState([]);
+    const { getSmartColumns, onColumnReordered } = useSmartGrid();
     const [isGridInitialized, setIsGridInitialized] = useState(false);
 
     const dataSourseSettings = useMemo(() => {
@@ -35,8 +36,8 @@ function SmartGrid(props) {
         }
     }, [searchConfig, tableNames]);
 
-    const columns = useMemo(() => {
-        return getSmartColumns(onFunc, tableNames[formName]);
+    useEffect(() => {
+        setColumns(getSmartColumns(onFunc, tableNames[formName]));
     }, [searchConfig, onFunc, tableNames]);
 
     const isDataReady = useMemo(() => {
@@ -100,7 +101,7 @@ function SmartGrid(props) {
                 summaryRow={{
                     visible: true
                 }}
-
+                onColumnReorder={(event) => {onColumnReordered(columns, setColumns)}}
             ></Grid>
         </div>
     );
