@@ -79,7 +79,7 @@ function DocumentModal({ isOpen, setIsOpen, role, initData = {}, documentData, c
         >
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="title">
-                    {role === "update" ? 'Update Customer' : 'Add New Customer'}
+                    {role === "update" ? 'Update' : 'Add'}
                 </div>
 
                 <div className={`field-container ${errors.description ? 'has-error' : ''}`}>
