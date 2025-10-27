@@ -47,20 +47,19 @@ function Customers2() {
     const onSearch = () => {
         try {
             const trimmedJob = searchKey.job?.trim();
-            const jobId = jobs.find((job) => job.name == trimmedJob)?.id;
-            if (!searchKey.age && !jobId) {
+            if (!searchKey.age && !trimmedJob) {
                 setFilteredData(dynamicData);
                 return;
             }
 
             setFilteredData(dynamicData.filter((oneData) => {
                 if (!searchKey.age) {
-                    return oneData.job == jobId;
+                    return oneData.job == trimmedJob;
                 }
-                if (!jobId) {
+                if (!trimmedJob) {
                     return oneData.age == searchKey.age;
                 }
-                return (oneData.age == searchKey.age) && (oneData.job == jobId);
+                return (oneData.age == searchKey.age) && (oneData.job == trimmedJob);
             }));
             localStorage.setItem("customers2SearchKey", JSON.stringify(searchKey));
         } catch (error) {
