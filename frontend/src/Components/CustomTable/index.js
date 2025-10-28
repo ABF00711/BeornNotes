@@ -22,11 +22,11 @@ import TableBody from './components/TableBody';
 
 // Sample data for demo
 const SAMPLE_COLUMNS = [
-    { field: 'fullname', header: 'Full Name', width: '180px', type: "text" },
-    { field: 'displayname', header: 'Display Name', width: '150px', type: "text" },
-    { field: 'birthday', header: 'Birthday', width: '120px', type: "date" },
-    { field: 'age', header: 'Age', width: '100px', type: "number" },
-    { field: 'job', header: 'Job', width: '150px', type: "text" }
+    { field: 'fullname', header: 'Full Name', type: "text" },
+    { field: 'displayname', header: 'Display Name', type: "text" },
+    { field: 'birthday', header: 'Birthday', type: "date" },
+    { field: 'age', header: 'Age', type: "number" },
+    { field: 'job', header: 'Job', type: "text" }
 ];
 
 const SAMPLE_DATA = [

@@ -1,12 +1,29 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import CustomTable from '../../Components/CustomTable';
 import './style.css';
 import useDynamicData from '../../Hooks/useDynamicData';
 import useSmartGrid from '../../Hooks/useSmartGrid';
+import useSearchConfig from '../../Hooks/useSearchConfig';
 
 const CustomTableDemo = () => {
     const {dynamicData, getDynamicData} = useDynamicData();
-    const [columns, setColumns] = useState([]);
+    const {searchConfig, getSearchConfigData} = useSearchConfig();
+    const columns = useMemo(() => {
+        const _columns = [];
+        if(searchConfig){
+            searchConfig.map((config) => {
+                if(config.table_name === "customers"){
+                    const column = {};
+                    column.field = config.field_name;
+                    column.header = config.field_label;
+                    column.type = config.field_type;
+                    if(column.type === "combobox") column.type = "text"
+                    _columns.push(column);
+                }
+            });
+        }
+        return _columns;
+    }, [searchConfig]);
 
     const handleRowClick = (row, index) => {
         console.log('Row clicked:', row, 'Index:', index);
@@ -30,6 +47,7 @@ const CustomTableDemo = () => {
 
     useEffect(() => {
         getDynamicData("Customers");
+        getSearchConfigData();
     }, [])
 
     return (
@@ -42,6 +60,7 @@ const CustomTableDemo = () => {
                     onDelete={handleDelete}
                     loading={false}
                     data={dynamicData}
+                    columns={columns}
                 />
             </div>
         </div>
