@@ -31,7 +31,7 @@ function useSmartGrid() {
           button.style.pointerEvents = 'auto';
           settings.cell.element.appendChild(button);
         },
-        summary: ['count'],
+        summary: [''],
         allowReorder: false,
       });
 
