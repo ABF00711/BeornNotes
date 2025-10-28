@@ -26,14 +26,14 @@ function DocumentGrid({ gridRef, customer, documentData, documents }) {
         setIsOpen(true);
     }
 
-    const handleCellClick = async(event) => {
+    const handleCellClick = async (event) => {
         try {
-            const {cell, dataField} = event.detail;
-            if(dataField == "name"){
+            const { cell, dataField } = event.detail;
+            if (dataField == "name") {
                 const unProxiedData = _.cloneDeep(cell);
                 const row = unProxiedData.row.data;
                 const url = await getOneDocument(row);
-                if(url){
+                if (url) {
                     window.open(url);
                 }
             }
@@ -71,6 +71,12 @@ function DocumentGrid({ gridRef, customer, documentData, documents }) {
             label: 'Name',
             dataField: 'name',
             sortOrder: 'asc',
+            formatFunction(settings) {
+                // Example: highlight age column
+                settings.cell.background = settings.value > 30 ? "#badeffff" : "#77c2ffff";
+                settings.cell.color = "#000";
+                settings.cell.element.style.cursor = "pointer";
+            },
         },
         {
             label: 'Description',
@@ -94,7 +100,7 @@ function DocumentGrid({ gridRef, customer, documentData, documents }) {
                     visible: true
                 }}
                 columns={columns}
-                onCellClick={(event) => {handleCellClick(event)}}
+                onCellClick={(event) => { handleCellClick(event) }}
                 className='documentGrid'
             >
             </Grid>
