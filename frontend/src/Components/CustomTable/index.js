@@ -20,23 +20,6 @@ import TableColumnHeader from './components/TableColumnHeader';
 import TableFilterRow from './components/TableFilterRow';
 import TableBody from './components/TableBody';
 
-// Sample data for demo
-const SAMPLE_COLUMNS = [
-    { field: 'fullname', header: 'Full Name', type: "text" },
-    { field: 'displayname', header: 'Display Name', type: "text" },
-    { field: 'birthday', header: 'Birthday', type: "date" },
-    { field: 'age', header: 'Age', type: "number" },
-    { field: 'job', header: 'Job', type: "text" }
-];
-
-const SAMPLE_DATA = [
-    { id: 1, fullname: 'John Doe', displayname: 'John D', birthday: '1990-05-15', age: 34, job: 'Developer' },
-    { id: 2, fullname: 'Jane Smith', displayname: 'Jane S', birthday: '1988-08-20', age: 36, job: 'Designer' },
-    { id: 3, fullname: 'Bob Johnson', displayname: 'Bob J', birthday: '1992-12-10', age: 32, job: 'Manager' },
-    { id: 4, fullname: 'Alice Brown', displayname: 'Alice B', birthday: '1985-03-25', age: 39, job: 'Analyst' },
-    { id: 5, fullname: 'Charlie Wilson', displayname: 'Charlie W', birthday: '1995-07-05', age: 29, job: 'Engineer' }
-];
-
 const CustomTable = ({
     columns = [],
     data = [],
@@ -48,8 +31,8 @@ const CustomTable = ({
     filteredData = null
 }) => {
     // Memoize table configuration
-    const tableColumns = useMemo(() => columns.length > 0 ? columns : SAMPLE_COLUMNS, [columns]);
-    const tableData = useMemo(() => data.length > 0 ? data : SAMPLE_DATA, [data]);
+    const tableColumns = useMemo(() => columns.length > 0 ? columns : [], [columns]);
+    const tableData = useMemo(() => data.length > 0 ? data : [], [data]);
     const displayData = filteredData !== null ? filteredData : tableData;
 
     // Local state for column configuration
