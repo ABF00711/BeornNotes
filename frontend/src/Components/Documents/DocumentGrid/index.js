@@ -50,7 +50,7 @@ function DocumentGrid({ gridRef, customer, documentData, documents }) {
             showIcon: true,
             formatFunction(settings) {
                 const button = document.createElement("button");
-                button.className = "btn btn-primary btn-icon";
+                button.className = "btn btn-primary";
                 button.innerHTML = "✎";
 
                 button.addEventListener("click", () => {
