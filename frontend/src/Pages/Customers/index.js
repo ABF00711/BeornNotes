@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
+import React, { useCallback, useContext, useEffect, useRef } from "react";
 import "./style.css";
 import SmartGrid from "../../Components/SmartGrid";
 import Add from "../../Components/Add";
@@ -7,7 +7,6 @@ import SmartLayouts from "../../Components/Layouts";
 import SmartSearchPattern from "../../Components/SearchPattern";
 import ResetBtn from "../../Components/Reset";
 import useDynamicData from "../../Hooks/useDynamicData";
-import useSearchConfig from "../../Hooks/useSearchConfig";
 import { useNavigate } from "react-router-dom";
 import { MyContext } from "../../Context";
 
@@ -26,7 +25,6 @@ function Customers() {
     const navigate = useNavigate();
     const { setCurrentInterface } = useContext(MyContext);
     const { getDynamicData } = useDynamicData();
-    const { getSearchConfigData } = useSearchConfig();
     const gridRef = useRef(null);
 
     const onNavigate = useCallback((data) => {
@@ -40,7 +38,6 @@ function Customers() {
     }, [])
 
     const getInit = async () => {
-        await getSearchConfigData();
         await getDynamicData(formName);
     }
 

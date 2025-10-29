@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import useAuth from "../../Hooks/useAuth";
 import { MyContext } from "../../Context";
 import ActiveTimeCounter from "../ActiveTimeCounter";
+import useSearchConfig from "../../Hooks/useSearchConfig";
 
 function Header() {
     const navigate = useNavigate();
@@ -13,6 +14,7 @@ function Header() {
     const [dropdownPosition, setDropdownPosition] = useState({ top: 0, right: 0 });
     const dropdownRef = useRef(null);
     const userMenuRef = useRef(null);
+    const {getSearchConfigData} = useSearchConfig();
 
     const handleLogout = () => {
         logout();
@@ -52,7 +54,8 @@ function Header() {
     }, [isDropdownOpen]);
 
     useEffect(() => {
-        isAuthenticated()
+        isAuthenticated();
+        getSearchConfigData();
     }, [])
 
     return (
