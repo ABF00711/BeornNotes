@@ -1,6 +1,5 @@
-import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import "./style.css";
-import { MyContext } from "../../Context";
 import SmartGrid from "../../Components/SmartGrid";
 import Add from "../../Components/Add";
 import Update from "../../Components/Update";
@@ -9,15 +8,12 @@ import useJob from "../../Hooks/useJob";
 import SmartDelete from "../../Components/Delete";
 import SmartLayouts from "../../Components/Layouts";
 import SmartSearchPattern from "../../Components/SearchPattern";
-import useSearchConfig from "../../Hooks/useSearchConfig";
 import { ComboBox } from "smart-webcomponents-react/combobox";
 import { Input } from "smart-webcomponents-react/input";
 
 const formName = "Customers2";
 
 function Customers2() {
-    const { isCollapsed } = useContext(MyContext);
-    const { getSearchConfigData } = useSearchConfig();
     const gridRef = useRef(null);
     const [isOpen, setIsOpen] = useState(false);
     const [updateData, setUpdateData] = useState({});
@@ -68,7 +64,6 @@ function Customers2() {
     }
 
     const getInitdata = async () => {
-        await getSearchConfigData();
         await getDynamicData(formName);
         await getJobs();
     }
