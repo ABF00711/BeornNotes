@@ -38,7 +38,7 @@ function Customers() {
     }, [])
 
     const getInit = async () => {
-        await getDynamicData(formName);
+        getDynamicData(formName);
     }
 
     useEffect(() => {
