@@ -17,7 +17,7 @@ function useSmartGrid() {
         showIcon: true,
         formatFunction(settings) {
           const button = document.createElement("button");
-          button.className = "btn btn-primary";
+          button.className = "btn-edit";
           button.innerHTML = "✎";
 
           button.addEventListener("click", () => {
@@ -33,6 +33,8 @@ function useSmartGrid() {
         },
         summary: [''],
         allowReorder: false,
+        freeze: "near",
+        width: "100px"
       });
 
       searchConfig.forEach((configData) => {
