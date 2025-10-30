@@ -73,22 +73,8 @@ function useSmartGrid() {
     }
   };
 
-  const onColumnReordered = (columns, setColumns) => {
-    try {
-      const fixedColIndex = columns.findIndex((column) => column.label == "Actions");
-      console.log("fixedColIndex: ", fixedColIndex);
-      const _columns = [...columns];
-      const fixedCol = _columns.splice(fixedColIndex, 1)[0];
-      _columns.unshift(fixedCol);
-      setColumns(_columns);
-    } catch (error) {
-      console.log("onColumnReorderedError: ", error);
-    }
-  }
-
   return {
     getSmartColumns,
-    onColumnReordered,
   }
 }
 
