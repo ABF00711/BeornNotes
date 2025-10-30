@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useRef } from "react";
+import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
 import "./style.css";
 import SmartGrid from "../../Components/SmartGrid";
 import Add from "../../Components/Add";
@@ -9,6 +9,7 @@ import ResetBtn from "../../Components/Reset";
 import useDynamicData from "../../Hooks/useDynamicData";
 import { useNavigate } from "react-router-dom";
 import { MyContext } from "../../Context";
+import useSmartGrid from "../../Hooks/useSmartGrid";
 
 const formName = "Customers";
 
@@ -22,9 +23,11 @@ const tabBtnData = {
 }
 
 function Customers() {
+    const [columns, setColumns] = useState([]);
     const navigate = useNavigate();
     const { setCurrentInterface } = useContext(MyContext);
-    const { getDynamicData } = useDynamicData();
+    const { getDynamicData, dynamicData, tableNames } = useDynamicData();
+    const {getSmartColumns} = useSmartGrid();
     const gridRef = useRef(null);
 
     const onNavigate = useCallback((data) => {
@@ -36,6 +39,10 @@ function Customers() {
             return prev;
         });
     }, [])
+
+    useEffect(() => {
+        setColumns(getSmartColumns(onNavigate, tableNames[formName]));
+    }, [tableNames]);
 
     const getInit = async () => {
         getDynamicData(formName);
@@ -62,6 +69,8 @@ function Customers() {
                 formName={formName}
                 gridRef={gridRef}
                 onFunc={onNavigate}
+                customData = {dynamicData}
+                columns = {columns}
             />
         </div>
     );

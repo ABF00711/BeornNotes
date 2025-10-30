@@ -10,27 +10,20 @@ import SmartLayouts from "../../Components/Layouts";
 import SmartSearchPattern from "../../Components/SearchPattern";
 import { ComboBox } from "smart-webcomponents-react/combobox";
 import { Input } from "smart-webcomponents-react/input";
+import { getJobComboRef, getSearchKey, onSearch } from "./utils";
+import useSmartGrid from "../../Hooks/useSmartGrid";
 
 const formName = "Customers2";
 
 function Customers2() {
+    const [columns, setColumns] = useState([]);
     const gridRef = useRef(null);
     const [isOpen, setIsOpen] = useState(false);
     const [updateData, setUpdateData] = useState({});
-    const [searchKey, setSearchKey] = useState(() => {
-        try {
-            const stored = JSON.parse(localStorage.getItem("customers2SearchKey") || "{}");
-            return {
-                age: stored && stored.age !== undefined && stored.age !== null ? String(stored.age) : "",
-                job: stored && stored.job !== undefined && stored.job !== null ? stored.job : "",
-            };
-        } catch (error) {
-            console.log("initSearchKeyError: ", error);
-            return { age: "", job: "" };
-        }
-    });
+    const [searchKey, setSearchKey] = useState(getSearchKey());
     const [filteredData, setFilteredData] = useState([]);
-    const { dynamicData, getDynamicData } = useDynamicData();
+    const { dynamicData, getDynamicData, tableNames } = useDynamicData();
+    const { getSmartColumns } = useSmartGrid();
     const { jobs, getJobs } = useJob();
 
     const jobComboBoxRef = useRef(null);
@@ -40,57 +33,26 @@ function Customers2() {
         setIsOpen(true);
     }, [])
 
-    const onSearch = () => {
-        try {
-            const trimmedJob = searchKey.job?.trim();
-            if (!searchKey.age && !trimmedJob) {
-                setFilteredData(dynamicData);
-                return;
-            }
-
-            setFilteredData(dynamicData.filter((oneData) => {
-                if (!searchKey.age) {
-                    return oneData.job == trimmedJob;
-                }
-                if (!trimmedJob) {
-                    return oneData.age == searchKey.age;
-                }
-                return (oneData.age == searchKey.age) && (oneData.job == trimmedJob);
-            }));
-            localStorage.setItem("customers2SearchKey", JSON.stringify(searchKey));
-        } catch (error) {
-            console.log("onSearchError: ", error);
-        }
-    }
-
-    const getInitdata = async () => {
-        await getDynamicData(formName);
-        await getJobs();
+    const getInitdata = () => {
+        getDynamicData(formName);
+        getJobs();
     }
 
     useEffect(() => {
-        onSearch();
+        getJobComboRef(jobComboBoxRef, jobs, searchKey);
+    }, [searchKey.job, jobs]);
+
+    useEffect(() => {
+        onSearch(searchKey, setFilteredData, dynamicData);
     }, [dynamicData])
+
+    useEffect(() => {
+        setColumns(getSmartColumns(openUpdateModal, tableNames[formName]));
+    }, [tableNames]);
 
     useEffect(() => {
         getInitdata();
     }, [])
-
-    // Set initial value for ComboBox using ref
-    useEffect(() => {
-        if (jobComboBoxRef.current && searchKey.job && jobs.length > 0) {
-            try {
-                // Try to set the value using the component's API
-                if (jobComboBoxRef.current.setValue) {
-                    jobComboBoxRef.current.setValue(searchKey.job);
-                } else if (jobComboBoxRef.current.value !== undefined) {
-                    jobComboBoxRef.current.value = searchKey.job;
-                }
-            } catch (error) {
-                console.log("Error setting ComboBox initial value:", error);
-            }
-        }
-    }, [searchKey.job, jobs]);
 
     return (
         <div className="customers2">
@@ -125,7 +87,7 @@ function Customers2() {
                             />
                         </div>
                     </div>
-                    <button onClick={onSearch} type="button" className="btn btn-primary">
+                    <button onClick={() => { onSearch(searchKey, setFilteredData, dynamicData) }} type="button" className="btn btn-primary">
                         <span className="btn-icon">⌕</span>
                         <span className="btn-label">Search</span>
                     </button>
@@ -140,6 +102,7 @@ function Customers2() {
                 gridRef={gridRef}
                 onFunc={openUpdateModal}
                 customData={filteredData}
+                columns={columns}
             />
             <Update
                 formName={formName}
