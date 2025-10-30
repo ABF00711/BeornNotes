@@ -1,88 +1,27 @@
-import React, { useMemo, memo, useState, useEffect } from "react";
+import React, { memo } from "react";
 import "./style.css";
 import { Grid } from "smart-webcomponents-react/grid";
 import 'smart-webcomponents-react/source/styles/smart.default.css';
-import useDynamicData from "../../Hooks/useDynamicData";
-import useSearchConfig from "../../Hooks/useSearchConfig";
-import useSmartGrid from "../../Hooks/useSmartGrid";
 import { gridState } from "./gridState";
 
 function SmartGrid(props) {
-    const { formName, gridRef, onFunc, customData } = props;
-    const { dynamicData, tableNames } = useDynamicData();
-    const { searchConfig } = useSearchConfig();
-    const [columns, setColumns] = useState([]);
-    const { getSmartColumns, onColumnReordered } = useSmartGrid();
-    const [isGridInitialized, setIsGridInitialized] = useState(false);
-
-    const dataSourseSettings = useMemo(() => {
-        try {
-            if (!searchConfig) return { dataFields: [] };
-            const dataFields = ['id: number'];
-            searchConfig.forEach(config => {
-                if (config.table_name !== tableNames[formName]) return;
-                let dataType;
-                if (config.field_type == "text") dataType = "string";
-                if (config.field_type == "combobox") dataType = "string";
-                if (config.field_type == "number") dataType = "number";
-                if (config.field_type == "date") dataType = "date";
-
-                dataFields.push(`${config.field_name}: ${dataType}`);
-            });
-            return { dataFields };
-        } catch (error) {
-            console.log("getDataSourceSettingsError: ", error);
-            return { dataFields: [] };
-        }
-    }, [searchConfig, tableNames]);
-
-    useEffect(() => {
-        setColumns(getSmartColumns(onFunc, tableNames[formName]));
-    }, [searchConfig, onFunc, tableNames]);
-
-    const isDataReady = useMemo(() => {
-        return columns.length > 0
-            && dataSourseSettings.dataFields?.length > 0
-            && tableNames[formName]
-            // && (dynamicData?.length > 0 || customData?.length > 0);
-    }, [columns.length, dataSourseSettings.dataFields?.length, tableNames, formName, dynamicData?.length, customData?.length]);
-
-    const dataAdapter = useMemo(() => {
-        if (!isDataReady) return null;
-
-        const dataToUse = customData || dynamicData;
-        if (!dataToUse?.length) return null;
-
-        return new window.Smart.DataAdapter({
-            dataSource: dataToUse,
-            dataFields: dataSourseSettings.dataFields
-        });
-    }, [isDataReady, dynamicData, customData, dataSourseSettings.dataFields]);
-
-    // Track grid initialization
-    useEffect(() => {
-        if (isDataReady && !isGridInitialized) {
-            setIsGridInitialized(true);
-        }
-    }, [isDataReady, isGridInitialized]);
-
-    if (!isDataReady) {
-        return <div className="smartGridTable">Loading...</div>;
-    }
-
-    if (!dataAdapter) {
-        return <div className="smartGridTable">There is no data!</div>;
-    }
-
-    if (!isGridInitialized) {
-        return <div className="smartGridTable">Initializing...</div>;
-    }
+    const { formName, gridRef, customData, columns = [] } = props;
 
     if (gridRef.current) {
-        gridRef.current.stateSettings.current = `smartGrid${formName}`;
-        setTimeout(() => {
-            gridRef.current.loadState(JSON.parse(localStorage.getItem(`smartGrid${formName}`) || null));
-        }, 100);
+        const savedState = JSON.parse(localStorage.getItem(`smartGrid${formName}`) || null);
+        const currentState = gridRef.current.getState();
+        if (!areArraysEqual(savedState.columns, currentState.columns)) {
+            gridRef.current.stateSettings.current = `smartGrid${formName}`;
+            setTimeout(() => {
+                gridRef.current.loadState(savedState);
+            }, 100);
+        }else{
+            console.log("savedState: ", savedState);
+            console.log("currentState: ", currentState);
+        }
+    }
+    if(columns.length == 0 || customData.length == 0) {
+        return;
     }
 
     return (
@@ -90,7 +29,7 @@ function SmartGrid(props) {
             <Grid id={`smartGrid${formName}`}
                 ref={gridRef}
                 appearance={gridState.appearance}
-                dataSource={dataAdapter}
+                dataSource={customData}
                 columns={columns}
                 behavior={gridState.behavior}
                 sorting={gridState.sorting}
@@ -101,10 +40,21 @@ function SmartGrid(props) {
                 summaryRow={{
                     visible: true
                 }}
-                onColumnReorder={(event) => {onColumnReordered(columns, setColumns)}}
             ></Grid>
         </div>
     );
+}
+
+function areArraysEqual(arr1, arr2) {
+    if (arr1.length !== arr2.length) {
+        return false;
+    }
+    for (let i = 0; i < arr1.length; i++) {
+        if (JSON.stringify(arr1[i]) !== JSON.stringify(arr2[i])) {
+            return false;
+        }
+    }
+    return true;
 }
 
 export default memo(SmartGrid);
