@@ -1,35 +1,8 @@
-import { useEffect, useState } from "react";
-import useSearchConfig from "../../Hooks/useSearchConfig";
-import useDynamicData from "../../Hooks/useDynamicData";
+import { useState } from "react";
 import DocumentModal from "./DocumentModal";
 
-function AddDocument ({formName, documentData, customer}) {
-     const {tableNames} = useDynamicData();
-    const { searchConfig } = useSearchConfig();
-    const [fieldsData, setFieldsData] = useState([]);
-    const [formData, setFormData] = useState({});
+function AddDocument ({documentData, customer}) {
     const [isOpen, setIsOpen] = useState(false);
-
-    const getFormData = () => {
-        try {
-            let _formData = {};
-            fieldsData.forEach((item) => {
-                _formData[item.field_name] = '';
-            });
-            setFormData(_formData);
-        } catch (error) {
-            console.log("getFormDataError: ", error);
-        }
-    }
-    
-    useEffect(() => {
-        getFormData();
-    }, [fieldsData])
-    
-    useEffect(() => {
-        if(!searchConfig) return;
-        setFieldsData(searchConfig.filter(item => item.table_name === tableNames[formName]));
-    }, [searchConfig, tableNames])
 
     return (
         <>
@@ -38,11 +11,9 @@ function AddDocument ({formName, documentData, customer}) {
                 <span className="btn-label">Add</span>
             </button>
             <DocumentModal
-                table_name={tableNames?.[formName] ?? ""}
                 isOpen={isOpen}
                 setIsOpen={setIsOpen}
                 role={"create"}
-                initData={formData}
                 documentData = {documentData}
                 customer = {customer}
             />

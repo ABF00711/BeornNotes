@@ -26,63 +26,6 @@ function DocumentGrid({ gridRef, customer, documentData, documents }) {
         setIsOpen(true);
     }
 
-    const handleCellClick = async (event) => {
-        try {
-            const { cell, dataField } = event.detail;
-            if (dataField == "name") {
-                const unProxiedData = _.cloneDeep(cell);
-                const row = unProxiedData.row.data;
-                const url = await getOneDocument(row);
-                if (url) {
-                    window.open(url);
-                }
-            }
-        } catch (error) {
-            console.log("handleCellClick: ", error);
-        }
-    };
-
-    const columns = [
-        {
-            label: "Edit",
-            dataField: "edit",
-            icon: 'fa-pencil',
-            showIcon: true,
-            formatFunction(settings) {
-                const button = document.createElement("button");
-                button.className = "btn btn-primary";
-                button.innerHTML = "✎";
-
-                button.addEventListener("click", () => {
-                    const unProxiedData = _.cloneDeep(settings.row.data);
-                    onUpdate(unProxiedData)
-                });
-
-                // Assign the actual DOM node
-                settings.cell.element.innerHTML = ""; // Clear existing content
-                settings.cell.element.style.pointerEvents = 'none';
-                button.style.pointerEvents = 'auto';
-                settings.cell.element.appendChild(button);
-            },
-            summary: ['count'],
-            allowReorder: false,
-        },
-        {
-            label: 'Name',
-            dataField: 'name',
-            sortOrder: 'asc',
-            formatFunction(settings) {
-                // Example: highlight age column
-                settings.cell.background = settings.value > 30 ? "#badeffff" : "#77c2ffff";
-                settings.cell.color = "#000";
-                settings.cell.element.style.cursor = "pointer";
-            },
-        },
-        {
-            label: 'Description',
-            dataField: 'description',
-        }
-    ]
     return (
         <>
             <Grid
@@ -100,7 +43,6 @@ function DocumentGrid({ gridRef, customer, documentData, documents }) {
                     visible: true
                 }}
                 columns={columns}
-                onCellClick={(event) => { handleCellClick(event) }}
                 className='documentGrid'
             >
             </Grid>
