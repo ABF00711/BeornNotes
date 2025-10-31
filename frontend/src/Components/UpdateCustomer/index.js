@@ -15,7 +15,7 @@ function UpdateCustomer({ updateData, customerData }) {
     const { updateDynamicData } = useDynamicData();
 
     const customerSchema = useMemo(() => {
-        return getCustomerSchema(customerData.labels, customerData.mandatories);
+        return getCustomerSchema(customerData.mandatories, customerData.labels);
     }, [customerData]);
 
     const getDefaultValue = (initData) => {
