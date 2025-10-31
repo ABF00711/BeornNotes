@@ -66,7 +66,11 @@ function useDocuments () {
         try {
             const res = await services.deleteDocuments(selectedRows);
             if(res.message == "deleteDocuments success"){
-                setDocuments(documents.filter((document) => document.id !== selectedRows.id));
+                let _documents = [...documents];
+                selectedRows.map((selectedRow) => {
+                    _documents = _documents.filter((document) => document.id !== selectedRow.id);
+                })
+                setDocuments(_documents);
                 toast.success("Deleted documents successfully");
             }
         } catch (error) {
