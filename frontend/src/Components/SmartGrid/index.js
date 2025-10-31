@@ -5,19 +5,18 @@ import 'smart-webcomponents-react/source/styles/smart.default.css';
 import { gridState } from "./gridState";
 
 function SmartGrid(props) {
-    const { formName, gridRef, customData, columns = [] } = props;
+    const { formName, gridRef, customData, columns = [], cellClick = () => {} } = props;
 
     if (gridRef.current) {
         const savedState = JSON.parse(localStorage.getItem(`smartGrid${formName}`) || null);
         const currentState = gridRef.current.getState();
-        if (!areArraysEqual(savedState.columns, currentState.columns)) {
-            gridRef.current.stateSettings.current = `smartGrid${formName}`;
-            setTimeout(() => {
-                gridRef.current.loadState(savedState);
-            }, 100);
-        }else{
-            console.log("savedState: ", savedState);
-            console.log("currentState: ", currentState);
+        if(savedState){
+            if (!areArraysEqual(savedState.columns, currentState.columns)) {
+                gridRef.current.stateSettings.current = `smartGrid${formName}`;
+                setTimeout(() => {
+                    gridRef.current.loadState(savedState);
+                }, 100);
+            }
         }
     }
     if(columns.length == 0 || customData.length == 0) {
@@ -40,6 +39,7 @@ function SmartGrid(props) {
                 summaryRow={{
                     visible: true
                 }}
+                onCellClick={(event) => {cellClick(event)}}
             ></Grid>
         </div>
     );
