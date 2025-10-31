@@ -1,9 +1,10 @@
 import { useContext } from "react";
 import { MyContext } from "../Context";
 import _ from "lodash"
+import services from "../Services";
 
 function useSmartGrid() {
-  const { searchConfig } = useContext(MyContext);
+  const { searchConfig, setGridState } = useContext(MyContext);
 
   const getSmartColumns = (onFunc, tableName) => {
     try {
@@ -75,8 +76,33 @@ function useSmartGrid() {
     }
   };
 
+  const saveGridState = async(state) => {
+    try {
+      const res = await services.createGridState(state);
+      if(res.message == "createGridState success"){
+        console.log(res.message);
+      }
+    } catch (error) {
+      console.log("saveGridState: ", error);
+    }
+  }
+
+  const getGridState = async () => {
+    try {
+      const res = await services.getGridState();
+      if(res.message == "getGridState success"){
+        return res.state;
+      }
+      return "";
+    } catch (error) {
+      console.log("getGridState: ", error);
+    }
+  }
+
   return {
-    getSmartColumns,
+    getSmartColumns, 
+    saveGridState, 
+    getGridState
   }
 }
 

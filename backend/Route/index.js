@@ -11,6 +11,7 @@ const tabInterfaceController = require("../Controller/tabInterfaceController.js"
 const jobController = require("../Controller/jobController.js");
 const documentController = require("../Controller/documentController.js");
 const upload = require("../middleware/upload.js");
+const gridStateController = require("../Controller/gridStateController.js");
 const router = express.Router();
 
 router.get('/searchConfigData', searchConfigController.getAll);
@@ -53,6 +54,9 @@ router.post('/documents/getOne', authMiddleware, documentController.getUrl);
 router.post('/documents/create', authMiddleware, upload.single("file"), documentController.createDocument );
 router.post('/documents/update', authMiddleware, upload.single("file"), documentController.updateDocument);
 router.post('/documents/delete', authMiddleware, documentController.deleteDocuments);
+
+router.post('/gridState', authMiddleware, gridStateController.create);
+router.get('/gridState', authMiddleware, gridStateController.get);
 
 router.get('/job/get', authMiddleware, jobController.getJobs)
 module.exports = router;
