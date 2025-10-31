@@ -9,6 +9,8 @@ import DeleteDocument from "./DeleteDocument";
 import { getDocumentColumns, handleCellClick } from "./utils/documentUtils";
 import _ from "lodash";
 import DocumentModal from "./DocumentModal";
+import SmartLayouts from "../Layouts";
+import SmartSearchPattern from "../SearchPattern";
 
 function Documents({ documentData, customer }) {
     const [isOpen, setIsOpen] = useState(false);
@@ -57,13 +59,15 @@ function Documents({ documentData, customer }) {
                         <div className="table-header">
                             <AddDocument formName={"Documents"} documentData={documentData} customer={customer} />
                             <DeleteDocument gridRef={gridRef} />
+                            <SmartLayouts formName={"Documents"} gridRef={gridRef} />
+                            <SmartSearchPattern formName={"Documents"} gridRef={gridRef} />
                         </div>
                         <div className="table-body">
                             <SmartGrid
+                                formName={"Documents"}
                                 gridRef={gridRef}
                                 customData={documents}
                                 columns={columns}
-                                formName={"Documents"}
                                 cellClick={handleCellClick}
                             />
                         </div>
