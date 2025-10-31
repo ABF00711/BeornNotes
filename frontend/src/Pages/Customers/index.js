@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import "./style.css";
 import SmartGrid from "../../Components/SmartGrid";
 import Add from "../../Components/Add";
@@ -23,7 +23,6 @@ const tabBtnData = {
 }
 
 function Customers() {
-    const [columns, setColumns] = useState([]);
     const navigate = useNavigate();
     const { setCurrentInterface } = useContext(MyContext);
     const { getDynamicData, dynamicData, tableNames } = useDynamicData();
@@ -39,11 +38,11 @@ function Customers() {
             return prev;
         });
     }, [])
-
-    useEffect(() => {
-        setColumns(getSmartColumns(onNavigate, tableNames[formName]));
+    
+    const columns = useMemo(() => {
+        return getSmartColumns(onNavigate, tableNames[formName]);
     }, [tableNames]);
-
+ 
     const getInit = async () => {
         getDynamicData(formName);
     }
