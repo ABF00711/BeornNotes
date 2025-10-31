@@ -19,7 +19,7 @@ function SmartGrid(props) {
             }
         }
     }
-    if(columns.length == 0 || customData.length == 0) {
+    if(columns?.length == 0 || customData?.length == 0) {
         return;
     }
 
