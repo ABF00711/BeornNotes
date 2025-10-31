@@ -124,7 +124,7 @@ class DataAccess{
             const sql = `Update ${tablename} Set ${setItems.join(', ')} Where id = ${newData.id}`;
             await this.dbModel.execute(sql, values);
         } catch (error) {
-            console.log("DA_updateErro: ", error);
+            console.log("DA_updateError: ", error);
         }
     }
 

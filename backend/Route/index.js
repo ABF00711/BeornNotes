@@ -56,7 +56,7 @@ router.post('/documents/update', authMiddleware, upload.single("file"), document
 router.post('/documents/delete', authMiddleware, documentController.deleteDocuments);
 
 router.post('/gridState', authMiddleware, gridStateController.create);
-router.get('/gridState', authMiddleware, gridStateController.get);
+router.post('/gridState/get', authMiddleware, gridStateController.get);
 
 router.get('/job/get', authMiddleware, jobController.getJobs)
 module.exports = router;

@@ -331,6 +331,26 @@ const services = {
         } catch (error) {
             console.log("getOneDocumentError: ", error);
         }
+    },
+
+    createGridState: async (state, formName) => {
+        try {
+            services.setAuthToken();
+            const res = await axios.post(services.serverURL + "/gridState", {state, formName});
+            return res.data;
+        } catch (error) {
+            console.log("createGridStateError: ", error);
+        }
+    },
+
+    getGridState: async (formName) => {
+        try {
+            services.setAuthToken();
+            const res = await axios.post(services.serverURL + "/gridState/get", {formName});
+            return res.data;
+        } catch (error) {
+            console.log("getGridStateError: ", error);
+        }
     }
 }
 

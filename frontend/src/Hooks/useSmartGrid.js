@@ -76,9 +76,9 @@ function useSmartGrid() {
     }
   };
 
-  const saveGridState = async(state) => {
+  const saveGridState = async(state, formName) => {
     try {
-      const res = await services.createGridState(state);
+      const res = await services.createGridState(state, formName);
       if(res.message == "createGridState success"){
         console.log(res.message);
       }
@@ -87,9 +87,9 @@ function useSmartGrid() {
     }
   }
 
-  const getGridState = async () => {
+  const getGridState = async (formName) => {
     try {
-      const res = await services.getGridState();
+      const res = await services.getGridState(formName);
       if(res.message == "getGridState success"){
         return res.state;
       }
