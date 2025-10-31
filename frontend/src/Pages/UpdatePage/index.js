@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import useSearchConfig from "../../Hooks/useSearchConfig";
 import "./style.css";
 import { useLocation } from "react-router-dom";
@@ -7,7 +7,7 @@ import Documents from "../../Components/Documents";
 
 function UpdatePage() {
     const location = useLocation();
-    const updateData = location.state;
+    const updateData = location.state || JSON.parse(localStorage.getItem("customerDataForUpdate"));
     const { searchConfig } = useSearchConfig();
 
     const customerData = useMemo(() => {
@@ -33,6 +33,12 @@ function UpdatePage() {
         })
         return { labels, mandatories };
     }, [searchConfig]);
+
+    useEffect(() => {
+        if(updateData){
+            localStorage.setItem("customerDataForUpdate", JSON.stringify(updateData));
+        }
+    }, [updateData])
 
     return (
         <div className="updatePage">
