@@ -39,8 +39,11 @@ const documentController = {
             const document = req.file;
             const documentInfo = JSON.parse(req.body.fileInfo);
             await mysqlDA.update("documents", documentInfo);
-
-            console.log("documentUrl: ", documentInfo.documentUrl);
+            
+            if(!document){
+                res.json({message: "updateDocument success"});
+                return;
+            }
             const key = documentInfo.documentUrl.split("com/")[1];
 
             await documentService.updateDocument(document, key);
