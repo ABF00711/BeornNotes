@@ -12,7 +12,11 @@
 
 .documents-tabs{
     width: 100%;
-    height: calc(100vh - 300px);
+    height: calc(100vh - 200px);
+}
+
+.documents-tabs .smart-grid {
+    height: calc(100vh - 350px);
 }
 
 @media (max-width: 1590px){
