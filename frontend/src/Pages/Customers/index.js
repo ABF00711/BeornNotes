@@ -67,7 +67,6 @@ function Customers() {
             <SmartGrid
                 formName={formName}
                 gridRef={gridRef}
-                onFunc={onNavigate}
                 customData = {dynamicData}
                 columns = {columns}
             />
