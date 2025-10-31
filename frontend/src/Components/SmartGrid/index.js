@@ -8,11 +8,11 @@ function SmartGrid(props) {
     const { formName, gridRef, customData, columns = [], cellClick = () => {} } = props;
 
     if (gridRef.current) {
+        gridRef.current.stateSettings.current = `smartGrid${formName}`;
         const savedState = JSON.parse(localStorage.getItem(`smartGrid${formName}`) || null);
         const currentState = gridRef.current.getState();
         if(savedState){
             if (!areArraysEqual(savedState.columns, currentState.columns)) {
-                gridRef.current.stateSettings.current = `smartGrid${formName}`;
                 setTimeout(() => {
                     gridRef.current.loadState(savedState);
                 }, 100);
