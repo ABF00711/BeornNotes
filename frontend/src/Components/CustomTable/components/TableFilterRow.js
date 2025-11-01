@@ -20,7 +20,7 @@ const TableFilterRow = ({
                 const placeholder = column.type === 'date' ? '' : `Filter ${column.header}...`;
 
                 return (
-                    <th key={`filter-${column.field}`} className="custom-table-header-cell filter-cell">
+                    <th key={`filter-${column.field}`} className="custom-table-header-cell filter-cell" style={{ width: column.width, minWidth: column.width, maxWidth: column.width }}>
                         <input
                             type={inputType}
                             className="filter-input"

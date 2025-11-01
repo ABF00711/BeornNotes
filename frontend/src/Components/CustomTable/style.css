@@ -237,7 +237,7 @@
 }
 
 .custom-table {
-    width: 100%;
+    width: auto;
     border-collapse: collapse;
     font-size: 14px;
     background: #ffffff;
@@ -907,25 +907,10 @@
     width: 4px;
     cursor: col-resize;
     user-select: none;
-    z-index: 5;
+    z-index: 100;
     background: transparent;
     transition: background-color 0.2s ease;
     border-right: 1px solid transparent;
-}
-
-/* Left border for column resize */
-.column-resize-border-left {
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 4px;
-    cursor: col-resize;
-    user-select: none;
-    z-index: 5;
-    background: transparent;
-    transition: background-color 0.2s ease;
-    border-left: 1px solid transparent;
 }
 
 /* Show subtle borders on header hover */
@@ -933,24 +918,14 @@
     border-right: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-.custom-table-header-cell:hover .column-resize-border-left {
-    border-left: 1px solid rgba(255, 255, 255, 0.3);
-}
-
 /* Highlight borders on hover */
 .column-resize-border:hover {
     background: rgba(59, 130, 246, 0.3);
 }
 
-.column-resize-border-left:hover {
-    background: rgba(59, 130, 246, 0.3);
-}
-
 /* Prevent border resizing on checkbox and actions columns */
 .checkbox-header .column-resize-border,
-.actions-header .column-resize-border,
-.checkbox-header .column-resize-border-left,
-.actions-header .column-resize-border-left {
+.actions-header .column-resize-border {
     cursor: default;
     pointer-events: none;
 }

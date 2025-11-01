@@ -1,4 +1,4 @@
-import React, { useState, useRef, useMemo } from 'react';
+import React, { useState, useRef, useMemo, useEffect } from 'react';
 import './style.css';
 
 // Import custom hooks
@@ -39,10 +39,27 @@ const CustomTable = ({
     const [displayColumns, setDisplayColumns] = useState(tableColumns);
     const tableRef = useRef(null);
 
+    // Sync displayColumns when tableColumns changes
+    useEffect(() => {
+        if (tableColumns.length > 0) {
+            const hasAnyWidth = tableColumns.some(col => col.width);
+            if (!hasAnyWidth) {
+                // Initialize with default widths
+                const initializedColumns = tableColumns.map(col => ({
+                    ...col,
+                    width: col.width || '150px'
+                }));
+                setDisplayColumns(initializedColumns);
+            } else {
+                setDisplayColumns(tableColumns);
+            }
+        }
+    }, [tableColumns]);
+
     // Custom hooks for functionality
     const { draggedColumn, handleDragStart, handleDragOver, handleDrop } = useColumnReorder(displayColumns, setDisplayColumns);
     
-    const { resizingColumn, handleRightResizeStart, handleLeftResizeStart } = useColumnResize(displayColumns, setDisplayColumns);
+    const { resizingColumn, handleRightResizeStart } = useColumnResize(displayColumns, setDisplayColumns);
     
     const {
         columnVisibilities,
@@ -138,7 +155,6 @@ const CustomTable = ({
                                     onDragStart={handleDragStart}
                                     onDragOver={handleDragOver}
                                     onDrop={handleDrop}
-                                    onLeftResizeStart={handleLeftResizeStart}
                                     onRightResizeStart={handleRightResizeStart}
                                     onSort={handleSort}
                                     onToggleFilterMenu={toggleFilterMenu}

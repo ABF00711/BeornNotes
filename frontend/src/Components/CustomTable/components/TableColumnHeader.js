@@ -11,7 +11,6 @@ const TableColumnHeader = ({
     onDragStart,
     onDragOver,
     onDrop,
-    onLeftResizeStart,
     onRightResizeStart,
     onSort,
     onToggleFilterMenu,
@@ -29,19 +28,12 @@ const TableColumnHeader = ({
     return (
         <th
             className={`custom-table-header-cell ${isDragging ? 'dragging' : ''}`}
-            style={{ width: column.width, position: 'relative' }}
+            style={{ width: column.width, minWidth: column.width, maxWidth: column.width, position: 'relative' }}
             draggable
             onDragStart={(e) => onDragStart(e, index)}
             onDragOver={onDragOver}
             onDrop={(e) => onDrop(e, index)}
         >
-            {/* Left Resize border */}
-            <div
-                className="column-resize-border-left"
-                onMouseDown={(e) => onLeftResizeStart(e, index, column)}
-                title="Drag to resize column from left"
-            ></div>
-
             <div className="header-content" onClick={() => onSort(column.field, column.type)}>
                 <span className="header-text">{column.header}</span>
                 <div className="header-actions">
