@@ -47,10 +47,6 @@ function SmartGrid(props) {
     }
 
     useEffect(() => {
-        console.log("gridColumnState: ", griColumnState);
-    }, [griColumnState])
-
-    useEffect(() => {
         initData();
     }, [])
 
