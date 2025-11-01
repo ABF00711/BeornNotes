@@ -42,7 +42,7 @@ function SmartSearchPattern({ formName, gridRef }) {
             toast.error("Please input a search name");
             return;
         }
-        const savedColumnState = JSON.parse(localStorage.getItem(`smartGrid_${formName}`) || "{}");
+        const savedColumnState = JSON.parse(localStorage.getItem(`smartGrid${formName}`) || "{}");
         const searchDataJSON = JSON.stringify({
             filter: savedColumnState.filter,
             sort: savedColumnState.sort
@@ -63,7 +63,7 @@ function SmartSearchPattern({ formName, gridRef }) {
 
     const saveAsDefault = () => {
         try {
-            const savedColumnState = JSON.parse(localStorage.getItem(`smartGrid_${formName}`) || "{}");
+            const savedColumnState = JSON.parse(localStorage.getItem(`smartGrid${formName}`) || "{}");
             const searchDataJSON = JSON.stringify({
                 filter: savedColumnState.filter,
                 sor: savedColumnState.sort
@@ -95,7 +95,7 @@ function SmartSearchPattern({ formName, gridRef }) {
                 return;
             }
             const parsedPattern = JSON.parse(selectedPattern.data || "{}");
-            const savedColumnState = JSON.parse(localStorage.getItem(`smartGrid_${formName}`));
+            const savedColumnState = JSON.parse(localStorage.getItem(`smartGrid${formName}`));
             if (savedColumnState) {
                 savedColumnState.filter = parsedPattern.filter;
                 savedColumnState.sort = parsedPattern.sort;

@@ -37,7 +37,7 @@ function SmartLayouts({formName, gridRef}) {
                 return;
             }
             const layoutState = JSON.parse(selected.layout_json);
-            const savedColumnState = JSON.parse(localStorage.getItem(`smartGrid_${formName}`) || null);
+            const savedColumnState = JSON.parse(localStorage.getItem(`smartGrid${formName}`) || null);
             if((savedColumnState !== null) && savedColumnState.columns){
                 savedColumnState.columns = layoutState;
             }
@@ -54,7 +54,7 @@ function SmartLayouts({formName, gridRef}) {
                 toast.error("Please input name exactly!");
                 return;
             }
-            const columnState = JSON.parse(localStorage.getItem(`smartGrid_${formName}`) || "{}");
+            const columnState = JSON.parse(localStorage.getItem(`smartGrid${formName}`) || "{}");
             if(!columnState) return;
             const exists = layouts.find(l => l.layout_name === selectedName);
             if (exists) {
@@ -71,7 +71,7 @@ function SmartLayouts({formName, gridRef}) {
     }
     const saveDefault = () => {
         try {
-            const columnState = JSON.parse(localStorage.getItem(`smartGrid_${formName}`) || "{}");
+            const columnState = JSON.parse(localStorage.getItem(`smartGrid${formName}`) || "{}");
             const layoutJson = JSON.stringify(columnState.columns);
             updateLayouts(formName, "Default", layoutJson);
             setIsOpen(false);

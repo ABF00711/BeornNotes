@@ -27,18 +27,21 @@ function SmartGrid(props) {
         }, 500);
     }
 
-    if (gridRef.current) {
-        gridRef.current.stateSettings.current = `smartGrid${formName}`;
-        const savedState = JSON.parse((localStorage.getItem(`smartGrid${formName}`) || griColumnState?.state) || null);
-        const currentState = gridRef.current.getState();
-        if (savedState) {
-            if (!areArraysEqual(savedState.columns, currentState.columns)) {
-                setTimeout(() => {
-                    gridRef.current.loadState(savedState);
-                }, 100);
+    useEffect(() => {
+        if (gridRef.current) {
+            gridRef.current.stateSettings.current = `smartGrid${formName}`;
+            const savedState = JSON.parse((localStorage.getItem(`smartGrid${formName}`) || griColumnState?.state) || null);
+            const currentState = gridRef.current.getState();
+            if (savedState) {
+                if (!areArraysEqual(savedState.columns, currentState.columns)) {
+                    setTimeout(() => {
+                        gridRef.current.loadState(savedState);
+                    }, 100);
+                }
             }
         }
-    }
+    }, [gridRef.current])
+
 
     const initData = async () => {
         const _savedColumnState = await getGridState(formName);
