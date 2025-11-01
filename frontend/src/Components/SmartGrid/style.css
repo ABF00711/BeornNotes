@@ -4,6 +4,7 @@
     justify-content: center;
     align-items: center;
     padding: 25px;
+    transition: width 0.5s;
 }
 
 .smart-grid {
@@ -23,4 +24,9 @@
 }
 .btn-edit:hover {
     background-color: aquamarine;
+}
+
+.isNotReady{
+    width: 0px;
+    height: 0px;
 }

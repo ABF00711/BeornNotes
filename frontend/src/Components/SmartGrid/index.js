@@ -10,16 +10,13 @@ function SmartGrid(props) {
     const { formName, gridRef, customData, columns = [], cellClick = () => { } } = props;
     const {saveGridState, getGridState} = useSmartGrid();
     
-    // Store timeout reference for debouncing - prevents multiple API calls
     const saveTimeoutRef = useRef(null);
 
     const onColumnChanged = (event) => {
-        // Clear any existing timeout to debounce multiple rapid events
         if (saveTimeoutRef.current) {
             clearTimeout(saveTimeoutRef.current);
         }
         
-        // Set new timeout - only the last event will execute saveGridState
         saveTimeoutRef.current = setTimeout(() => {
             const savedState = localStorage.getItem(`smartGrid${formName}`) || null;
             saveGridState(savedState, formName);
@@ -35,7 +32,7 @@ function SmartGrid(props) {
             if (savedState) {
                 if (!areArraysEqual(savedState.columns, currentState.columns)) {
                     setTimeout(() => {
-                        gridRef.current.loadState(savedState);
+                        gridRef.current?.loadState(savedState);
                     }, 100);
                 }
             }
@@ -46,7 +43,6 @@ function SmartGrid(props) {
     const initData = async () => {
         const _savedColumnState = await getGridState(formName);
         if(!_savedColumnState) return;
-        console.log("savedColumnState: ", _savedColumnState);
         setGridColumnState(_savedColumnState);
     }
 
@@ -58,7 +54,6 @@ function SmartGrid(props) {
         initData();
     }, [])
 
-    // Cleanup timeout on unmount to prevent memory leaks
     useEffect(() => {
         return () => {
             if (saveTimeoutRef.current) {
@@ -72,7 +67,7 @@ function SmartGrid(props) {
     }
 
     return (
-        <div className="smartGridTable">
+        <div className={gridRef.current ? "smartGridTable" : "isNotReady"}>
             <Grid id={`smartGrid${formName}`}
                 ref={gridRef}
                 appearance={gridState.appearance}
