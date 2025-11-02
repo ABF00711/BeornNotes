@@ -24,7 +24,7 @@ function SmartGrid(props) {
         }, 500);
     }
 
-    useEffect(() => {
+    // useEffect(() => {
         if (gridRef.current) {
             gridRef.current.stateSettings.current = `smartGrid${formName}`;
             const savedState = JSON.parse((localStorage.getItem(`smartGrid${formName}`) || griColumnState?.state) || null);
@@ -37,7 +37,7 @@ function SmartGrid(props) {
                 }
             }
         }
-    }, [gridRef.current])
+    // }, [gridRef.current])
 
 
     const initData = async () => {
