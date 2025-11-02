@@ -16,6 +16,8 @@ import Customers from './Pages/Customers';
 import Layout from './Pages/Layout';
 import UpdatePage from './Pages/UpdatePage';
 import CustomTableDemo from './Pages/CustomTableDemo';
+import { LayoutProvider } from './Context/LayoutContex';
+import { SearchPatternProvider } from './Context/SearchPatternContext';
 
 // Register all Community features
 if (window.Smart) {
@@ -30,27 +32,31 @@ function App() {
 
   return (
     <ContextProvider>
-      <div className="App">
-        <BrowserRouter>
-          <Routes>
-            <Route element={<Layout />}>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/products" element={<Products />} />
-              <Route path="/customers" element={<Customers />} />
-              <Route path="/customers2" element={<Customers2 />} />
-              <Route path="/orders" element={<Orders />} />
-              <Route path="/summary_report" element={<SummaryReport />} />
-              <Route path="/inventory_report" element={<InventoryReport />} />
-              <Route path="/updateCustomer" element={<UpdatePage />} />
-              <Route path="/testTable" element={<CustomTableDemo />} />
-            </Route>
-            <Route path="/register" element={<Register />} />
-            <Route path="/login" element={<Login />} />
-          </Routes>
-          <ToastContainer />
-        </BrowserRouter>
-      </div>
+      <LayoutProvider>
+        <SearchPatternProvider>
+          <div className="App">
+            <BrowserRouter>
+              <Routes>
+                <Route element={<Layout />}>
+                  <Route path="/" element={<Dashboard />} />
+                  <Route path="/profile" element={<Profile />} />
+                  <Route path="/products" element={<Products />} />
+                  <Route path="/customers" element={<Customers />} />
+                  <Route path="/customers2" element={<Customers2 />} />
+                  <Route path="/orders" element={<Orders />} />
+                  <Route path="/summary_report" element={<SummaryReport />} />
+                  <Route path="/inventory_report" element={<InventoryReport />} />
+                  <Route path="/updateCustomer" element={<UpdatePage />} />
+                  <Route path="/testTable" element={<CustomTableDemo />} />
+                </Route>
+                <Route path="/register" element={<Register />} />
+                <Route path="/login" element={<Login />} />
+              </Routes>
+              <ToastContainer />
+            </BrowserRouter>
+          </div>
+        </SearchPatternProvider>
+      </LayoutProvider>
     </ContextProvider>
   );
 }

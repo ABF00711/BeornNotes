@@ -4,7 +4,7 @@ import _ from "lodash"
 import services from "../Services";
 
 function useSmartGrid() {
-  const { searchConfig, setGridState } = useContext(MyContext);
+  const { searchConfig} = useContext(MyContext);
 
   const getSmartColumns = (onFunc, tableName) => {
     try {

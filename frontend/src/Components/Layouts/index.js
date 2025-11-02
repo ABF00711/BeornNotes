@@ -1,13 +1,12 @@
-import React from "react";
 import "./style.css";
 import { Button, Select } from "antd";
 import { useState, useRef, useContext, useEffect } from "react";
-import { MyContext } from "../../Context";
 import useLayouts from "../../Hooks/useLayouts";
 import { toast } from "react-toastify";
+import { LayoutContext } from "../../Context/LayoutContex";
 
 function SmartLayouts({formName, gridRef}) {
-    const { layouts } = useContext(MyContext);
+    const {layouts} = useContext(LayoutContext);
     const { getLayouts, createLayouts, updateLayouts, deleteLayouts } = useLayouts();
     const [isOpen, setIsOpen] = useState(false);
     const [layoutName, setLayoutName] = useState("");

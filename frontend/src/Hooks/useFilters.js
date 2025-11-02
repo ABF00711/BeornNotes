@@ -1,10 +1,12 @@
 import services from "../Services";
 import { toast } from "react-toastify";
 import { useCallback, useContext } from "react";
-import { MyContext } from "../Context";
+import { SearchPatternContext } from "../Context/SearchPatternContext";
+import { LayoutContext } from "../Context/LayoutContex";
 
 function useSearchpatterns() {
-    const { searchpatterns, setSearchpatterns, token, layouts } = useContext(MyContext);
+    const { searchpatterns, setSearchpatterns } = useContext(SearchPatternContext);
+    const { layouts } = useContext(LayoutContext);
 
     const getSearchpatterns = async (tablename) => {
         try {

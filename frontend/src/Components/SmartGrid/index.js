@@ -6,17 +6,17 @@ import { gridState } from "./gridState";
 import useSmartGrid from "../../Hooks/useSmartGrid";
 
 function SmartGrid(props) {
-    const [griColumnState, setGridColumnState]= useState(null);
+    const [griColumnState, setGridColumnState] = useState(null);
     const { formName, gridRef, customData, columns = [], cellClick = () => { } } = props;
-    const {saveGridState, getGridState} = useSmartGrid();
-    
+    const { saveGridState, getGridState } = useSmartGrid();
+
     const saveTimeoutRef = useRef(null);
 
     const onColumnChanged = (event) => {
         if (saveTimeoutRef.current) {
             clearTimeout(saveTimeoutRef.current);
         }
-        
+
         saveTimeoutRef.current = setTimeout(() => {
             const savedState = localStorage.getItem(`smartGrid${formName}`) || null;
             saveGridState(savedState, formName);
@@ -24,7 +24,7 @@ function SmartGrid(props) {
         }, 500);
     }
 
-    // useEffect(() => {
+    useEffect(() => {
         if (gridRef.current) {
             gridRef.current.stateSettings.current = `smartGrid${formName}`;
             const savedState = JSON.parse((localStorage.getItem(`smartGrid${formName}`) || griColumnState?.state) || null);
@@ -37,12 +37,12 @@ function SmartGrid(props) {
                 }
             }
         }
-    // }, [gridRef.current])
+    }, [gridRef.current])
 
 
     const initData = async () => {
         const _savedColumnState = await getGridState(formName);
-        if(!_savedColumnState) return;
+        if (!_savedColumnState) return;
         setGridColumnState(_savedColumnState);
     }
 

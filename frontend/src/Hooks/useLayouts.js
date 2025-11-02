@@ -1,10 +1,10 @@
 import { useContext } from "react";
-import { MyContext } from "../Context";
 import services from "../Services";
 import { toast } from "react-toastify";
+import { LayoutContext } from "../Context/LayoutContex";
 
 function useLayouts () {
-    const {layouts, setLayouts, token} = useContext(MyContext);
+    const {layouts, setLayouts} = useContext(LayoutContext);
 
     const getLayouts = async (tablename) => {
         try {
