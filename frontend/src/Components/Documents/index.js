@@ -47,10 +47,6 @@ function Documents({ documentData, customer }) {
         getDocuments(customer);
     }, [])
 
-    useEffect(() => {
-        console.log("updateData: ", updateData);
-    }, [updateData])
-
     return (
         <div className="documents">
             <div className="documents-main">

@@ -7,6 +7,7 @@ import useSmartGrid from "../../Hooks/useSmartGrid";
 
 function SmartGrid(props) {
     const [griColumnState, setGridColumnState] = useState(null);
+    const [isGridReady, setIsGridReady] = useState(false);
     const { formName, gridRef, customData, columns = [], cellClick = () => { } } = props;
     const { saveGridState, getGridState } = useSmartGrid();
 
@@ -24,8 +25,16 @@ function SmartGrid(props) {
         }, 500);
     }
 
+    // Use callback ref to detect when grid is mounted
+    const gridCallbackRef = (gridInstance) => {
+        if (gridInstance) {
+            gridRef.current = gridInstance;
+            setIsGridReady(true);
+        }
+    };
+
     useEffect(() => {
-        if (gridRef.current) {
+        if (gridRef.current && isGridReady) {
             gridRef.current.stateSettings.current = `smartGrid${formName}`;
             const savedState = JSON.parse((localStorage.getItem(`smartGrid${formName}`) || griColumnState?.state) || null);
             const currentState = gridRef.current.getState();
@@ -37,7 +46,7 @@ function SmartGrid(props) {
                 }
             }
         }
-    }, [gridRef.current])
+    }, [isGridReady, formName, griColumnState])
 
 
     const initData = async () => {
@@ -63,9 +72,9 @@ function SmartGrid(props) {
     }
 
     return (
-        <div className={gridRef.current ? "smartGridTable" : "isNotReady"}>
+        <div className={isGridReady ? "smartGridTable" : "isNotReady"}>
             <Grid id={`smartGrid${formName}`}
-                ref={gridRef}
+                ref={gridCallbackRef}
                 appearance={gridState.appearance}
                 dataSource={customData}
                 columns={columns}
