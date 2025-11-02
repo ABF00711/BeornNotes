@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useMemo } from "react";
 
 const DataContext = createContext([]);
 
@@ -59,24 +59,31 @@ function ContextProvider({ children }) {
         setUserTime(defaultUserTime);
     }
 
+    const contextValue = useMemo(() => ({
+        initializeStateData,
+        userData, setUserData,
+        token, setToken,
+        tableNames, setTableNames,
+        searchConfig, setSearchConfig,
+        menuItems, setMenuItems,
+        tabbedInterfaces, setTabbedInterfaces,
+        isCollapsed, setIsCollapsed,
+        dynamicData, setDynamicData,
+        searchpatterns, setSearchpatterns,
+        layouts, setLayouts,
+        currentInterface, setCurrentInterface,
+        jobs, setJobs,
+        userTime, setUserTime,
+        documents, setDocuments,
+    }), [
+        initializeStateData,
+        userData, token, tableNames, searchConfig, menuItems,
+        tabbedInterfaces, isCollapsed, dynamicData, searchpatterns,
+        layouts, currentInterface, jobs, userTime, documents,
+    ]);
+
     return (
-        <DataContext.Provider value={{
-            initializeStateData,
-            userData, setUserData,
-            token, setToken,
-            tableNames, setTableNames,
-            searchConfig, setSearchConfig,
-            menuItems, setMenuItems,
-            tabbedInterfaces, setTabbedInterfaces,
-            isCollapsed, setIsCollapsed,
-            dynamicData, setDynamicData,
-            searchpatterns, setSearchpatterns,
-            layouts, setLayouts,
-            currentInterface, setCurrentInterface,
-            jobs, setJobs,
-            userTime, setUserTime,
-            documents, setDocuments
-        }}>
+        <DataContext.Provider value={contextValue}>
             {children}
         </DataContext.Provider>
     )
