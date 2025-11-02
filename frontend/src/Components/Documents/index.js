@@ -51,7 +51,7 @@ function Documents({ documentData, customer }) {
         <div className="documents">
             <div className="documents-main">
                 <Tabs className="documents-tabs">
-                    <TabItem label={`Document(${documents?.length})`}>
+                    <TabItem label={`Document(${!documents?.length?0:documents.length})`}>
                         <div className="table-header">
                             <AddDocument formName={"Documents"} documentData={documentData} customer={customer} />
                             <DeleteDocument gridRef={gridRef} />
