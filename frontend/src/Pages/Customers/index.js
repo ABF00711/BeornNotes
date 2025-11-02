@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
+import React, { memo, useCallback, useEffect, useMemo, useRef } from "react";
 import "./style.css";
 import SmartGrid from "../../Components/SmartGrid";
 import Add from "../../Components/Add";
@@ -8,35 +8,18 @@ import SmartSearchPattern from "../../Components/SearchPattern";
 import ResetBtn from "../../Components/Reset";
 import useDynamicData from "../../Hooks/useDynamicData";
 import { useNavigate } from "react-router-dom";
-import { MyContext } from "../../Context";
 import useSmartGrid from "../../Hooks/useSmartGrid";
 
 const formName = "Customers";
 
-const tabBtnData = {
-    id: 100,
-    title: "Edit",
-    active: true,
-    icon: "",
-    path: "/updateCustomer",
-    screen_id: "udpateCustomer",
-}
-
 function Customers() {
     const navigate = useNavigate();
-    const { setCurrentInterface } = useContext(MyContext);
     const { getDynamicData, dynamicData, tableNames } = useDynamicData();
     const {getSmartColumns} = useSmartGrid();
     const gridRef = useRef(null);
 
     const onNavigate = useCallback((data) => {
-        navigate(tabBtnData.path, {state: data});
-        setCurrentInterface(prev => {
-            const exists = prev.tabbedBtns.find(item => item.id === tabBtnData.id);
-            prev.tabbedBtns = exists ? prev.tabbedBtns : [...prev.tabbedBtns, tabBtnData];
-            prev.activeUrl = tabBtnData.path;
-            return prev;
-        });
+        navigate("/updateCustomer", {state: data});
     }, [])
     
     const columns = useMemo(() => {
@@ -74,4 +57,4 @@ function Customers() {
     );
 }
 
-export default Customers;
+export default memo(Customers);
