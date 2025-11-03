@@ -1,7 +1,7 @@
 import "./style.css";
 import { Tabs, TabItem } from 'smart-webcomponents-react/tabs';
 import 'smart-webcomponents-react/source/styles/smart.default.css';
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import SmartGrid from "../SmartGrid";
 import AddDocument from "./AddDocument";
 import useDocuments from "../../Hooks/useDocuments";
@@ -19,12 +19,12 @@ function Documents({ documentData, customer }) {
     const { documents, getDocuments, getOneDocument } = useDocuments();
     const [isDataReady, setIsDataReady] = useState(false);
 
-    const onUpdate = (data) => {
+    const onUpdate = useCallback((data) => {
         setIsOpen(true);
         setUpdateData(data);
-    }
+    }, []);
 
-    const handleCellClick = async (event) => {
+    const handleCellClick = useCallback(async (event) => {
         try {
             const { cell, dataField } = event.detail;
             if (dataField == "name") {
@@ -38,7 +38,7 @@ function Documents({ documentData, customer }) {
         } catch (error) {
             console.log("handleCellClick: ", error);
         }
-    }
+    }, []);
 
     const columns = useMemo(() => {
         return getDocumentColumns(documentData, onUpdate);
