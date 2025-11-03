@@ -38,7 +38,7 @@ function useDocuments () {
             formData.append("fileInfo", JSON.stringify(documentInfo));
             const res = await services.createDocument(formData);
             if(res.message == "createDocument success"){
-                setDocuments(prev => [...prev, res.document]);
+                setDocuments(documents => [...documents, res.document]);
                 toast(res.message);
                 return;
             }
