@@ -30,6 +30,10 @@ export const formatCellValue = (value, columnType) => {
                 ? value.toLocaleString('en-US')
                 : value;
 
+        case 'url':
+            // Return object with type indicator for rendering as link
+            return { type: 'url', value };
+
         case 'text':
         default:
             return value;
@@ -56,6 +60,7 @@ export const evaluateCondition = (cellValue, operator, filterValue, columnType) 
 
     switch (columnType) {
         case 'text':
+        case 'url':
             const strValue = String(cellValue).toLowerCase();
             const strFilter = String(filterValue).toLowerCase();
             switch (operator) {

@@ -39,6 +39,7 @@ export const getOperatorsForType = (type) => {
             return NUMBER_OPERATORS;
         case 'date':
             return DATE_OPERATORS;
+        case 'url':
         case 'text':
         default:
             return TEXT_OPERATORS;

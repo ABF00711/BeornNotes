@@ -45,13 +45,30 @@ const TableRow = ({
             </td>
 
             {/* Regular Data Cells */}
-            {visibleColumns.map((column) => (
-                <td key={column.field} className="custom-table-cell">
-                    <span className="cell-content">
-                        {formatCellValue(row[column.field], column.type)}
-                    </span>
-                </td>
-            ))}
+            {visibleColumns.map((column) => {
+                const formattedValue = formatCellValue(row[column.field], column.type);
+                const isLink = formattedValue && typeof formattedValue === 'object' && formattedValue.type === 'url';
+                
+                return (
+                    <td key={column.field} className="custom-table-cell">
+                        {isLink ? (
+                            <a 
+                                href={formattedValue.value} 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                onClick={(e) => e.stopPropagation()}
+                                className="cell-link"
+                            >
+                                {formattedValue.value}
+                            </a>
+                        ) : (
+                            <span className="cell-content">
+                                {formattedValue}
+                            </span>
+                        )}
+                    </td>
+                );
+            })}
         </tr>
     );
 };
