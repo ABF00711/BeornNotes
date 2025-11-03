@@ -30,3 +30,8 @@
     width: 0px;
     height: 0px;
 }
+
+.smart-grid-summary-row-cell .summary-value{
+    color: black;
+    font-weight: bolder;
+}
