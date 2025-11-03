@@ -4,7 +4,7 @@ import useLayouts from "./useLayouts";
 import useSearchConfig from "./useSearchConfig";
 
 const useCustomers3 = () => {
-    const { searchpatterns } = useSearchpatterns;
+    const { searchpatterns } = useSearchpatterns();
     const { layouts } = useLayouts();
     const [labels, setLabels] = useState({});
     const [mandatoryFields, setMandatoryFields] = useState({});

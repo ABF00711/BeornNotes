@@ -23,7 +23,6 @@ function ContextProvider({ children }) {
     });
     const [isCollapsed, setIsCollapsed] = useState(false);
 
-    const [jobs, setJobs] = useState([]);
     const [documents, setDocuments] = useState([]);
     const [userTime, setUserTime] = useState(defaultUserTime);
 
@@ -50,7 +49,6 @@ function ContextProvider({ children }) {
             activeUrl: "/"
         });
         setIsCollapsed(false);
-        setJobs([]);
         setDocuments([]);
         setUserTime(defaultUserTime);
     }
@@ -66,14 +64,13 @@ function ContextProvider({ children }) {
         isCollapsed, setIsCollapsed,
         dynamicData, setDynamicData,
         currentInterface, setCurrentInterface,
-        jobs, setJobs,
         userTime, setUserTime,
         documents, setDocuments,
     }), [
         initializeStateData,
         userData, token, tableNames, searchConfig, menuItems,
         tabbedInterfaces, isCollapsed, dynamicData,
-        currentInterface, jobs, userTime, documents,
+        currentInterface, userTime, documents,
     ]);
 
     return (
