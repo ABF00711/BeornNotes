@@ -31,12 +31,7 @@ export const getDocumentColumns = (documentData, onUpdate) => {
                 label: documentData.labels.name,
                 dataField: 'name',
                 sortOrder: 'asc',
-                formatFunction(settings) {
-                    // Example: highlight age column
-                    settings.cell.background = settings.value > 30 ? "#badeffff" : "#77c2ffff";
-                    settings.cell.color = "#000";
-                    settings.cell.element.style.cursor = "pointer";
-                },
+                template: '<a href="#{{value}}">{{value}}</a>'
             },
             {
                 label: documentData.labels.description,
