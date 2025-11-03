@@ -17,6 +17,7 @@ function Documents({ documentData, customer }) {
     const [updateData, setUpdateData] = useState(null);
     const gridRef = useRef(null);
     const { documents, getDocuments, getOneDocument } = useDocuments();
+    const [isDataReady, setIsDataReady] = useState(false);
 
     const onUpdate = (data) => {
         setIsOpen(true);
@@ -43,15 +44,22 @@ function Documents({ documentData, customer }) {
         return getDocumentColumns(documentData, onUpdate);
     }, [])
 
+    const getInitData = async () => {
+        await getDocuments(customer);
+        setIsDataReady(true);
+    }
+
     useEffect(() => {
-        getDocuments(customer);
+        getInitData();
     }, [])
+
+    if (!isDataReady) return;
 
     return (
         <div className="documents">
             <div className="documents-main">
                 <Tabs className="documents-tabs">
-                    <TabItem label={`Document(${!documents?.length?0:documents.length})`}>
+                    <TabItem label={`Document(${!documents?.length ? 0 : documents.length})`}>
                         <div className="table-header">
                             <AddDocument formName={"Documents"} documentData={documentData} customer={customer} />
                             <DeleteDocument gridRef={gridRef} />
