@@ -106,7 +106,7 @@ function DynamicModal({ table_name, isOpen, setIsOpen, role, initData = {} }) {
 
                 {/* Fullname */}
                 <div className={`field-container ${errors.fullname ? 'has-error' : ''}`}>
-                    <label>{labels.fullname}</label>
+                    <label>{labels.fullname || "Fullname"}</label>
                     <div style={{ width: "60%" }}>
                         <Controller
                             name="fullname"
@@ -126,7 +126,7 @@ function DynamicModal({ table_name, isOpen, setIsOpen, role, initData = {} }) {
 
                 {/* Displayname */}
                 <div className={`field-container ${errors.displayname ? 'has-error' : ''}`}>
-                    <label>{labels.displayname}</label>
+                    <label>{labels.displayname || "Displayname"}</label>
                     <div style={{ width: "60%" }}>
                         <Controller
                             name="displayname"
@@ -146,7 +146,7 @@ function DynamicModal({ table_name, isOpen, setIsOpen, role, initData = {} }) {
 
                 {/* Birthday (Date Picker) */}
                 <div className={`field-container ${errors.birthday ? 'has-error' : ''}`}>
-                    <label>{labels.birthday}</label>
+                    <label>{labels.birthday || "Birthday"}</label>
                     <div style={{ width: "60%" }}>
                         <Controller
                             name="birthday"
@@ -171,7 +171,7 @@ function DynamicModal({ table_name, isOpen, setIsOpen, role, initData = {} }) {
 
                 {/* Age (Numeric Input) */}
                 <div className={`field-container ${errors.age ? 'has-error' : ''}`}>
-                    <label>{labels.age}</label>
+                    <label>{labels.age || "Age"}</label>
                     <div style={{ width: "60%" }}>
                         <Controller
                             name="age"
@@ -191,7 +191,7 @@ function DynamicModal({ table_name, isOpen, setIsOpen, role, initData = {} }) {
 
                 {/* Job (ComboBox) */}
                 <div className={`field-container ${errors.job ? 'has-error' : ''}`}>
-                    <label>{labels.job}</label>
+                    <label>{labels.job || "Job"}</label>
                     <div style={{ width: "60%" }}>
                         <Controller
                             name="job"
