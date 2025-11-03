@@ -145,7 +145,7 @@ function DocumentModal({ isOpen, setIsOpen, role, initData = null, documentData,
                 </div>
 
                 <div className={`field-container ${errors.description ? 'has-error' : ''}`}>
-                    <label>{documentData.labels.description}</label>
+                    <label>{documentData.labels.description || "Description"}</label>
                     <div style={{ width: "60%" }}>
                         <Controller
                             name="description"
@@ -164,7 +164,7 @@ function DocumentModal({ isOpen, setIsOpen, role, initData = null, documentData,
                 </div>
 
                 <div className={`field-container ${errors.name ? 'has-error' : ''}`}>
-                    <label>{documentData.labels.name}</label>
+                    <label>{documentData.labels.name || "Name"}</label>
                     <div style={{ width: "60%" }}>
                         {role === "update" && initData?.name && (
                             <div style={{ marginBottom: "8px", fontSize: "12px", color: "#666" }}>

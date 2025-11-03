@@ -28,13 +28,13 @@ export const getDocumentColumns = (documentData, onUpdate) => {
                 allowReorder: false,
             },
             {
-                label: documentData.labels.name,
+                label: documentData?.labels?.name || "Name",
                 dataField: 'name',
                 sortOrder: 'asc',
                 template: '<a href="#{{value}}">{{value}}</a>'
             },
             {
-                label: documentData.labels.description,
+                label: documentData?.labels?.description || "Description",
                 dataField: 'description',
             }
         ]
