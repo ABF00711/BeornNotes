@@ -23,11 +23,15 @@ function useTabbedInterfaces() {
 
     const removeTabbedInterface = (btnInfo) => {
         try {
-            const currentTabIndex = currentInterface.tabbedBtns.findIndex(btns => btns.title == btnInfo.title);
-            const nextTabBtn = currentInterface.tabbedBtns[currentTabIndex - 1];
-            let nextActiveUrl = "/";
-            if (nextTabBtn) {
-                nextActiveUrl = nextTabBtn.path;
+            const currentTabbedUrl = JSON.parse(localStorage.getItem("currentInterface") || null).activeUrl;
+            let nextActiveUrl = currentTabbedUrl;
+            
+            const targetTabIndex = currentInterface.tabbedBtns.findIndex(btns => btns.title == btnInfo.title);
+            if(btnInfo.path == currentTabbedUrl){
+                const nextTabBtn = currentInterface.tabbedBtns[targetTabIndex - 1];
+                if (nextTabBtn) {
+                    nextActiveUrl = nextTabBtn.path;
+                }
             }
             const tabbedInterface = {
                 ...currentInterface,
