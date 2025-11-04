@@ -45,9 +45,10 @@ const CustomTable = ({
             const hasAnyWidth = tableColumns.some(col => col.width);
             if (!hasAnyWidth) {
                 // Initialize with default widths
+                const tableWidth = document.getElementsByClassName("table-header-section")[0].offsetWidth;
                 const initializedColumns = tableColumns.map(col => ({
                     ...col,
-                    width: col.width || '150px'
+                    width: col.width || `${(tableWidth - 180)/tableColumns?.length}px`
                 }));
                 setDisplayColumns(initializedColumns);
             } else {
@@ -58,9 +59,9 @@ const CustomTable = ({
 
     // Custom hooks for functionality
     const { draggedColumn, handleDragStart, handleDragOver, handleDrop } = useColumnReorder(displayColumns, setDisplayColumns);
-    
+
     const { resizingColumn, handleRightResizeStart } = useColumnResize(displayColumns, setDisplayColumns);
-    
+
     const {
         columnVisibilities,
         showColumnMenu,
@@ -70,11 +71,11 @@ const CustomTable = ({
         resetColumnVisibility,
         getVisibleColumns
     } = useColumnVisibility(displayColumns);
-    
+
     const { selectedRows, handleSelectAll, handleRowSelect, getSelectionState } = useRowSelection(onSelectionChange);
-    
+
     const { sortConfig, sortedData, handleSort, handleClearSort } = useSorting(displayData);
-    
+
     const {
         columnFilters,
         activeFilterMenu,
