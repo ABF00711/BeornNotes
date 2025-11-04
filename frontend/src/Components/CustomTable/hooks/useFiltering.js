@@ -167,11 +167,45 @@ const useFiltering = (sortedData, displayColumns) => {
                     }
                 }));
             } else {
-                updateFilterCondition(field, 0, { value });
+                // If previously applied via Excel filter (in/notIn), replace with text/number operator
+                const current = columnFilters[field];
+                const currentOp = current?.conditions?.[0]?.operator;
+                if (currentOp === 'in' || currentOp === 'notIn') {
+                    setColumnFilters(prev => ({
+                        ...prev,
+                        [field]: {
+                            conditions: [{
+                                operator: columnType === 'number' ? 'equal' : columnType === 'date' ? 'equal' : 'contains',
+                                value
+                            }],
+                            logic: 'and'
+                        }
+                    }));
+                } else {
+                    updateFilterCondition(field, 0, { value });
+                }
             }
         } else {
             clearColumnFilter(field);
         }
+    };
+
+    const applyExcelFilter = (field, values, columnType) => {
+        setColumnFilters(prev => {
+            // If all values selected or none provided, clear filter
+            if (!values || values.length === 0) {
+                const { [field]: removed, ...rest } = prev;
+                return rest;
+            }
+            return {
+                ...prev,
+                [field]: {
+                    conditions: [{ operator: 'in', value: values }],
+                    logic: 'and'
+                }
+            };
+        });
+        setActiveFilterMenu(null);
     };
 
     return {
@@ -186,7 +220,8 @@ const useFiltering = (sortedData, displayColumns) => {
         applyColumnFilter,
         clearColumnFilter,
         clearAllFilters,
-        handleQuickFilterChange
+        handleQuickFilterChange,
+        applyExcelFilter
     };
 };
 

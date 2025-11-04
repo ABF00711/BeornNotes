@@ -87,7 +87,8 @@ const CustomTable = ({
         applyColumnFilter,
         clearColumnFilter,
         clearAllFilters,
-        handleQuickFilterChange
+        handleQuickFilterChange,
+        applyExcelFilter
     } = useFiltering(sortedData, displayColumns);
 
     // Get visible columns
@@ -166,6 +167,8 @@ const CustomTable = ({
                                     onApplyFilter={applyColumnFilter}
                                     onClearFilter={clearColumnFilter}
                                     onInitializeFilter={initializeFilter}
+                                    dataForMenu={tableData}
+                                    onApplyExcelFilter={applyExcelFilter}
                                 />
                             ))}
                         </tr>
@@ -176,6 +179,8 @@ const CustomTable = ({
                             columnFilters={columnFilters}
                             onFilterChange={handleQuickFilterChange}
                             onClearFilter={clearColumnFilter}
+                            onUpdateFilterCondition={updateFilterCondition}
+                            onInitializeFilter={initializeFilter}
                         />
                     </thead>
 

@@ -7,6 +7,8 @@ export const TEXT_OPERATORS = [
     { value: 'notEquals', label: 'not equals' },
     { value: 'startsWith', label: 'starts with' },
     { value: 'endsWith', label: 'ends with' },
+    { value: 'in', label: 'in (selected)' },
+    { value: 'notIn', label: 'not in (selected)' },
     { value: 'empty', label: 'empty' },
     { value: 'notEmpty', label: 'not empty' }
 ];
@@ -18,6 +20,8 @@ export const NUMBER_OPERATORS = [
     { value: 'lessThanOrEqual', label: 'less than or equal' },
     { value: 'greaterThan', label: 'greater than' },
     { value: 'greaterThanOrEqual', label: 'greater than or equal' },
+    { value: 'in', label: 'in (selected)' },
+    { value: 'notIn', label: 'not in (selected)' },
     { value: 'empty', label: 'empty' },
     { value: 'notEmpty', label: 'not empty' }
 ];

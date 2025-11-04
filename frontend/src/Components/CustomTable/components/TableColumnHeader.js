@@ -21,7 +21,10 @@ const TableColumnHeader = ({
     onToggleFilterLogic,
     onApplyFilter,
     onClearFilter,
-    onInitializeFilter
+    onInitializeFilter,
+    // excel filter additions
+    dataForMenu,
+    onApplyExcelFilter
 }) => {
     const hasFilter = columnFilters[column.field] && columnFilters[column.field].conditions.length > 0;
 
@@ -72,13 +75,9 @@ const TableColumnHeader = ({
                     columnFilters={columnFilters}
                     onSort={onSort}
                     onClearSort={onClearSort}
-                    onUpdateFilterCondition={onUpdateFilterCondition}
-                    onAddFilterCondition={onAddFilterCondition}
-                    onRemoveFilterCondition={onRemoveFilterCondition}
-                    onToggleFilterLogic={onToggleFilterLogic}
-                    onApplyFilter={onApplyFilter}
+                    dataForMenu={dataForMenu}
+                    onApplyExcelFilter={onApplyExcelFilter}
                     onClearFilter={onClearFilter}
-                    onInitializeFilter={onInitializeFilter}
                 />
             )}
         </th>
