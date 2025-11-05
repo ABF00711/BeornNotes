@@ -53,10 +53,9 @@ const TableRow = ({
                     <td key={column.field} className="custom-table-cell">
                         {isLink ? (
                             <a 
-                                href={formattedValue.value} 
                                 target="_blank" 
                                 rel="noopener noreferrer"
-                                onClick={(e) => e.stopPropagation()}
+                                onClick={(e) => column.onClickUrl(row)}
                                 className="cell-link"
                             >
                                 {formattedValue.value}
