@@ -15,7 +15,7 @@ import Customers2 from './Pages/Customers2';
 import Customers from './Pages/Customers';
 import Layout from './Pages/Layout';
 import UpdatePage from './Pages/UpdatePage';
-import CustomTableDemo from './Pages/CustomTableDemo';
+import Customers3 from './Pages/Customers3';
 import { LayoutProvider } from './Context/LayoutContex';
 import { SearchPatternProvider } from './Context/SearchPatternContext';
 import { JobsProvider } from './Context/JobsContext';
@@ -49,7 +49,7 @@ function App() {
                     <Route path="/summary_report" element={<SummaryReport />} />
                     <Route path="/inventory_report" element={<InventoryReport />} />
                     <Route path="/updateCustomer" element={<UpdatePage />} />
-                    <Route path="/testTable" element={<CustomTableDemo />} />
+                    <Route path="/testTable" element={<Customers3 />} />
                   </Route>
                   <Route path="/register" element={<Register />} />
                   <Route path="/login" element={<Login />} />
