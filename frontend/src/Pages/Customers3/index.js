@@ -2,28 +2,14 @@ import React, { useEffect, useMemo, useState } from 'react';
 import CustomTable from '../../Components/CustomTable';
 import './style.css';
 import useDynamicData from '../../Hooks/useDynamicData';
-import useSmartGrid from '../../Hooks/useSmartGrid';
 import useSearchConfig from '../../Hooks/useSearchConfig';
 
-const CustomTableDemo = () => {
-    const {dynamicData, getDynamicData} = useDynamicData();
-    const {searchConfig, getSearchConfigData} = useSearchConfig();
+const Customers3 = () => {
+    const { dynamicData, tableNames, getDynamicData, getColumns } = useDynamicData();
+    const { getSearchConfigData } = useSearchConfig();
     const columns = useMemo(() => {
-        const _columns = [];
-        if(searchConfig){
-            searchConfig.map((config) => {
-                if(config.table_name === "customers"){
-                    const column = {};
-                    column.field = config.field_name;
-                    column.header = config.field_label;
-                    column.type = config.field_type;
-                    if(column.type === "combobox") column.type = "text"
-                    _columns.push(column);
-                }
-            });
-        }
-        return _columns;
-    }, [searchConfig]);
+        return getColumns("customers")
+    }, [tableNames]);
 
     const handleRowClick = (row, index) => {
         console.log('Row clicked:', row, 'Index:', index);
@@ -67,5 +53,5 @@ const CustomTableDemo = () => {
     );
 };
 
-export default CustomTableDemo;
+export default Customers3;
 
