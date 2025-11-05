@@ -2,18 +2,20 @@ import { useContext, useMemo } from "react"
 import { MyContext } from "../Context"
 import services from "../Services";
 import { toast } from "react-toastify";
+import useDocuments from "./useDocuments";
 
 function useDynamicData() {
     const { dynamicData, setDynamicData, searchConfig, token, tableNames, setTableNames } = useContext(MyContext);
+    const {openDocument} = useDocuments();
 
     const statusBar = useMemo(() => ({
-            statusPanels: [
-                {
-                    statusPanel: 'agTotalAndFilteredRowCountComponent',
-                    align: 'left',
-                },
-            ],
-        }), []);
+        statusPanels: [
+            {
+                statusPanel: 'agTotalAndFilteredRowCountComponent',
+                align: 'left',
+            },
+        ],
+    }), []);
 
     const getDynamicData = async (formName) => {
         try {
@@ -33,7 +35,7 @@ function useDynamicData() {
     const createDynamicData = async (tablename, newData) => {
         try {
             for (const key in newData) {
-                if(!newData[key]){
+                if (!newData[key]) {
                     newData[key] = null;
                 }
             }
@@ -54,7 +56,7 @@ function useDynamicData() {
     const updateDynamicData = async (tablename, newData) => {
         try {
             for (const key in newData) {
-                if(!newData[key]){
+                if (!newData[key]) {
                     newData[key] = null;
                 }
             }
@@ -83,11 +85,11 @@ function useDynamicData() {
             console.log("deleteDynamicData: ", error);
         }
     }
-    
+
     const searchDynamicData = async (formName, searchKey) => {
         try {
             const res = await services.searchDynamicData(formName, searchKey);
-            if(res.message === "searchDynamicData success"){
+            if (res.message === "searchDynamicData success") {
                 setDynamicData(res.dynamicData);
                 setTableNames((current) => ({
                     ...current,
@@ -122,7 +124,7 @@ function useDynamicData() {
     };
 
     // Helper function to create case-insensitive text comparator for set filter
-    const createTextComparator = () => (a, b) => 
+    const createTextComparator = () => (a, b) =>
         a?.toString().toLowerCase().localeCompare(b?.toString().toLowerCase());
 
     // Helper function to create date column definition
@@ -182,7 +184,7 @@ function useDynamicData() {
                                     const lower = s.toLowerCase();
                                     const num = parseInt(s, 10);
                                     const full = [
-                                        'January','February','March','April','May','June','July','August','September','October','November','December'
+                                        'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'
                                     ];
                                     // Numeric month like "2" or "02"
                                     if (!Number.isNaN(num) && num >= 1 && num <= 12) return full[num - 1];
@@ -289,14 +291,32 @@ function useDynamicData() {
         }
     };
 
-    return { 
-            tableNames, dynamicData, setDynamicData, 
-            getDynamicData, getColumnDefs, 
-            createDynamicData, updateDynamicData, 
-            deleteDynamicData, statusBar,
-            searchDynamicData 
+    const getColumns = (tablename) => {
+        const _columns = [];
+        if (searchConfig) {
+            searchConfig.map((config) => {
+                if (config.table_name === tablename) {
+                    const column = {};
+                    column.field = config.field_name;
+                    column.header = config.field_label;
+                    column.type = config.field_type;
+                    if (column.type === "combobox") column.type = "text"
+                    if (column.type === "url") column.onClickUrl = openDocument
+                    _columns.push(column);
+                }
+            });
         }
-    ;
+        return _columns;
+    }
+
+    return {
+        tableNames, dynamicData, setDynamicData,
+        getDynamicData, getColumnDefs,
+        createDynamicData, updateDynamicData,
+        deleteDynamicData, statusBar,
+        searchDynamicData,
+        getColumns
+    }
 }
 
 export default useDynamicData;
