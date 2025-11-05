@@ -36,7 +36,7 @@ function SmartGrid(props) {
     useEffect(() => {
         if (gridRef.current && isGridReady) {
             gridRef.current.stateSettings.current = `smartGrid${formName}`;
-            const savedState = JSON.parse((localStorage.getItem(`smartGrid${formName}`) || griColumnState?.state) || null);
+            const savedState = JSON.parse(griColumnState?.state || null);
             const currentState = gridRef.current?.getState();
             if (savedState) {
                 if (!areArraysEqual(savedState.columns, currentState.columns)) {
