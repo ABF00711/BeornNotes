@@ -40,13 +40,14 @@ function SmartGrid(props) {
             const currentState = gridRef.current?.getState();
             if (savedState) {
                 if (!areArraysEqual(savedState.columns, currentState.columns)) {
+                    console.log("savedState: ", savedState);
                     setTimeout(() => {
                         gridRef.current?.loadState(savedState);
                     }, 100);
                 }
             }
         }
-    }, [isGridReady, formName, griColumnState, customData])
+    }, [isGridReady, griColumnState, customData])
 
 
     const initData = async () => {
@@ -57,7 +58,7 @@ function SmartGrid(props) {
 
     useEffect(() => {
         initData();
-    }, [])
+    }, [formName])
 
     useEffect(() => {
         return () => {
@@ -73,7 +74,7 @@ function SmartGrid(props) {
 
     return (
         <div className={isGridReady ? "smartGridTable" : "isNotReady"}>
-            <Grid id={`smartGrid${formName}`}
+            <Grid id={formName}
                 ref={gridCallbackRef}
                 appearance={gridState.appearance}
                 dataSource={customData}
