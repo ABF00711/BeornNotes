@@ -19,8 +19,10 @@ import TableHeader from './components/TableHeader';
 import TableColumnHeader from './components/TableColumnHeader';
 import TableFilterRow from './components/TableFilterRow';
 import TableBody from './components/TableBody';
+import useCustomTable from '../../Hooks/useCustomTable';
 
 const CustomTable = ({
+    formName = "",
     columns = [],
     data = [],
     onRowClick = () => { },
@@ -30,8 +32,10 @@ const CustomTable = ({
     onDelete = () => { },
     filteredData = null
 }) => {
+    const { getGridState, saveGridState } = useCustomTable();
+
     // Memoize table configuration
-    const tableColumns = useMemo(() => columns.length > 0 ? columns : [], [columns]);
+    const [tableColumns, setTableColumns] = useState([]);
     const tableData = useMemo(() => data.length > 0 ? data : [], [data]);
     const displayData = filteredData !== null ? filteredData : tableData;
 
@@ -48,7 +52,7 @@ const CustomTable = ({
                 const tableWidth = document.getElementsByClassName("table-header-section")[0].offsetWidth;
                 const initializedColumns = tableColumns.map(col => ({
                     ...col,
-                    width: col.width || `${(tableWidth - 180)/tableColumns?.length}px`
+                    width: col.width || `${(tableWidth - 180) / tableColumns?.length}px`
                 }));
                 setDisplayColumns(initializedColumns);
             } else {
@@ -70,7 +74,7 @@ const CustomTable = ({
         toggleColumnVisibility,
         resetColumnVisibility,
         getVisibleColumns
-    } = useColumnVisibility(displayColumns);
+    } = useColumnVisibility(displayColumns, setDisplayColumns);
 
     const { selectedRows, handleSelectAll, handleRowSelect, getSelectionState } = useRowSelection(onSelectionChange);
 
@@ -94,9 +98,25 @@ const CustomTable = ({
 
     // Get visible columns
     const visibleColumns = getVisibleColumns();
-    
+
     // Get selection state
     const { allRowsSelected, someRowsSelected } = getSelectionState(filteredAndSortedData);
+
+    const getTableColumns = async () => {
+        const savedColumns = await getGridState(formName);
+        const parsedColumns = JSON.parse(savedColumns?.state);
+        setTableColumns(parsedColumns.length > 0 ? parsedColumns : (columns.length > 0 ? columns : []));
+    }
+
+    useEffect(() => {
+        if (resizingColumn === null && draggedColumn === null && displayColumns.length > 0) {
+            saveGridState(JSON.stringify(displayColumns), formName)
+        }
+    }, [resizingColumn, draggedColumn])
+
+    useEffect(() => {
+        getTableColumns();
+    }, [columns])
 
     return (
         <div className="custom-table-container">
