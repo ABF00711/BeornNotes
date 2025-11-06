@@ -40,6 +40,7 @@ const Customers3 = () => {
         <div className="custom-table-demo-page">
             <div className="demo-content">
                 <CustomTable
+                    formName='Customers3'
                     onRowClick={handleRowClick}
                     onSelectionChange={handleSelectionChange}
                     onEdit={handleEdit}
