@@ -46,7 +46,7 @@ function SmartGrid(props) {
                 }
             }
         }
-    }, [isGridReady, formName, griColumnState])
+    }, [isGridReady, formName, griColumnState, customData])
 
 
     const initData = async () => {
