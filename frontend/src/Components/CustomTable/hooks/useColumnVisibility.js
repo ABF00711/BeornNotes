@@ -24,7 +24,7 @@ const useColumnVisibility = (displayColumns) => {
     const toggleColumnVisibility = (field) => {
         setColumnVisibilities(prev => ({
             ...prev,
-            [field]: !prev[field]
+            [field]: prev[field] === undefined ? false : !prev[field]
         }));
     };
 
