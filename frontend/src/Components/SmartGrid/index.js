@@ -40,7 +40,6 @@ function SmartGrid(props) {
             const currentState = gridRef.current?.getState();
             if (savedState) {
                 if (!areArraysEqual(savedState.columns, currentState.columns)) {
-                    console.log("savedState: ", savedState);
                     setTimeout(() => {
                         gridRef.current?.loadState(savedState);
                     }, 100);
