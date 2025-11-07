@@ -9,7 +9,7 @@ function useSmartGrid() {
   const getSmartColumns = (onFunc, tableName) => {
     try {
       if (!searchConfig) return [];
-      const columns = [];
+      let columns = [];
 
       columns.push({
         label: "Actions",
@@ -40,21 +40,20 @@ function useSmartGrid() {
 
       searchConfig.forEach((configData) => {
         if (configData.table_name == tableName) {
-          let dataType = configData.field_type;
-
-          // 🔹 Fix mappings
-          if (dataType === "combobox") dataType = "string";
-          if (dataType === "text") dataType = "string";
-          if (dataType === "number") dataType = "number";
-          if (dataType === "date") dataType = "date";
 
           const column = {
             label: configData.field_label,
             dataField: configData.field_name,
-            dataType
+            dataType: configData.field_type
           };
-
-          if (column.dataField == "age") {
+          
+          if (column.dataType === "combobox") {
+            column.dataType = 'string'
+          }
+          if (column.dataType === "text") {
+            column.dataType = "string"
+          };
+          if (column.dataType === "number") {
             column.formatFunction = (settings) => {
               const value = settings.value;
               settings.value = (value === null || value === undefined || value === 0)
@@ -62,10 +61,10 @@ function useSmartGrid() {
                 : value;
             };
           }
-
-          if (dataType === "date") {
+          if (column.dataType === "date") {
             column.cellsFormat = "MM/dd/yyyy";
           }
+
           columns.push(column);
         }
       });
