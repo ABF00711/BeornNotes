@@ -25,7 +25,6 @@ function SmartGrid(props) {
         }, 500);
     }
 
-    // Use callback ref to detect when grid is mounted
     const gridCallbackRef = (gridInstance) => {
         if (gridInstance) {
             gridRef.current = gridInstance;
@@ -46,7 +45,7 @@ function SmartGrid(props) {
                 }
             }
         }
-    }, [isGridReady, griColumnState, customData])
+    }, [isGridReady, formName, griColumnState, customData])
 
 
     const initData = async () => {
