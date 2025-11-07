@@ -8,7 +8,7 @@ function useSmartGrid() {
 
   const getSmartColumns = (onFunc, tableName) => {
     try {
-      if (!searchConfig) return [];
+      if (!searchConfig || searchConfig.length === 0) return [];
       let columns = [];
 
       columns.push({
