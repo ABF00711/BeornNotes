@@ -48,22 +48,22 @@ const CustomTable = ({
     useEffect(() => {
         if (tableColumns.length > 0) {
             const hasAnyWidth = tableColumns.some(col => col.width);
-            
+
             const initializedColumns = tableColumns.map(col => {
                 const column = { ...col };
-                
+
                 if (!hasAnyWidth && !column.width) {
                     const tableWidth = document.getElementsByClassName("table-header-section")[0]?.offsetWidth || wholeWidth;
                     column.width = `${(tableWidth - actionAndCheckBoxWidth) / tableColumns?.length}px`;
                 }
-                
+
                 if (column.visible === undefined) {
                     column.visible = true;
                 }
-                
+
                 return column;
             });
-            
+
             setDisplayColumns(initializedColumns);
         }
     }, [tableColumns]);
@@ -116,11 +116,18 @@ const CustomTable = ({
     }
 
     useEffect(() => {
-        if (resizingColumn === null && draggedColumn === null && columnVisibleChanged && displayColumns.length > 0) {
+        if (resizingColumn === null && draggedColumn === null && displayColumns.length > 0) {
             saveGridState(JSON.stringify(displayColumns), formName);
             setColumnVisibleChanged(false);
         }
-    }, [resizingColumn, draggedColumn, columnVisibleChanged])
+    }, [resizingColumn, draggedColumn])
+
+    useEffect(() => {
+        if (columnVisibleChanged && displayColumns.length > 0) {
+            saveGridState(JSON.stringify(displayColumns), formName);
+            setColumnVisibleChanged(false);
+        }
+    }, [columnVisibleChanged])
 
     useEffect(() => {
         getTableColumns();
