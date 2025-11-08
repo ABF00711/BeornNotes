@@ -21,6 +21,9 @@ import TableFilterRow from './components/TableFilterRow';
 import TableBody from './components/TableBody';
 import useCustomTable from '../../Hooks/useCustomTable';
 
+const wholeWidth = 1200;
+const actionAndCheckBoxWidth = 180;
+
 const CustomTable = ({
     formName = "",
     columns = [],
@@ -50,8 +53,8 @@ const CustomTable = ({
                 const column = { ...col };
                 
                 if (!hasAnyWidth && !column.width) {
-                    const tableWidth = document.getElementsByClassName("table-header-section")[0]?.offsetWidth || 1200;
-                    column.width = `${(tableWidth - 180) / tableColumns?.length}px`;
+                    const tableWidth = document.getElementsByClassName("table-header-section")[0]?.offsetWidth || wholeWidth;
+                    column.width = `${(tableWidth - actionAndCheckBoxWidth) / tableColumns?.length}px`;
                 }
                 
                 if (column.visible === undefined) {
@@ -108,8 +111,8 @@ const CustomTable = ({
 
     const getTableColumns = async () => {
         const savedColumns = await getGridState(formName);
-        const parsedColumns = JSON.parse(savedColumns?.state);
-        setTableColumns(parsedColumns.length > 0 ? parsedColumns : (columns.length > 0 ? columns : []));
+        const parsedColumns = JSON.parse(savedColumns?.state || null);
+        setTableColumns(parsedColumns?.length > 0 ? parsedColumns : (columns.length > 0 ? columns : []));
     }
 
     useEffect(() => {
