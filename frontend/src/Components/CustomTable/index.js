@@ -30,7 +30,7 @@ const CustomTable = ({
     onSelectionChange = () => { },
     onEdit = () => { },
     onDelete = () => { },
-    filteredData = null
+    filteredData = null,
 }) => {
     const { getGridState, saveGridState } = useCustomTable();
 
@@ -39,35 +39,39 @@ const CustomTable = ({
     const tableData = useMemo(() => data.length > 0 ? data : [], [data]);
     const displayData = filteredData !== null ? filteredData : tableData;
 
-    // Local state for column configuration
     const [displayColumns, setDisplayColumns] = useState(tableColumns);
     const tableRef = useRef(null);
 
-    // Sync displayColumns when tableColumns changes
     useEffect(() => {
         if (tableColumns.length > 0) {
             const hasAnyWidth = tableColumns.some(col => col.width);
-            if (!hasAnyWidth) {
-                // Initialize with default widths
-                const tableWidth = document.getElementsByClassName("table-header-section")[0].offsetWidth;
-                const initializedColumns = tableColumns.map(col => ({
-                    ...col,
-                    width: col.width || `${(tableWidth - 180) / tableColumns?.length}px`
-                }));
-                setDisplayColumns(initializedColumns);
-            } else {
-                setDisplayColumns(tableColumns);
-            }
+            
+            const initializedColumns = tableColumns.map(col => {
+                const column = { ...col };
+                
+                if (!hasAnyWidth && !column.width) {
+                    const tableWidth = document.getElementsByClassName("table-header-section")[0]?.offsetWidth || 1200;
+                    column.width = `${(tableWidth - 180) / tableColumns?.length}px`;
+                }
+                
+                if (column.visible === undefined) {
+                    column.visible = true;
+                }
+                
+                return column;
+            });
+            
+            setDisplayColumns(initializedColumns);
         }
     }, [tableColumns]);
 
-    // Custom hooks for functionality
     const { draggedColumn, handleDragStart, handleDragOver, handleDrop } = useColumnReorder(displayColumns, setDisplayColumns);
 
     const { resizingColumn, handleRightResizeStart } = useColumnResize(displayColumns, setDisplayColumns);
 
     const {
-        columnVisibilities,
+        columnVisibleChanged,
+        setColumnVisibleChanged,
         showColumnMenu,
         columnMenuRef,
         setShowColumnMenu,
@@ -109,10 +113,11 @@ const CustomTable = ({
     }
 
     useEffect(() => {
-        if (resizingColumn === null && draggedColumn === null && displayColumns.length > 0) {
-            saveGridState(JSON.stringify(displayColumns), formName)
+        if (resizingColumn === null && draggedColumn === null && columnVisibleChanged && displayColumns.length > 0) {
+            saveGridState(JSON.stringify(displayColumns), formName);
+            setColumnVisibleChanged(false);
         }
-    }, [resizingColumn, draggedColumn])
+    }, [resizingColumn, draggedColumn, columnVisibleChanged])
 
     useEffect(() => {
         getTableColumns();
@@ -131,7 +136,6 @@ const CustomTable = ({
                 showColumnMenu={showColumnMenu}
                 columnMenuRef={columnMenuRef}
                 displayColumns={displayColumns}
-                columnVisibilities={columnVisibilities}
                 onToggleColumnMenu={() => setShowColumnMenu(!showColumnMenu)}
                 onToggleColumnVisibility={toggleColumnVisibility}
                 onResetColumnVisibility={resetColumnVisibility}

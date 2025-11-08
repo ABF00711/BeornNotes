@@ -2,15 +2,13 @@ import { useState, useRef, useEffect } from 'react';
 
 /**
  * Custom hook for column visibility management
+ * Uses visible property on each column instead of separate state
  */
-const useColumnVisibility = (displayColumns) => {
-    const [columnVisibilities, setColumnVisibilities] = useState(() =>
-        displayColumns.reduce((acc, col) => ({ ...acc, [col.field]: true }), {})
-    );
+const useColumnVisibility = (displayColumns, setDisplayColumns) => {
     const [showColumnMenu, setShowColumnMenu] = useState(false);
     const columnMenuRef = useRef(null);
+    const [columnVisibleChanged, setColumnVisibleChanged] = useState(false);
 
-    // Close column menu when clicking outside
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (columnMenuRef.current && !columnMenuRef.current.contains(event.target)) {
@@ -22,32 +20,51 @@ const useColumnVisibility = (displayColumns) => {
     }, []);
 
     const toggleColumnVisibility = (field) => {
-        setColumnVisibilities(prev => ({
-            ...prev,
-            [field]: prev[field] === undefined ? false : !prev[field]
-        }));
+        setDisplayColumns(prevColumns => {
+            const updatedColumns = prevColumns.map(col => {
+                if (col.field === field) {
+                    const currentVisible = col.visible === undefined ? true : col.visible;
+                    return {
+                        ...col,
+                        visible: !currentVisible
+                    };
+                }
+                return col;
+            });
+            
+            setColumnVisibleChanged(true);
+            return updatedColumns;
+        });
     };
 
     const resetColumnVisibility = () => {
-        const resetVisibilities = displayColumns.reduce((acc, col) => {
-            if (col.field !== 'checkbox' && col.field !== 'actions') {
-                acc[col.field] = true;
-            }
-            return acc;
-        }, {});
-        setColumnVisibilities(resetVisibilities);
+        setDisplayColumns(prevColumns => {
+            const updatedColumns = prevColumns.map(col => {
+                if (col.field !== 'checkbox' && col.field !== 'actions') {
+                    return {
+                        ...col,
+                        visible: true
+                    };
+                }
+                return col;
+            });
+            
+            setColumnVisibleChanged(true);
+            return updatedColumns;
+        });
     };
 
     const getVisibleColumns = () => {
         return displayColumns.filter(col =>
             col.field !== 'checkbox' && 
             col.field !== 'actions' && 
-            columnVisibilities[col.field] !== false
+            col.visible !== false
         );
     };
 
     return {
-        columnVisibilities,
+        columnVisibleChanged,
+        setColumnVisibleChanged,
         showColumnMenu,
         columnMenuRef,
         setShowColumnMenu,

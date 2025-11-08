@@ -4,7 +4,6 @@ const ColumnVisibilityMenu = ({
     showMenu,
     menuRef,
     displayColumns,
-    columnVisibilities,
     onToggleVisibility,
     onReset
 }) => {
@@ -20,7 +19,7 @@ const ColumnVisibilityMenu = ({
                         <label key={column.field} className="menu-item">
                             <input
                                 type="checkbox"
-                                checked={columnVisibilities[column.field] !== false}
+                                checked={column.visible !== false}
                                 onChange={() => onToggleVisibility(column.field)}
                             />
                             <span>{column.header}</span>

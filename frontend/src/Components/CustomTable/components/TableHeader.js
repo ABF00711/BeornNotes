@@ -9,7 +9,6 @@ const TableHeader = ({
     showColumnMenu,
     columnMenuRef,
     displayColumns,
-    columnVisibilities,
     onToggleColumnMenu,
     onToggleColumnVisibility,
     onResetColumnVisibility,
@@ -104,7 +103,6 @@ const TableHeader = ({
                     showMenu={showColumnMenu}
                     menuRef={columnMenuRef}
                     displayColumns={displayColumns}
-                    columnVisibilities={columnVisibilities}
                     onToggleVisibility={onToggleColumnVisibility}
                     onReset={onResetColumnVisibility}
                 />
