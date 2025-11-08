@@ -6,7 +6,8 @@ import { useState } from 'react';
 const useColumnReorder = (displayColumns, setDisplayColumns) => {
     const [draggedColumn, setDraggedColumn] = useState(null);
 
-    const handleDragStart = (e, columnIndex) => {
+    const handleDragStart = (e, field) => {
+        const columnIndex = displayColumns.findIndex(column => column.field === field);
         setDraggedColumn(columnIndex);
         e.dataTransfer.effectAllowed = 'move';
     };
@@ -16,9 +17,10 @@ const useColumnReorder = (displayColumns, setDisplayColumns) => {
         e.dataTransfer.dropEffect = 'move';
     };
 
-    const handleDrop = (e, dropIndex) => {
+    const handleDrop = (e, field) => {
         e.preventDefault();
         if (draggedColumn === null) return;
+        const dropIndex = displayColumns.findIndex(column => column.field === field);
 
         const newColumns = [...displayColumns];
         const draggedCol = newColumns[draggedColumn];

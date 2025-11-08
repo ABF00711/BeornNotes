@@ -33,9 +33,9 @@ const TableColumnHeader = ({
             className={`custom-table-header-cell ${isDragging ? 'dragging' : ''}`}
             style={{ width: column.width, minWidth: column.width, maxWidth: column.width, position: 'relative' }}
             draggable
-            onDragStart={(e) => onDragStart(e, index)}
+            onDragStart={(e) => onDragStart(e, column.field)}
             onDragOver={onDragOver}
-            onDrop={(e) => onDrop(e, index)}
+            onDrop={(e) => onDrop(e, column.field)}
         >
             <div className="header-content" onClick={() => onSort(column.field, column.type)}>
                 <span className="header-text">{column.header}</span>

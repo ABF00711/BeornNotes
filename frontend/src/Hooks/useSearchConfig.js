@@ -6,7 +6,6 @@ function useSearchConfig () {
     const {searchConfig, setSearchConfig} = useContext(MyContext);
 
     const getSearchConfigData = async () => {
-        console.log("getSearchConfigData is called!")
         try {
             const res = await services.getSearchConfig();
             if(res.message == "getSearchConfigData success"){
