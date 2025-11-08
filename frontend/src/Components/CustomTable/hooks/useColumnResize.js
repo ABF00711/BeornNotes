@@ -29,8 +29,9 @@ const useColumnResize = (displayColumns, setDisplayColumns) => {
             
             if (newWidth > 50) {
                 const updatedColumns = [...displayColumns];
-                updatedColumns[columnIndex] = {
-                    ...updatedColumns[columnIndex],
+                const updatedColumnIndex = displayColumns.findIndex(col => col.field === column.field);
+                updatedColumns[updatedColumnIndex] = {
+                    ...updatedColumns[updatedColumnIndex],
                     width: `${newWidth}px`
                 };
                 setDisplayColumns(updatedColumns);
