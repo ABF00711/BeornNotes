@@ -1,7 +1,9 @@
 import React from 'react';
 import ColumnVisibilityMenu from './ColumnVisibilityMenu';
+import SmartLayouts from './Layouts';
 
 const TableHeader = ({
+    formName,
     selectedRowsCount,
     totalRows,
     filteredRows,
@@ -12,7 +14,8 @@ const TableHeader = ({
     onToggleColumnMenu,
     onToggleColumnVisibility,
     onResetColumnVisibility,
-    onClearAllFilters
+    onClearAllFilters,
+    setDisplayColumns
 }) => {
     return (
         <div className="table-header-section">
@@ -46,20 +49,7 @@ const TableHeader = ({
                     Delete
                 </button>
 
-                {/* Layout Button */}
-                <button
-                    className="header-action-btn layout-btn"
-                    onClick={() => {/* TODO: Implement layout management */ }}
-                    title="Save/Load Layout (Column Width, Order, Visibility)"
-                >
-                    <svg className="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <rect x="3" y="3" width="7" height="7"></rect>
-                        <rect x="14" y="3" width="7" height="7"></rect>
-                        <rect x="14" y="14" width="7" height="7"></rect>
-                        <rect x="3" y="14" width="7" height="7"></rect>
-                    </svg>
-                    Layout
-                </button>
+                <SmartLayouts formName={formName} displayColumns={displayColumns} setDisplayColumns={setDisplayColumns} />
 
                 {/* Search Button */}
                 <button
