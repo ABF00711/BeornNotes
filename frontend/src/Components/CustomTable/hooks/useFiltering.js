@@ -4,7 +4,7 @@ import { evaluateCondition, initializeFilter } from '../utils/tableUtils';
 /**
  * Custom hook for filtering functionality
  */
-const useFiltering = (sortedData, displayColumns) => {
+const useFiltering = (sortedData, displayColumns, tableColumns) => {
     const [columnFilters, setColumnFilters] = useState({});
     const [activeFilterMenu, setActiveFilterMenu] = useState(null);
 
@@ -207,6 +207,10 @@ const useFiltering = (sortedData, displayColumns) => {
         });
         setActiveFilterMenu(null);
     };
+
+    useEffect(() => {
+        setColumnFilters(tableColumns?.filter || {})
+    }, [tableColumns])
 
     return {
         columnFilters,

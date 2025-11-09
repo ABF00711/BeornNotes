@@ -101,7 +101,7 @@ const CustomTable = ({
         clearAllFilters,
         handleQuickFilterChange,
         applyExcelFilter
-    } = useFiltering(sortedData, displayColumns);
+    } = useFiltering(sortedData, displayColumns, tableColumns);
 
     // Get visible columns
     const visibleColumns = getVisibleColumns();
