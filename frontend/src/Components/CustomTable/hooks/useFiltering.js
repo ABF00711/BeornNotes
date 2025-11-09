@@ -209,7 +209,7 @@ const useFiltering = (sortedData, displayColumns, tableColumns) => {
     };
 
     useEffect(() => {
-        setColumnFilters(tableColumns?.filter || {})
+        setColumnFilters(tableColumns?.filterConfig || {})
     }, [tableColumns])
 
     return {

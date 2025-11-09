@@ -68,7 +68,7 @@ const useSorting = (data, tableColumns) => {
     }, [data, sortConfig]);
 
     useEffect(() => {
-        setSortConfig(tableColumns?.sort || { field: null, direction: null, type: null })
+        setSortConfig(tableColumns?.sortConfig || { field: null, direction: null, type: null })
     }, [tableColumns])
 
     return {

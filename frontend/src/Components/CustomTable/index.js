@@ -118,14 +118,15 @@ const CustomTable = ({
 
     useEffect(() => {
         if (resizingColumn === null && draggedColumn === null && displayColumns.length > 0) {
-            const newGridState = {columns: displayColumns, sort: sortConfig, filter: columnFilters}
+            const newGridState = {columns: displayColumns, sortConfig, filterConfig: columnFilters}
             saveGridState(JSON.stringify(newGridState), formName);
         }
     }, [resizingColumn, draggedColumn])
   
     useEffect(() => {
         if (columnVisibleChanged && displayColumns.length > 0) {
-            saveGridState(JSON.stringify(displayColumns), formName);
+            const newGridState = {columns: displayColumns, sortConfig, filterConfig: columnFilters}
+            saveGridState(JSON.stringify(newGridState), formName);
             setColumnVisibleChanged(false);
         }
     }, [columnVisibleChanged])
@@ -136,7 +137,7 @@ const CustomTable = ({
 
     useEffect(() => {
         if(displayColumns.length > 0){
-            const newGridState = {columns: displayColumns, sort: sortConfig, filter: columnFilters}
+            const newGridState = {columns: displayColumns, sortConfig, filterConfig: columnFilters}
             saveGridState(JSON.stringify(newGridState), formName);
         }
     }, [sortConfig, columnFilters])
@@ -147,6 +148,7 @@ const CustomTable = ({
 
             {/* Table Header */}
             <TableHeader
+                formName={formName}
                 selectedRowsCount={selectedRows.size}
                 totalRows={tableData.length}
                 filteredRows={filteredAndSortedData.length}
@@ -158,6 +160,7 @@ const CustomTable = ({
                 onToggleColumnVisibility={toggleColumnVisibility}
                 onResetColumnVisibility={resetColumnVisibility}
                 onClearAllFilters={clearAllFilters}
+                setDisplayColumns={setDisplayColumns}
             />
 
             <div className="custom-table-wrapper" ref={tableRef}>
