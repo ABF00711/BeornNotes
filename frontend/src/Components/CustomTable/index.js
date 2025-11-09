@@ -63,8 +63,11 @@ const CustomTable = ({
 
                 return column;
             });
-
             setDisplayColumns(initializedColumns);
+            console.log("exist!")
+        }else{
+            console.log("not exist columns!")
+            setDisplayColumns(columns);
         }
     }, [tableColumns]);
 
@@ -136,7 +139,7 @@ const CustomTable = ({
     }, [columns])
 
     useEffect(() => {
-        if(displayColumns.length > 0){
+        if(displayColumns.length > 0 && (sortConfig.type || columnFilters.displayname)){
             const newGridState = {columns: displayColumns, sortConfig, filterConfig: columnFilters}
             saveGridState(JSON.stringify(newGridState), formName);
         }
