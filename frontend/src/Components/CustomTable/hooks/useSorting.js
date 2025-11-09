@@ -1,9 +1,9 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 
 /**
  * Custom hook for sorting functionality
  */
-const useSorting = (data) => {
+const useSorting = (data, tableColumns) => {
     const [sortConfig, setSortConfig] = useState({ field: null, direction: null, type: null });
 
     const handleSort = (field, columnType) => {
@@ -66,6 +66,10 @@ const useSorting = (data) => {
 
         return sorted;
     }, [data, sortConfig]);
+
+    useEffect(() => {
+        setSortConfig(tableColumns?.sort || { field: null, direction: null, type: null })
+    }, [tableColumns])
 
     return {
         sortConfig,

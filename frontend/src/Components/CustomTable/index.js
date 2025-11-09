@@ -38,23 +38,23 @@ const CustomTable = ({
     const { getGridState, saveGridState } = useCustomTable();
 
     // Memoize table configuration
-    const [tableColumns, setTableColumns] = useState([]);
+    const [tableColumns, setTableColumns] = useState({});
     const tableData = useMemo(() => data.length > 0 ? data : [], [data]);
     const displayData = filteredData !== null ? filteredData : tableData;
 
-    const [displayColumns, setDisplayColumns] = useState(tableColumns);
+    const [displayColumns, setDisplayColumns] = useState([]);
     const tableRef = useRef(null);
 
     useEffect(() => {
-        if (tableColumns.length > 0) {
-            const hasAnyWidth = tableColumns.some(col => col.width);
+        if (tableColumns?.columns?.length > 0) {
+            const hasAnyWidth = tableColumns?.columns.some(col => col.width);
 
-            const initializedColumns = tableColumns.map(col => {
+            const initializedColumns = tableColumns?.columns.map(col => {
                 const column = { ...col };
 
                 if (!hasAnyWidth && !column.width) {
                     const tableWidth = document.getElementsByClassName("table-header-section")[0]?.offsetWidth || wholeWidth;
-                    column.width = `${(tableWidth - actionAndCheckBoxWidth) / tableColumns?.length}px`;
+                    column.width = `${(tableWidth - actionAndCheckBoxWidth) / tableColumns?.columns?.length}px`;
                 }
 
                 if (column.visible === undefined) {
@@ -85,7 +85,7 @@ const CustomTable = ({
 
     const { selectedRows, handleSelectAll, handleRowSelect, getSelectionState } = useRowSelection(onSelectionChange);
 
-    const { sortConfig, sortedData, handleSort, handleClearSort } = useSorting(displayData);
+    const { sortConfig, sortedData, handleSort, handleClearSort } = useSorting(displayData, tableColumns);
 
     const {
         columnFilters,
@@ -110,18 +110,19 @@ const CustomTable = ({
     const { allRowsSelected, someRowsSelected } = getSelectionState(filteredAndSortedData);
 
     const getTableColumns = async () => {
-        const savedColumns = await getGridState(formName);
-        const parsedColumns = JSON.parse(savedColumns?.state || null);
-        setTableColumns(parsedColumns?.length > 0 ? parsedColumns : (columns.length > 0 ? columns : []));
+        const savedColumnStates = await getGridState(formName);
+        const parsedColumnStates = JSON.parse(savedColumnStates?.state || null);
+        const initColumnStates = {columns: [], sort: {}, filter: {}};
+        setTableColumns(parsedColumnStates ? parsedColumnStates : initColumnStates);
     }
 
     useEffect(() => {
         if (resizingColumn === null && draggedColumn === null && displayColumns.length > 0) {
-            saveGridState(JSON.stringify(displayColumns), formName);
-            setColumnVisibleChanged(false);
+            const newGridState = {columns: displayColumns, sort: sortConfig, filter: columnFilters}
+            saveGridState(JSON.stringify(newGridState), formName);
         }
     }, [resizingColumn, draggedColumn])
-
+  
     useEffect(() => {
         if (columnVisibleChanged && displayColumns.length > 0) {
             saveGridState(JSON.stringify(displayColumns), formName);
@@ -132,6 +133,13 @@ const CustomTable = ({
     useEffect(() => {
         getTableColumns();
     }, [columns])
+
+    useEffect(() => {
+        if(displayColumns.length > 0){
+            const newGridState = {columns: displayColumns, sort: sortConfig, filter: columnFilters}
+            saveGridState(JSON.stringify(newGridState), formName);
+        }
+    }, [sortConfig, columnFilters])
 
     return (
         <div className="custom-table-container">
