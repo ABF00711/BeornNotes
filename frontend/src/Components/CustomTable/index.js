@@ -164,6 +164,9 @@ const CustomTable = ({
                 onResetColumnVisibility={resetColumnVisibility}
                 onClearAllFilters={clearAllFilters}
                 setDisplayColumns={setDisplayColumns}
+                sortConfig={sortConfig}
+                filterConfig={columnFilters}
+                setTableColumns={setTableColumns}
             />
 
             <div className="custom-table-wrapper" ref={tableRef}>

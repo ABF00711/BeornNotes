@@ -1,0 +1,64 @@
+.searchpatterns{
+    position: relative;
+    display: inline-block;
+}
+
+.filterModal-body{
+    width: 240px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 1000;
+    border-radius: 12px;
+    position: absolute;
+    top: 44px;
+    right: 0;
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(30, 144, 255, 0.25);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.modal-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: -4px 0 4px 0;
+}
+
+.modal-title{
+    font-weight: 600;
+    color: #0f4c81;
+}
+
+.modal-close{
+    border: none;
+    background: transparent;
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+    color: #0f4c81;
+}
+
+.filter-actions{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.searchpatterns .btn{
+    height: 34px;
+}
+
+.btn.btn-primary{
+    background: linear-gradient(135deg, #5aa9ff, #3f8cff);
+    color: #fff;
+    border: 1px solid #3f8cff;
+}
+
+.btn.btn-danger{
+    background: #ff4d4f;
+    color: #fff;
+    border: 1px solid #ff4d4f;
+}

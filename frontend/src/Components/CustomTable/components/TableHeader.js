@@ -1,6 +1,7 @@
 import React from 'react';
 import ColumnVisibilityMenu from './ColumnVisibilityMenu';
 import SmartLayouts from './Layouts';
+import SmartSearchPattern from '../SearchPattern';
 
 const TableHeader = ({
     formName,
@@ -15,7 +16,10 @@ const TableHeader = ({
     onToggleColumnVisibility,
     onResetColumnVisibility,
     onClearAllFilters,
-    setDisplayColumns
+    setDisplayColumns,
+    setTableColumns,
+    sortConfig,
+    filterConfig
 }) => {
     return (
         <div className="table-header-section">
@@ -52,17 +56,7 @@ const TableHeader = ({
                 <SmartLayouts formName={formName} displayColumns={displayColumns} setDisplayColumns={setDisplayColumns} />
 
                 {/* Search Button */}
-                <button
-                    className="header-action-btn search-btn"
-                    onClick={() => {/* TODO: Implement search state management */ }}
-                    title="Save/Load Search (Filter & Sort State)"
-                >
-                    <svg className="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <path d="m21 21-4.35-4.35"></path>
-                    </svg>
-                    Search
-                </button>
+                <SmartSearchPattern formName={formName} displayColumns = {displayColumns} sortConfig={sortConfig} filterConfig={filterConfig} setTableColumns={setTableColumns} />
 
                 {/* Clear Filters Button */}
                 {activeFiltersCount > 0 && (
