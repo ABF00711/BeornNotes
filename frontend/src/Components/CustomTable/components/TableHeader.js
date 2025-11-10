@@ -1,7 +1,7 @@
 import React from 'react';
 import ColumnVisibilityMenu from './ColumnVisibilityMenu';
 import SmartLayouts from './Layouts';
-import SmartSearchPattern from '../SearchPattern';
+import SmartSearchPattern from './SearchPattern';
 
 const TableHeader = ({
     formName,

@@ -3,7 +3,7 @@ import "./style.css";
 import { Select } from "antd";
 import { useState, useRef, useEffect } from "react";
 import { toast } from "react-toastify";
-import useSearchpatterns from "../../../Hooks/useFilters";
+import useSearchpatterns from "../../../../Hooks/useFilters";
 
 function SmartSearchPattern({ formName, displayColumns, sortConfig, filterConfig, setTableColumns }) {
     const { getSearchpatterns, updateSearchpatterns, deleteSearchpatterns, createSearchpatterns, searchpatterns } = useSearchpatterns();
