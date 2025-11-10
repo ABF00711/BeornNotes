@@ -55,12 +55,39 @@ export const evaluateCondition = (cellValue, operator, filterValue, columnType) 
     // Return true if no filter value provided (except for empty/notEmpty)
     if (!filterValue && filterValue !== 0) return true;
 
-    // Handle null/undefined values
-    if (cellValue === null || cellValue === undefined) return false;
+    // For 'in' and 'notIn' operators, we need to handle blank values specially
+    // So don't return false early for null/undefined - let the operator handle it
+    const isInOperator = operator === 'in' || operator === 'notIn';
+    
+    // Handle null/undefined values (but skip for 'in'/'notIn' operators which handle blanks)
+    if (!isInOperator && (cellValue === null || cellValue === undefined)) return false;
 
     switch (columnType) {
         case 'text':
         case 'url':
+            // For 'in'/'notIn' operators with blank values, handle before converting to string
+            if (isInOperator) {
+                if (!Array.isArray(filterValue)) return true;
+                const hasBlank = filterValue.includes('__BLANK__');
+                const isBlank = cellValue === '' || cellValue === null || cellValue === undefined;
+                
+                if (operator === 'in') {
+                    if (isBlank && hasBlank) return true;
+                    if (isBlank && !hasBlank) return false;
+                    // For non-blank values, check against the set
+                    const strValue = String(cellValue).toLowerCase();
+                    const set = new Set(filterValue.filter(v => v !== '__BLANK__').map(v => String(v).toLowerCase()));
+                    return set.has(strValue);
+                } else { // notIn
+                    if (isBlank) return !hasBlank;
+                    // For non-blank values, check against the set
+                    const strValue = String(cellValue).toLowerCase();
+                    const set = new Set(filterValue.filter(v => v !== '__BLANK__').map(v => String(v).toLowerCase()));
+                    return !set.has(strValue);
+                }
+            }
+            
+            // For other operators, convert to string and compare
             const strValue = String(cellValue).toLowerCase();
             const strFilter = typeof filterValue === 'string' ? String(filterValue).toLowerCase() : filterValue;
             switch (operator) {
@@ -70,27 +97,35 @@ export const evaluateCondition = (cellValue, operator, filterValue, columnType) 
                 case 'notEquals': return strValue !== strFilter;
                 case 'startsWith': return strValue.startsWith(strFilter);
                 case 'endsWith': return strValue.endsWith(strFilter);
-                case 'in': {
-                    if (!Array.isArray(filterValue)) return true;
-                    // Support special token for blanks
-                    const hasBlank = filterValue.includes('__BLANK__');
-                    if ((cellValue === '' || cellValue === null || cellValue === undefined) && hasBlank) return true;
-                    const set = new Set(filterValue.filter(v => v !== '__BLANK__').map(v => String(v).toLowerCase()));
-                    return set.has(strValue);
-                }
-                case 'notIn': {
-                    if (!Array.isArray(filterValue)) return true;
-                    const hasBlank = filterValue.includes('__BLANK__');
-                    if ((cellValue === '' || cellValue === null || cellValue === undefined)) {
-                        return !hasBlank;
-                    }
-                    const set = new Set(filterValue.filter(v => v !== '__BLANK__').map(v => String(v).toLowerCase()));
-                    return !set.has(strValue);
-                }
                 default: return true;
             }
 
         case 'number':
+            // For 'in'/'notIn' operators, handle blank values before parsing numbers
+            if (isInOperator) {
+                if (!Array.isArray(filterValue)) return true;
+                const hasBlank = filterValue.includes('__BLANK__');
+                const isBlank = cellValue === '' || cellValue === null || cellValue === undefined;
+                
+                if (operator === 'in') {
+                    if (isBlank && hasBlank) return true;
+                    if (isBlank && !hasBlank) return false;
+                    // For non-blank values, parse and check against the set
+                    const numValue = typeof cellValue === 'number' ? cellValue : parseFloat(cellValue);
+                    if (isNaN(numValue)) return false;
+                    const set = new Set(filterValue.filter(v => v !== '__BLANK__').map(v => typeof v === 'number' ? v : parseFloat(v)).filter(v => !isNaN(v)));
+                    return set.has(numValue);
+                } else { // notIn
+                    if (isBlank) return !hasBlank;
+                    // For non-blank values, parse and check against the set
+                    const numValue = typeof cellValue === 'number' ? cellValue : parseFloat(cellValue);
+                    if (isNaN(numValue)) return false;
+                    const set = new Set(filterValue.filter(v => v !== '__BLANK__').map(v => typeof v === 'number' ? v : parseFloat(v)).filter(v => !isNaN(v)));
+                    return !set.has(numValue);
+                }
+            }
+            
+            // For other operators, parse numbers and compare
             const numValue = typeof cellValue === 'number' ? cellValue : parseFloat(cellValue);
             const numFilter = typeof filterValue === 'number' ? filterValue : parseFloat(filterValue);
             if (isNaN(numValue) || isNaN(numFilter)) return false;
@@ -101,18 +136,6 @@ export const evaluateCondition = (cellValue, operator, filterValue, columnType) 
                 case 'lessThanOrEqual': return numValue <= numFilter;
                 case 'greaterThan': return numValue > numFilter;
                 case 'greaterThanOrEqual': return numValue >= numFilter;
-                case 'in': {
-                    if (!Array.isArray(filterValue)) return true;
-                    const set = new Set(filterValue.filter(v => v !== '__BLANK__').map(v => typeof v === 'number' ? v : parseFloat(v)).filter(v => !isNaN(v)));
-                    if (cellValue === '' || cellValue === null || cellValue === undefined) return filterValue.includes('__BLANK__');
-                    return set.has(numValue);
-                }
-                case 'notIn': {
-                    if (!Array.isArray(filterValue)) return true;
-                    const set = new Set(filterValue.filter(v => v !== '__BLANK__').map(v => typeof v === 'number' ? v : parseFloat(v)).filter(v => !isNaN(v)));
-                    if (cellValue === '' || cellValue === null || cellValue === undefined) return !filterValue.includes('__BLANK__');
-                    return !set.has(numValue);
-                }
                 default: return true;
             }
 
