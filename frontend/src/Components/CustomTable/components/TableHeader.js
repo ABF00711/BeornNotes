@@ -1,8 +1,7 @@
-import React from 'react';
 import ColumnVisibilityMenu from './ColumnVisibilityMenu';
 import Layouts_Custom from './Layouts';
 import SearchPattern_Custom from './SearchPattern';
-import SmartDelete from './Delete';
+import Delete_Custom from './Delete';
 
 const TableHeader = ({
     formName,
@@ -22,6 +21,7 @@ const TableHeader = ({
     sortConfig,
     filterConfig,
     setOnColumnChanged,
+    setSelectedRows,
 }) => {
     return (
         <div className="table-header-section">
@@ -40,7 +40,7 @@ const TableHeader = ({
                 </button>
 
                 {/* Delete Button */}
-                <SmartDelete formName = {formName} selectedRows = {selectedRows} />
+                <Delete_Custom formName = {formName} selectedRows = {selectedRows} setSelectedRows = {setSelectedRows} />
 
                 <Layouts_Custom formName={formName} displayColumns={displayColumns} setDisplayColumns={setDisplayColumns} setOnColumnChanged = {setOnColumnChanged} />
 

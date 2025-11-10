@@ -1,8 +1,8 @@
 import "./style.css";
 import useDynamicData from "../../../../Hooks/useDynamicData";
 
-function SmartDelete(props) {
-    const { formName, selectedRows } = props;
+function Delete_Custom(props) {
+    const { formName, selectedRows, setSelectedRows } = props;
     const { tableNames } = useDynamicData();
     const { deleteDynamicData } = useDynamicData();
 
@@ -10,6 +10,7 @@ function SmartDelete(props) {
         try {
             if (window.confirm("Really want to delete selected rows?") === true) {
                 deleteDynamicData(tableNames[formName], Array.from(selectedRows));
+                setSelectedRows(new Set());
             }
         } catch (error) {
             console.log("onDeleteError: ", error);
@@ -34,4 +35,4 @@ function SmartDelete(props) {
     );
 }
 
-export default SmartDelete;
+export default Delete_Custom;

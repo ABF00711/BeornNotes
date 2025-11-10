@@ -37,6 +37,7 @@ const useRowSelection = (onSelectionChange) => {
 
     return {
         selectedRows,
+        setSelectedRows,
         handleSelectAll,
         handleRowSelect,
         getSelectionState

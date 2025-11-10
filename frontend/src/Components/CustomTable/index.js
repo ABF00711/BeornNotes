@@ -86,7 +86,7 @@ const CustomTable = ({
         getVisibleColumns
     } = useColumnVisibility(displayColumns, setDisplayColumns, setOnColumnChanged);
 
-    const { selectedRows, handleSelectAll, handleRowSelect, getSelectionState } = useRowSelection(onSelectionChange);
+    const { selectedRows, setSelectedRows, handleSelectAll, handleRowSelect, getSelectionState } = useRowSelection(onSelectionChange);
 
     const { sortConfig, sortedData, handleSort, handleClearSort } = useSorting(displayData, tableColumns);
 
@@ -170,6 +170,7 @@ const CustomTable = ({
                 filterConfig={columnFilters}
                 setTableColumns={setTableColumns}
                 setOnColumnChanged={setOnColumnChanged}
+                setSelectedRows = {setSelectedRows}
             />
 
             <div className="custom-table-wrapper" ref={tableRef}>
