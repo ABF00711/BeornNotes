@@ -97,6 +97,17 @@ function SmartLayouts({ formName, displayColumns, setDisplayColumns, setOnColumn
     }
 
     useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (!isOpen) return;
+            if (containerRef.current && !containerRef.current.contains(event.target)) {
+                setIsOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, [isOpen]);
+
+    useEffect(() => {
         buildOptions();
     }, [layouts])
 
