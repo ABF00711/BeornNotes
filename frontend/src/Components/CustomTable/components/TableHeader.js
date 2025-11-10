@@ -1,7 +1,7 @@
 import React from 'react';
 import ColumnVisibilityMenu from './ColumnVisibilityMenu';
-import SmartLayouts from './Layouts';
-import SmartSearchPattern from './SearchPattern';
+import Layouts_Custom from './Layouts';
+import SearchPattern_Custom from './SearchPattern';
 
 const TableHeader = ({
     formName,
@@ -54,10 +54,10 @@ const TableHeader = ({
                     Delete
                 </button>
 
-                <SmartLayouts formName={formName} displayColumns={displayColumns} setDisplayColumns={setDisplayColumns} setOnColumnChanged = {setOnColumnChanged} />
+                <Layouts_Custom formName={formName} displayColumns={displayColumns} setDisplayColumns={setDisplayColumns} setOnColumnChanged = {setOnColumnChanged} />
 
                 {/* Search Button */}
-                <SmartSearchPattern formName={formName} displayColumns = {displayColumns} sortConfig={sortConfig} filterConfig={filterConfig} setTableColumns={setTableColumns} />
+                <SearchPattern_Custom formName={formName} displayColumns = {displayColumns} sortConfig={sortConfig} filterConfig={filterConfig} setTableColumns={setTableColumns} />
 
                 {/* Clear Filters Button */}
                 {activeFiltersCount > 0 && (

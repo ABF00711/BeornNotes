@@ -5,7 +5,7 @@ import { useState, useRef, useEffect } from "react";
 import { toast } from "react-toastify";
 import useSearchpatterns from "../../../../Hooks/useFilters";
 
-function SmartSearchPattern({ formName, displayColumns, sortConfig, filterConfig, setTableColumns }) {
+function SearchPattern_Custom({ formName, displayColumns, sortConfig, filterConfig, setTableColumns }) {
     const { getSearchpatterns, updateSearchpatterns, deleteSearchpatterns, createSearchpatterns, searchpatterns } = useSearchpatterns();
     const [isOpen, setIsOpen] = useState(false);
     const [patternName, setPatternName] = useState("");
@@ -175,4 +175,4 @@ function SmartSearchPattern({ formName, displayColumns, sortConfig, filterConfig
     );
 }
 
-export default SmartSearchPattern;
+export default SearchPattern_Custom;

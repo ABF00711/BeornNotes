@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { LayoutContext } from "../../../../Context/LayoutContex";
 import useLayouts from "../../../../Hooks/useLayouts";
 
-function SmartLayouts({ formName, displayColumns, setDisplayColumns, setOnColumnChanged }) {
+function Layouts_Custom({ formName, displayColumns, setDisplayColumns, setOnColumnChanged }) {
     const { layouts } = useContext(LayoutContext);
     const { getLayouts, createLayouts, updateLayouts, deleteLayouts } = useLayouts();
     const [isOpen, setIsOpen] = useState(false);
@@ -162,4 +162,4 @@ function SmartLayouts({ formName, displayColumns, setDisplayColumns, setOnColumn
     );
 }
 
-export default SmartLayouts;
+export default Layouts_Custom;
