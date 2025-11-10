@@ -62,6 +62,9 @@ const CustomTable = ({
                     column.visible = true;
                 }
 
+                const matchedCol = columns.find(col => col.field === column.field);
+                column.header = matchedCol.header;
+
                 return column;
             });
             setDisplayColumns(initializedColumns);
