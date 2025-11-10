@@ -83,11 +83,11 @@ const TableHeader = ({
 
             <div className="table-header-info">
                 <span className="count-text">
-                    Showing <strong>{filteredRows?.length}</strong> of <strong>{totalRows}</strong> rows
+                    Showing <strong>{filteredRows}</strong> of <strong>{totalRows}</strong> rows
                 </span>
-                {selectedRows > 0 && (
+                {selectedRows?.size > 0 && (
                     <span className="selected-count">
-                        ({selectedRows?.length} selected)
+                        ({selectedRows?.size} selected)
                     </span>
                 )}
             </div>
