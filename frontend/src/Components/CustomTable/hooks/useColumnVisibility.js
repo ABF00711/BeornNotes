@@ -4,10 +4,9 @@ import { useState, useRef, useEffect } from 'react';
  * Custom hook for column visibility management
  * Uses visible property on each column instead of separate state
  */
-const useColumnVisibility = (displayColumns, setDisplayColumns) => {
+const useColumnVisibility = (displayColumns, setDisplayColumns, setOnColumnChanged) => {
     const [showColumnMenu, setShowColumnMenu] = useState(false);
     const columnMenuRef = useRef(null);
-    const [columnVisibleChanged, setColumnVisibleChanged] = useState(false);
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -32,7 +31,7 @@ const useColumnVisibility = (displayColumns, setDisplayColumns) => {
                 return col;
             });
             
-            setColumnVisibleChanged(true);
+            setOnColumnChanged(true);
             return updatedColumns;
         });
     };
@@ -49,7 +48,7 @@ const useColumnVisibility = (displayColumns, setDisplayColumns) => {
                 return col;
             });
             
-            setColumnVisibleChanged(true);
+            setOnColumnChanged(true);
             return updatedColumns;
         });
     };
@@ -63,8 +62,6 @@ const useColumnVisibility = (displayColumns, setDisplayColumns) => {
     };
 
     return {
-        columnVisibleChanged,
-        setColumnVisibleChanged,
         showColumnMenu,
         columnMenuRef,
         setShowColumnMenu,

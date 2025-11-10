@@ -19,7 +19,8 @@ const TableHeader = ({
     setDisplayColumns,
     setTableColumns,
     sortConfig,
-    filterConfig
+    filterConfig,
+    setOnColumnChanged,
 }) => {
     return (
         <div className="table-header-section">
@@ -53,7 +54,7 @@ const TableHeader = ({
                     Delete
                 </button>
 
-                <SmartLayouts formName={formName} displayColumns={displayColumns} setDisplayColumns={setDisplayColumns} />
+                <SmartLayouts formName={formName} displayColumns={displayColumns} setDisplayColumns={setDisplayColumns} setOnColumnChanged = {setOnColumnChanged} />
 
                 {/* Search Button */}
                 <SmartSearchPattern formName={formName} displayColumns = {displayColumns} sortConfig={sortConfig} filterConfig={filterConfig} setTableColumns={setTableColumns} />

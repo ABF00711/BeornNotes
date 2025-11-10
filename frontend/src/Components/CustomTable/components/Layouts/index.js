@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { LayoutContext } from "../../../../Context/LayoutContex";
 import useLayouts from "../../../../Hooks/useLayouts";
 
-function SmartLayouts({ formName, displayColumns, setDisplayColumns }) {
+function SmartLayouts({ formName, displayColumns, setDisplayColumns, setOnColumnChanged }) {
     const { layouts } = useContext(LayoutContext);
     const { getLayouts, createLayouts, updateLayouts, deleteLayouts } = useLayouts();
     const [isOpen, setIsOpen] = useState(false);
@@ -37,6 +37,7 @@ function SmartLayouts({ formName, displayColumns, setDisplayColumns }) {
             }
             const layoutState = JSON.parse(selected.layout_json);
             setDisplayColumns(layoutState);
+            setOnColumnChanged(true);
             toast.success("Applied");
         }
         catch (error) {

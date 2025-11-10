@@ -1,4 +1,4 @@
-import React, { useState, useRef, useMemo, useEffect } from 'react';
+import React, { useState, useRef, useMemo, useEffect, useLayoutEffect } from 'react';
 import './style.css';
 
 // Import custom hooks
@@ -44,6 +44,7 @@ const CustomTable = ({
 
     const [displayColumns, setDisplayColumns] = useState([]);
     const tableRef = useRef(null);
+    const [onColumnChanged, setOnColumnChanged] = useState(false);
 
     useEffect(() => {
         if (tableColumns?.columns?.length > 0) {
@@ -64,9 +65,7 @@ const CustomTable = ({
                 return column;
             });
             setDisplayColumns(initializedColumns);
-            console.log("exist!")
-        }else{
-            console.log("not exist columns!")
+        } else {
             setDisplayColumns(columns);
         }
     }, [tableColumns]);
@@ -76,15 +75,13 @@ const CustomTable = ({
     const { resizingColumn, handleRightResizeStart } = useColumnResize(displayColumns, setDisplayColumns);
 
     const {
-        columnVisibleChanged,
-        setColumnVisibleChanged,
         showColumnMenu,
         columnMenuRef,
         setShowColumnMenu,
         toggleColumnVisibility,
         resetColumnVisibility,
         getVisibleColumns
-    } = useColumnVisibility(displayColumns, setDisplayColumns);
+    } = useColumnVisibility(displayColumns, setDisplayColumns, setOnColumnChanged);
 
     const { selectedRows, handleSelectAll, handleRowSelect, getSelectionState } = useRowSelection(onSelectionChange);
 
@@ -115,35 +112,37 @@ const CustomTable = ({
     const getTableColumns = async () => {
         const savedColumnStates = await getGridState(formName);
         const parsedColumnStates = JSON.parse(savedColumnStates?.state || null);
-        const initColumnStates = {columns: [], sort: {}, filter: {}};
+        const initColumnStates = { columns: [], sort: {}, filter: {} };
         setTableColumns(parsedColumnStates ? parsedColumnStates : initColumnStates);
     }
 
     useEffect(() => {
         if (resizingColumn === null && draggedColumn === null && displayColumns.length > 0) {
-            const newGridState = {columns: displayColumns, sortConfig, filterConfig: columnFilters}
-            saveGridState(JSON.stringify(newGridState), formName);
+            setOnColumnChanged(true);
         }
     }, [resizingColumn, draggedColumn])
-  
-    useEffect(() => {
-        if (columnVisibleChanged && displayColumns.length > 0) {
-            const newGridState = {columns: displayColumns, sortConfig, filterConfig: columnFilters}
-            saveGridState(JSON.stringify(newGridState), formName);
-            setColumnVisibleChanged(false);
-        }
-    }, [columnVisibleChanged])
 
     useEffect(() => {
         getTableColumns();
     }, [columns])
 
     useEffect(() => {
-        if(displayColumns.length > 0 && (sortConfig.type || columnFilters.displayname)){
-            const newGridState = {columns: displayColumns, sortConfig, filterConfig: columnFilters}
-            saveGridState(JSON.stringify(newGridState), formName);
+        if (displayColumns.length > 0 && (sortConfig.type || columnFilters.displayname)) {
+            setOnColumnChanged(true);
         }
     }, [sortConfig, columnFilters])
+
+    const onSaveColumnState = () => {
+        const newGridState = { columns: displayColumns, sortConfig, filterConfig: columnFilters }
+        saveGridState(JSON.stringify(newGridState), formName);
+    }
+
+    useEffect(() => {
+        if (onColumnChanged) {
+            onSaveColumnState();
+            setOnColumnChanged(false);
+        }
+    }, [onColumnChanged])
 
     return (
         <div className="custom-table-container">
@@ -167,6 +166,7 @@ const CustomTable = ({
                 sortConfig={sortConfig}
                 filterConfig={columnFilters}
                 setTableColumns={setTableColumns}
+                setOnColumnChanged={setOnColumnChanged}
             />
 
             <div className="custom-table-wrapper" ref={tableRef}>
