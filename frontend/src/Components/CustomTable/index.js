@@ -112,7 +112,7 @@ const CustomTable = ({
     const getTableColumns = async () => {
         const savedColumnStates = await getGridState(formName);
         const parsedColumnStates = JSON.parse(savedColumnStates?.state || null);
-        const initColumnStates = { columns: [], sort: {}, filter: {} };
+        const initColumnStates = { columns, sort: {}, filter: {} };
         setTableColumns(parsedColumnStates ? parsedColumnStates : initColumnStates);
     }
 
