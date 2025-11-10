@@ -4,11 +4,13 @@ import './style.css';
 import useDynamicData from '../../Hooks/useDynamicData';
 import useSearchConfig from '../../Hooks/useSearchConfig';
 
+const formName = "Customers3"
+
 const Customers3 = () => {
     const { dynamicData, tableNames, getDynamicData, getColumns } = useDynamicData();
     const { getSearchConfigData } = useSearchConfig();
     const columns = useMemo(() => {
-        return getColumns("customers")
+        return getColumns(tableNames[formName])
     }, [tableNames]);
 
     const handleRowClick = (row, index) => {
@@ -32,7 +34,7 @@ const Customers3 = () => {
     };
 
     useEffect(() => {
-        getDynamicData("Customers");
+        getDynamicData(formName);
         getSearchConfigData();
     }, [])
 
@@ -40,7 +42,7 @@ const Customers3 = () => {
         <div className="custom-table-demo-page">
             <div className="demo-content">
                 <CustomTable
-                    formName='Customers3'
+                    formName={formName}
                     onRowClick={handleRowClick}
                     onSelectionChange={handleSelectionChange}
                     onEdit={handleEdit}

@@ -6,7 +6,7 @@ import useDocuments from "./useDocuments";
 
 function useDynamicData() {
     const { dynamicData, setDynamicData, searchConfig, token, tableNames, setTableNames } = useContext(MyContext);
-    const {openDocument} = useDocuments();
+    const { openDocument } = useDocuments();
 
     const statusBar = useMemo(() => ({
         statusPanels: [
@@ -77,7 +77,9 @@ function useDynamicData() {
             const res = await services.deleteDynamicData(tablename, selectedRows);
             if (res.message === "deleteDynamicData success") {
                 toast.success("Deleted rows selected successfully");
-                // getDynamicData(tablename);
+                setDynamicData(prev =>
+                    prev.filter(data => !selectedRows.some(id => id === data.id))
+                );
                 return;
             }
             toast.error(res.message);

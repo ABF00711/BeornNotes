@@ -63,7 +63,7 @@ const CustomTable = ({
                 }
 
                 const matchedCol = columns.find(col => col.field === column.field);
-                column.header = matchedCol.header;
+                column.header = matchedCol?.header;
 
                 return column;
             });
@@ -154,7 +154,7 @@ const CustomTable = ({
             {/* Table Header */}
             <TableHeader
                 formName={formName}
-                selectedRowsCount={selectedRows.size}
+                selectedRows={selectedRows}
                 totalRows={tableData.length}
                 filteredRows={filteredAndSortedData.length}
                 activeFiltersCount={Object.keys(columnFilters).length}

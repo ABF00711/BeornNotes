@@ -11,14 +11,13 @@ function SmartDelete(props) {
     const onDelete = () => {
         if(gridRef == null) return;
         try {
-            const selectedRows = gridRef.current?.getSelectedRowsData();
             const selectedIds = gridRef.current?.getSelectedRowIds();
             if (selectedIds.length === 0) {
                 toast.error("No rows selected!");
                 return;
             }
             if(window.confirm("Really want to delete selected rows?") === true){
-                deleteDynamicData(tableNames[formName], selectedRows);
+                deleteDynamicData(tableNames[formName], selectedIds);
                 selectedIds.forEach(id => {
                     gridRef.current.deleteRow(id);
                 });
