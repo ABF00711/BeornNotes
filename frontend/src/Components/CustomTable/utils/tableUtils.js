@@ -158,7 +158,6 @@ export const evaluateCondition = (cellValue, operator, filterValue, columnType) 
             }
             const [year, month, day] = filterValue.split("-");
             const filterDate = new Date(year, month - 1, day); // *This is just the issue*
-            console.log("filterDate: ", filterDate);
             if (isNaN(filterDate.getTime())) return false;
             const filterDay = new Date(filterDate.getFullYear(), filterDate.getMonth(), filterDate.getDate()).getTime();
             const cellDay = new Date(cellDate.getFullYear(), cellDate.getMonth(), cellDate.getDate()).getTime();

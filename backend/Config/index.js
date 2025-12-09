@@ -7,8 +7,8 @@ const configs = {
         password: "",
         database: "beornnotes"
     },
-    WASABI_ACCESS_KEY: '6DV18Q6NGK1AJBVZCG4I',
-    WASABI_SECRET_KEY: 'dluIJCRMVXPbTjLrDYYGHIwsYN2YIlKUfaTRmJes',
+    WASABI_ACCESS_KEY: 'PX7KNHNNSCD6IMSB2MUA',
+    WASABI_SECRET_KEY: 'Gf5OBCGvf90OZPtDgoV91pGLN6RW81LQ5ZBA0goC',
     region: "us-west-2",
     endpoint: "https://s3.us-west-2.wasabisys.com",
 }

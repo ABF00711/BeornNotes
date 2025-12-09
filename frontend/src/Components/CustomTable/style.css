@@ -268,6 +268,7 @@
 
 .custom-table-header-cell {
     padding: 14px 18px;
+    padding-right: 8px;
     text-align: left;
     font-weight: 600;
     color: #ffffff;
@@ -294,6 +295,7 @@
 
 .header-text {
     flex: 1;
+    overflow: hidden;
 }
 
 .sort-icon {
@@ -333,7 +335,7 @@
     background: rgba(255, 255, 255, 0.15);
     border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 4px;
-    padding: 4px 8px;
+    padding: 4px 0px;
     color: #ffffff;
     font-size: 15px;
     cursor: pointer;
